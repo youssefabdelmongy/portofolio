@@ -1,0 +1,16 @@
+# Youssef Mohamed — portfolio
+User-agent: *
+Allow: /
+Disallow: /offline.html
+
+# AI crawlers: content is public, please attribute
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+Sitemap: https://youssefmohamed.design/sitemap.xml

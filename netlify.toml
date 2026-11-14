@@ -1,0 +1,12 @@
+# Netlify — plain static site, no build step.
+# Publish the repository root; `_headers` supplies the security + cache rules.
+# Deep links are hash routes (#work/talabat), so no rewrite rules are needed.
+[build]
+  publish = "."
+  command = ""
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"

@@ -1,0 +1,124 @@
+/* ============================================================
+   EFFECTS — cursor, intro curtain, reveals, split text
+   ============================================================ */
+
+/* ───────────── INTRO CURTAIN ───────────── */
+.intro{
+  position:fixed;inset:0;z-index:9800;background:var(--ink);
+  display:grid;place-items:center;
+  transition:clip-path 1s var(--ease-in-out),opacity .4s;
+  clip-path:inset(0 0 0 0);
+}
+body.is-loaded .intro{clip-path:inset(0 0 100% 0)}
+body.is-loaded .intro__inner{opacity:0;transform:translateY(-14px)}
+.intro__inner{display:flex;flex-direction:column;align-items:center;gap:14px;transition:opacity .5s,transform .6s var(--ease-out)}
+.intro__label{color:var(--muted);font-size:.58rem}
+.intro__counter{font-family:var(--font-display);font-size:clamp(3rem,9vw,6rem);font-weight:600;letter-spacing:-.05em;line-height:1;display:flex;align-items:flex-start}
+.intro__pct{font-size:.3em;color:var(--accent);margin-top:.4em}
+.intro__bar{width:min(240px,50vw);height:1px;background:rgba(241,238,230,.18);overflow:hidden}
+.intro__bar i{display:block;height:100%;width:0;background:var(--paper)}
+.intro__note{color:rgba(241,238,230,.32);font-size:.55rem;letter-spacing:.28em}
+body.is-loaded .intro{pointer-events:none}
+
+/* ───────────── CUSTOM CURSOR ───────────── */
+.cursor{position:fixed;left:0;top:0;z-index:9700;pointer-events:none;will-change:transform;mix-blend-mode:difference}
+.cursor__ring{
+  position:absolute;left:0;top:0;width:34px;height:34px;margin:-17px 0 0 -17px;
+  border:1px solid #fff;border-radius:99px;
+  display:grid;place-items:center;overflow:hidden;
+  transition:width .4s var(--ease-out),height .4s var(--ease-out),margin .4s var(--ease-out),
+             background .4s,border-color .4s,opacity .3s,backdrop-filter .4s;
+  will-change:width,height,transform;
+}
+.cursor__dot{
+  position:absolute;left:0;top:0;width:5px;height:5px;margin:-2.5px 0 0 -2.5px;border-radius:50%;
+  background:#fff;transition:opacity .25s,transform .35s var(--ease-out);
+}
+.cursor__label{
+  font-family:var(--font-mono);font-size:.56rem;letter-spacing:.14em;text-transform:uppercase;
+  color:#fff;white-space:nowrap;opacity:0;transform:translateY(6px);
+  transition:opacity .3s,transform .4s var(--ease-out);mix-blend-mode:difference;
+}
+
+/* states */
+.cursor.is-hover .cursor__ring{width:52px;height:52px;margin:-26px 0 0 -26px;background:rgba(255,255,255,.12)}
+.cursor.is-label .cursor__ring{
+  width:78px;height:78px;margin:-39px 0 0 -39px;background:#fff;border-color:#fff;
+}
+.cursor.is-label .cursor__label{opacity:1;transform:none;color:#000;mix-blend-mode:normal}
+.cursor.is-label .cursor__dot{opacity:0}
+.cursor.is-big .cursor__ring{width:120px;height:120px;margin:-60px 0 0 -60px;background:rgba(255,255,255,.1);border-width:1px}
+.cursor.is-invert .cursor__ring{background:#fff;border-color:#fff;width:56px;height:56px;margin:-28px 0 0 -28px}
+.cursor.is-invert .cursor__dot{background:#000;opacity:1}
+.cursor.is-snap .cursor__ring{width:24px;height:24px;margin:-12px 0 0 -12px;border-width:2px;border-radius:6px}
+.cursor.is-text .cursor__ring{width:auto;height:auto;margin:0;border:0;background:transparent;overflow:visible}
+.cursor.is-text .cursor__label{opacity:1;transform:none;font-size:.8rem;letter-spacing:.02em;font-family:var(--font-serif);font-style:italic;text-transform:none;color:#fff}
+.cursor.is-text .cursor__dot{opacity:0}
+.cursor.is-none .cursor__ring{opacity:0}
+.cursor.is-down .cursor__ring{transform:scale(.85)}
+.cursor.is-hidden{opacity:0}
+
+.cursor-trail{position:fixed;inset:0;z-index:9650;pointer-events:none;mix-blend-mode:screen;opacity:.5}
+
+body.cursor-hidden .cursor,
+body.cursor-hidden .cursor-trail{opacity:0}
+
+/* touch / no-hover: hide custom cursor entirely */
+@media (hover:none),(pointer:coarse){
+  .cursor,.cursor-trail{display:none}
+}
+
+/* ───────────── TEXT SPLIT / REVEALS ───────────── */
+[data-split] .word,[data-split] .char{display:inline-block;will-change:transform,opacity}
+[data-split] .word{overflow:hidden;vertical-align:top}
+[data-split="chars"] .char{transform:translateY(105%) rotate(4deg);opacity:0;transition:transform .9s var(--ease-out),opacity .6s}
+[data-split="chars"].is-inview .char{transform:none;opacity:1}
+[data-split="words"] .word > span{display:inline-block}
+[data-split="words"] .word{opacity:0;transform:translateY(28px);transition:opacity .7s var(--ease-out),transform .9s var(--ease-out)}
+[data-split="words"].is-inview .word{opacity:1;transform:none}
+
+[data-reveal]{opacity:0;transform:translateY(34px);transition:opacity .9s var(--ease-out),transform 1s var(--ease-out)}
+[data-reveal].is-inview{opacity:1;transform:none}
+
+.fade-in{opacity:0;animation:fadeIn 1s var(--ease-out) forwards}
+@keyframes fadeIn{to{opacity:1}}
+
+/* hero name reveal */
+.hero__name .w{opacity:0;transform:translateY(110%) rotate(3deg)}
+body.is-loaded .hero__name .w{opacity:1;transform:none;transition:transform 1.1s var(--ease-out),opacity .8s var(--ease-out)}
+body.is-loaded .hero__line[data-line="1"] .w{transition-delay:.12s}
+body.is-loaded .hero__line[data-line="2"] .w:nth-child(1){transition-delay:.2s}
+body.is-loaded .hero__line[data-line="2"] .w:nth-child(2){transition-delay:.28s}
+body.is-loaded .hero__line[data-line="2"] .w:nth-child(3){transition-delay:.36s}
+
+.hero__meta,.hero__sub,.hero__figure,.hero__badge{opacity:0;transform:translateY(18px)}
+body.is-loaded .hero__meta,body.is-loaded .hero__sub,body.is-loaded .hero__badge{
+  opacity:1;transform:none;transition:opacity .9s var(--ease-out),transform 1s var(--ease-out)
+}
+body.is-loaded .hero__meta{transition-delay:.45s}
+body.is-loaded .hero__sub{transition-delay:.55s}
+body.is-loaded .hero__badge{transition-delay:.75s}
+body.is-loaded .hero__figure{
+  opacity:1;transform:none;
+  transition:opacity 1.2s var(--ease-out) .35s,transform 1.4s var(--ease-out) .35s;
+}
+
+/* magnetic */
+.magnetic{transition:transform .35s var(--ease-out)}
+.magnetic.is-active{transition:transform .12s linear}
+
+/* card clip reveal */
+.card__media{clip-path:inset(0 0 100% 0)}
+.card.is-inview .card__media{clip-path:inset(0 0 0 0);transition:clip-path 1.1s var(--ease-in-out)}
+.card .card__media img{transform:scale(1.14)}
+.card.is-inview .card__media img{transform:scale(1.02);transition:transform 1.4s var(--ease-out)}
+.card:hover.is-inview .card__media img{transform:scale(1.07)}
+
+/* section hairline draw */
+.section::before{
+  content:"";position:absolute;left:var(--pad);right:var(--pad);top:0;height:1px;
+  background:linear-gradient(90deg,var(--accent),rgba(241,238,230,.12) 30%,transparent);
+  transform:scaleX(0);transform-origin:left;transition:transform 1.4s var(--ease-out);
+}
+.section.is-inview::before{transform:scaleX(1)}
+.hero::before,.marquee::before{display:none}
