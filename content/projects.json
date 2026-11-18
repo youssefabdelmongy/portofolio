@@ -1,0 +1,13 @@
+{
+  "note": "Order of the Selected Work grid. To add a project: create content/projects/<id>.json, then add its id below. To hide one, delete its line — the file can stay.",
+  "order": [
+    "talabat",
+    "sheikh",
+    "alhazem-tech",
+    "qandil",
+    "cookin-aboud",
+    "menus",
+    "company",
+    "seafood"
+  ]
+}

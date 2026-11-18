@@ -1,0 +1,9 @@
+{
+  "note": "Order of the four scroll acts. Add or remove an id to change the sequence.",
+  "order": [
+    "menus",
+    "campaigns",
+    "identity",
+    "social"
+  ]
+}

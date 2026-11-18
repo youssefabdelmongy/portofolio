@@ -1,0 +1,24 @@
+{
+  "key": "IDENTITY",
+  "name": "Identity",
+  "urlLabel": "live work / brand-system",
+  "bg": "halftone",
+  "tint": "#F2A93B",
+  "kicker": "03 · Brand identity — from 2 weeks",
+  "intro": "Logo, colours, type and a rulebook your team can follow.",
+  "panelTitle": "One brand your team can actually use.",
+  "what": "A logo. Tap “Today” to see the file most businesses send over WhatsApp.",
+  "result": "Sign, menu, packaging and posts look like one business — and new staff can stay on brand without asking you first.",
+  "get": [
+    "Logo set (all formats)",
+    "Colours + type rules",
+    "Mini rulebook (few pages)",
+    "Editable source files"
+  ],
+  "proof": "Sheikh El Balad — identity used on print, social and packaging.",
+  "before": "The logo file you have",
+  "after": "The system you keep",
+  "panelBody": "Logos arrive as WhatsApp screenshots — stretched on the sign, blurred on the menu, no colour code — so every new print job looks different.",
+  "panelMeta": "Logo set · palette & type · mini rulebook · source files",
+  "id": "identity"
+}

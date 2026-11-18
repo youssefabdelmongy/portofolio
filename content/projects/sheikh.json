@@ -1,0 +1,26 @@
+{
+  "bg": "#7A1F23",
+  "gallery": [
+    "assets/work/sheikh-1.webp",
+    "assets/work/sheikh-2.webp"
+  ],
+  "title": "Sheikh El Balad",
+  "kind": "Social Campaign",
+  "year": "2025",
+  "client": "Sheikh El Balad — restaurant, Cairo",
+  "service": "Social media campaign, menu photography direction, post system",
+  "tags": [
+    "Social Media",
+    "F&B",
+    "Art Direction"
+  ],
+  "blurb": "A food brand that lives on tradition, not trends. Deep burgundy, gold Arabic type and one hero dish per post — the whole campaign reads like a family recipe card rather than an ad.",
+  "img": "assets/work/sheikh.webp",
+  "alt": "Sheikh El Balad social media campaign posters with burgundy and gold Arabic typography",
+  "url": "https://www.behance.net/gallery/256995583/Sheikh-El-Balad-Social-Media-Campaign",
+  "details": [
+    "Post template set of 9 formats covering offers, dishes, hours and occasions.",
+    "Type pairing: a display Arabic face for the hook, one light face for the supporting line — never three.",
+    "Every post carries a single call-to-action number, consistent across the whole feed."
+  ]
+}

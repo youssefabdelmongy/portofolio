@@ -1,0 +1,24 @@
+{
+  "key": "SOCIAL",
+  "name": "Social",
+  "urlLabel": "live work / social-system",
+  "bg": "blur",
+  "tint": "#F1EEE6",
+  "kicker": "04 · Social systems — monthly, no agency retainer",
+  "intro": "Templates and monthly sets you can reuse for weeks.",
+  "panelTitle": "A feed that looks like one business, not five.",
+  "what": "A week of posts. Tap “Today” to see a busy week with no templates.",
+  "result": "Your page keeps posting through the busy weeks, on brand, without a designer on call — and without you chasing anyone.",
+  "get": [
+    "Editable post templates",
+    "Offer + menu formats",
+    "Monthly set you can reuse",
+    "Handover walkthrough"
+  ],
+  "proof": "Eight live projects on Behance — check the work before we talk.",
+  "before": "A busy week, no system",
+  "after": "A busy week, still on brand",
+  "panelBody": "Posting stops in the busiest weeks because every post is designed from scratch — the page goes quiet exactly when orders should go up.",
+  "panelMeta": "Templates · post formats · monthly sets · handover",
+  "id": "social"
+}

@@ -1,0 +1,26 @@
+{
+  "bg": "#E85D22",
+  "gallery": [
+    "assets/work/talabat-1.webp",
+    "assets/work/talabat-2.webp"
+  ],
+  "title": "Talabat — 10 Years",
+  "kind": "Social Campaign",
+  "year": "2025",
+  "client": "Talabat (concept / spec work)",
+  "service": "Campaign art direction, social design, key visuals",
+  "tags": [
+    "Social Media",
+    "Campaign",
+    "Key Visual"
+  ],
+  "blurb": "An anniversary campaign where the number 10 becomes the hero: one bold orange card, one clean photo of a real smiling face, one line of Arabic that does the heavy lifting. Built as a modular system that survives carousels, stories and feed placements.",
+  "img": "assets/work/talabat.webp",
+  "alt": "Talabat 10-year social media campaign key visual with orange phone card and Arabic headline",
+  "url": "https://www.behance.net/gallery/246473857/Talabat-Social-Media-campaign",
+  "details": [
+    "One master layout, three crops (1:1, 4:5, 9:16) so the team never re-designs per placement.",
+    "Type scale locked to two sizes so Arabic headlines stay readable on a phone at arm’s length.",
+    "Colour system: Talabat orange reserved only for the brand cue, everything else neutral so photos breathe."
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "bg": "#E9E0D2",
+  "gallery": [
+    "assets/work/cookin-1.webp",
+    "assets/work/cookin-2.webp"
+  ],
+  "title": "Cookin Aboud",
+  "kind": "Social Campaign",
+  "year": "2024",
+  "client": "Cookin Aboud — cookware brand",
+  "service": "Social media design, product staging, copy layout",
+  "tags": [
+    "Social Media",
+    "Product",
+    "E-commerce"
+  ],
+  "blurb": "Cookware shot like jewellery. Warm light, a deep plate, and one line of copy that sells the feeling of cooking rather than the pot. Built to work as a paid ad and as an organic post without a redraw.",
+  "img": "assets/work/cookin.webp",
+  "alt": "Cookin Aboud cookware social media designs with warm lighting and Arabic order-now copy",
+  "url": "https://www.behance.net/gallery/246199819/Cookin-Aboud-Social-Media-Design",
+  "details": [
+    "Three post archetypes: hero product, lifestyle scene, offer card.",
+    "Retouching direction for product shots so every pot sits in the same warm world.",
+    "CTA stays identical across paid and organic so recall compounds."
+  ]
+}

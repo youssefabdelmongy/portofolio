@@ -1,0 +1,152 @@
+# Pages CMS — the editing screen for this site.
+# Open https://app.pagescms.org, sign in with GitHub, pick this repository.
+# Everything below becomes a form: no JSON, no code.
+# Docs: https://pagescms.org/docs
+
+media:
+  input: assets/work
+  output: /assets/work
+  extensions: [webp, jpg, png]
+
+content:
+  # ─────────────────────────── WHO YOU ARE ───────────────────────────
+  - name: person
+    label: ١ · المعلومات الشخصية
+    file: content/site.json
+    fields:
+      - name: person
+        label: هو أنت
+        type: object
+        fields:
+          - { name: name, label: الاسم الكامل, type: string }
+          - { name: first, label: الاسم الأول (كبير), type: string }
+          - { name: last, label: اسم العائلة, type: string }
+          - { name: role, label: الوظيفة, type: string }
+          - { name: email, label: البريد الإلكتروني, type: string, note: "غيّره هنا فقط — كل أزرار الإيميل بتتحدّث لوحدها" }
+          - { name: whatsapp, label: رقم الواتساب (بالكود الدولي، من غير +), type: string, note: "مثال: 201066956233 — بيبني لينك wa.me في ٣ أماكن (التواصل، السوشيال، باني البريف)" }
+          - { name: whatsappLocal, label: رقم الواتساب زي ما يظهر للزائر, type: string, note: "مثال: 0106 695 6233 — ده اللي بيتقرأ بالعين في صف السوشيال، مش اللينك" }
+          - { name: behance, label: لينك Behance, type: string }
+          - { name: city, label: المدينة, type: string }
+          - { name: years, label: عدد سنين الخبرة, type: number }
+
+  # ─────────────────────────── HERO ───────────────────────────
+  - name: hero
+    label: ٢ · أول شاشة (Hero)
+    file: content/site.json
+    fields:
+      - name: hero
+        label: الكلام اللي فوق
+        type: object
+        fields:
+          - { name: status, label: الحالة (OPEN FOR PROJECTS…), type: string }
+          - { name: location, label: المكان, type: string }
+          - { name: subSerif, label: أول كلمة بخط ايطاليك, type: string }
+          - { name: badgeRing, label: النص الدايري حول الشارة, type: string }
+          - { name: badgeCore, label: رقم الشارة, type: string }
+          - { name: badgeUnit, label: وحدة الشارة (yrs), type: string }
+          - { name: portraitCaption, label: كابشن الصورة, type: string }
+          - { name: portrait, label: صورة البورتريه, type: image }
+
+  # ─────────────────────────── THE FOUR ACTS ───────────────────────────
+  - name: acts
+    label: ٣ · الفصول الأربعة (The Cursor)
+    folder: content/acts
+    extension: json
+    filename:
+      template: "{name}.json"
+    fields:
+      - { name: name, label: اسم الفصل, type: string }
+      - { name: kicker, label: السطر الصغير اللي فوق, type: string }
+      - { name: panelTitle, label: العنوان الكبير, type: string }
+      - { name: panelBody, label: الوصف, type: text }
+      - { name: panelMeta, label: تفاصيل صغيرة, type: string }
+      - { name: what, label: سطر الكارت في الأعلى, type: string }
+      - { name: result, label: النتيجة (جملة واحدة), type: text }
+      - { name: get, label: اللي بتاخده (نقاط), type: list }
+      - { name: proof, label: سطر الدليل (Made for), type: string }
+      - { name: before, label: اسم تاب Today, type: string }
+      - { name: after, label: اسم تاب After the fix, type: string }
+
+  # ─────────────────────────── ABOUT ───────────────────────────
+  - name: about
+    label: ٤ · عني
+    file: content/site.json
+    fields:
+      - name: about
+        label: قسم About
+        type: object
+        fields:
+          - { name: statement, label: الفقرة الكبيرة (تقبل HTML), type: rich-text }
+          - { name: toolsTitle, label: عنوان المهارات, type: string }
+          - name: tools
+            label: الأدوات
+            type: list
+            fields:
+              - { name: name, label: اسم البرنامج, type: string }
+              - { name: level, label: النسبة %, type: number }
+          - { name: servicesTitle, label: عنوان الخدمات, type: string }
+          - { name: services, label: الخدمات, type: list }
+          - name: stats
+            label: الأرقام
+            type: list
+            fields:
+              - { name: count, label: الرقم, type: string }
+              - { name: suffix, label: علامة بعد الرقم (+), type: string }
+              - { name: label, label: الوصف (تقبل <br>), type: string }
+          - { name: quote, label: جملة عميل, type: text }
+          - { name: quoteBy, label: مصدر الجملة, type: string }
+          - { name: arabic, label: الفقرة العربية, type: text }
+
+  # ─────────────────────────── CONTACT & FOOTER ───────────────────────────
+  - name: contact
+    label: ٥ · التواصل
+    file: content/site.json
+    fields:
+      - name: contact
+        label: Contact
+        type: object
+        fields:
+          - { name: titleLine1, label: العنوان — السطر الأول, type: string }
+          - { name: titleLine2, label: العنوان — السطر الثاني, type: string }
+          - { name: emailCta, label: نص زر الإيميل, type: string }
+          - { name: copyCta, label: نص زر النسخ, type: string }
+          - { name: jumpCta, label: نص زر القائمة, type: string }
+          - name: socials
+            label: لينكات السوشيال
+            type: list
+            fields:
+              - { name: label, label: الاسم الظاهر, type: string }
+              - { name: url, label: اللينك, type: string }
+
+  # ─────────────────────────── PROJECTS ───────────────────────────
+  - name: projects
+    label: ٦ · المشاريع
+    folder: content/projects
+    extension: json
+    fields:
+      - { name: title, label: اسم المشروع, type: string }
+      - { name: kind, label: النوع (Social Campaign…), type: string }
+      - { name: year, label: السنة, type: string }
+      - { name: client, label: العميل, type: string }
+      - { name: service, label: الخدمة, type: string }
+      - { name: blurb, label: الوصف, type: text }
+      - { name: img, label: الصورة الرئيسية, type: image }
+      - name: gallery
+        label: صور إضافية (حتى ٢)
+        type: image
+        list: true
+      - { name: alt, label: وصف الصورة (لقارئ الشاشة), type: string }
+      - { name: url, label: لينك Behance, type: string }
+      - { name: bg, label: لون الخلفية, type: string }
+      - { name: tags, label: تاجات, type: list }
+      - { name: details, label: تفاصيل دراسة الحالة, type: list }
+
+  # ─────────────────────────── ORDER ───────────────────────────
+  - name: projectOrder
+    label: ٧ · ترتيب المشاريع
+    file: content/projects.json
+    fields:
+      - name: order
+        label: ترتيب المشاريع (id لكل مشروع)
+        type: list
+        required: true

@@ -111,6 +111,43 @@ window.PF = window.PF || {};
     'See a month of posts <span aria-hidden="true">↗</span>'
   ];
 
+  /* content/acts.json overrides the copy above once it loads — the array here is
+     the shipped fallback, so the stage still works offline or before the fetch */
+  document.addEventListener('pf:content', function () { refreshStages(); });
+  fetch('content/acts.json', { cache: 'no-cache' })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (index) {
+      if (!index || !Array.isArray(index.order) || !index.order.length) return null;
+      return Promise.all(index.order.map(function (id) {
+        return fetch('content/acts/' + id + '.json', { cache: 'no-cache' })
+          .then(function (r) { return r.ok ? r.json() : null; })
+          .catch(function () { return null; });
+      })).then(function (list) { return list.filter(Boolean); });
+    })
+    .then(function (acts) {
+      if (!Array.isArray(acts) || !acts.length) return;
+      acts.forEach(function (a, i) {
+        if (!STAGES[i]) return;
+        ['name','urlLabel','bg','tint','kicker','intro','panelTitle','panelBody',
+         'panelMeta','what','result','proof','before','after'].forEach(function (k) {
+          if (a[k] != null && a[k] !== '') STAGES[i][k] = a[k];
+        });
+        if (Array.isArray(a.get) && a.get.length) STAGES[i].get = a.get;
+      });
+      refreshStages();
+    })
+    .catch(function () {});
+
+  function refreshStages() {
+    if (rail) {
+      PF.$$('.cstage__rail-i', rail).forEach(function (b, i) {
+        var s = STAGES[i];
+        if (s) b.innerHTML = '<span class="mono">0' + (i + 1) + '</span>' + s.name + '<i aria-hidden="true"></i>';
+      });
+    }
+    setStage(PF.clamp(current, 0, STAGES.length - 1), true);
+  }
+
   /* the rail: one line per act, reads like a table of contents */
   if (rail) {
     rail.innerHTML = STAGES.map(function (s, i) {
@@ -172,11 +209,11 @@ window.PF = window.PF || {};
         panelK.textContent = src.querySelector('.cstep__k').textContent;
         panelT.textContent = src.querySelector('.cstep__t').textContent;
         /* the first sentence is what a phone shows — the rest is on wide screens */
-        panelD.innerHTML = src.querySelector('.cstep__d').innerHTML.replace(
+        panelD.innerHTML = (st.panelBody || src.querySelector('.cstep__d').textContent).replace(
           /^([^.]+\.)\s*(.+)$/,
           '<b>$1</b><span class="cstage__panel-rest"> $2</span>'
         );
-        panelMeta.textContent = src.querySelector('.cstep__meta').textContent;
+        panelMeta.textContent = st.panelMeta || src.querySelector('.cstep__meta').textContent;
         if (panelTry) panelTry.innerHTML = TRY[i] || '';
         panel.classList.remove('is-swap');
         void panel.offsetWidth;

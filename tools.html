@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Tools — Youssef Mohamed</title>
+<meta name="description" content="Six free tools every designer needs: social media sizes, print bleed calculator, WCAG contrast checker, px/rem converter, a palette builder and a file-weight budget — plus a curated directory of the tools that actually earn their place." />
+<meta name="author" content="Youssef Mohamed" />
+<meta name="theme-color" content="#0A0A0B" />
+<link rel="canonical" href="https://yousefmohamed.design/tools.html" />
+
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Youssef Mohamed" />
+<meta property="og:title" content="Tools — Youssef Mohamed" />
+<meta property="og:description" content="Six working tools for designers: social sizes, print bleed, contrast, units, palettes, file weight." />
+<meta property="og:url" content="https://yousefmohamed.design/tools.html" />
+<meta property="og:image" content="https://yousefmohamed.design/assets/og.jpg" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Tools — Youssef Mohamed" />
+<meta name="twitter:description" content="Six working tools for designers, plus a curated directory." />
+
+<link rel="icon" href="assets/icon-192.png" sizes="192x192" />
+<link rel="icon" href="assets/icon-512.png" sizes="512x512" />
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+<link rel="manifest" href="manifest.webmanifest" />
+
+<link rel="stylesheet" href="fonts.css" />
+<link rel="stylesheet" href="css/base.css" />
+<link rel="stylesheet" href="css/tools.css" />
+
+<noscript>
+<style>
+  .tp-nav,.tdir__bar{display:none}
+  .tsize__groups{display:block}
+</style>
+</noscript>
+</head>
+<body class="tools-page">
+
+<a class="skip-link" href="#tools">Skip to the tools</a>
+
+<header class="site-head" id="siteHead">
+  <a class="brand" href="index.html">
+    <span class="brand__mark" aria-hidden="true"><i></i><i></i></span>
+    <span class="brand__txt">YOUSSEF<br>MOHAMED</span>
+  </a>
+
+  <nav class="nav" aria-label="Primary">
+    <a href="index.html#pointer" class="nav__link"><span class="mono">01</span>Hire me</a>
+    <a href="index.html#work" class="nav__link"><span class="mono">02</span>Work</a>
+    <a href="index.html#about" class="nav__link"><span class="mono">03</span>About</a>
+    <a href="index.html#contact" class="nav__link"><span class="mono">04</span>Contact</a>
+  </nav>
+
+  <div class="head-right">
+    <a class="btn btn--pill" href="index.html#contact">
+      <span>Let's talk</span><i aria-hidden="true">↗</i>
+    </a>
+    <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false"><i></i><i></i></button>
+  </div>
+</header>
+
+<main id="tools">
+  <div class="pad">
+
+    <header class="tp-head">
+      <p class="tp-head__kicker mono">Tools · free · no sign-up</p>
+      <h1 class="tp-title">The things I open<br><em>twenty times a day.</em></h1>
+      <p class="tp-lede">
+        Six calculators I got tired of googling, and a directory of the tools that actually
+        earn their place in a working designer's browser. Everything here runs on your device —
+        nothing is uploaded, nothing is tracked, and it all works offline.
+      </p>
+
+      <nav class="tp-nav" aria-label="Jump to a tool">
+        <a href="#sizes">01 · Social sizes</a>
+        <a href="#print">02 · Print bleed</a>
+        <a href="#contrast">03 · Contrast</a>
+        <a href="#units">04 · Units</a>
+        <a href="#palette">05 · Palette</a>
+        <a href="#fonts">06 · Fonts</a>
+        <a href="#weight">07 · File weight</a>
+        <a href="#audit">08 · Image audit</a>
+        <a href="#lockup">09 · Lockup</a>
+        <a href="#directory">10 · Directory</a>
+      </nav>
+    </header>
+
+    <!-- ───────────── 01 · SOCIAL SIZES ───────────── -->
+    <section class="tool" id="sizes">
+      <div class="tool__head">
+        <span class="tool__n mono">01</span>
+        <h2 class="tool__title">Social media sizes</h2>
+      </div>
+      <p class="tool__d">
+        The current sizes for every placement worth designing for. Tap any row to copy
+        “width × height” to the clipboard — the aspect ratio is there so you can set up the
+        artboard without doing the maths.
+      </p>
+      <div class="tsize__groups" id="tSizeList"></div>
+    </section>
+
+    <!-- ───────────── 02 · PRINT BLEED ───────────── -->
+    <section class="tool" id="print">
+      <div class="tool__head">
+        <span class="tool__n mono">02</span>
+        <h2 class="tool__title">Print bleed calculator</h2>
+      </div>
+      <p class="tool__d">
+        The number that causes the most reprints. Set your trim size and the bleed, and this
+        gives you the document size to create, the safe area to keep text inside, and the pixel
+        count at your export resolution.
+      </p>
+
+      <div class="tprint">
+        <div>
+          <div class="tf" style="margin-bottom:12px">
+            <label for="tPrintPreset">Preset</label>
+            <select id="tPrintPreset"></select>
+          </div>
+          <div class="tf__row">
+            <div class="tf"><label for="tPrintW">Width (mm)</label><input id="tPrintW" type="number" value="210" min="1" step="0.5" inputmode="decimal" /></div>
+            <div class="tf"><label for="tPrintH">Height (mm)</label><input id="tPrintH" type="number" value="297" min="1" step="0.5" inputmode="decimal" /></div>
+          </div>
+          <div class="tf__row" style="margin-top:10px">
+            <div class="tf"><label for="tPrintBleed">Bleed (mm)</label><input id="tPrintBleed" type="number" value="3" min="0" step="0.5" inputmode="decimal" /></div>
+            <div class="tf"><label for="tPrintSafe">Safe margin (mm)</label><input id="tPrintSafe" type="number" value="5" min="0" step="0.5" inputmode="decimal" /></div>
+            <div class="tf"><label for="tPrintDpi">Resolution (dpi)</label><input id="tPrintDpi" type="number" value="300" min="72" step="1" inputmode="numeric" /></div>
+          </div>
+          <div class="tp__out" id="tPrintOut"></div>
+        </div>
+        <div class="tp__figwrap">
+          <div id="tPrintFig"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────── 03 · CONTRAST ───────────── -->
+    <section class="tool" id="contrast">
+      <div class="tool__head">
+        <span class="tool__n mono">03</span>
+        <h2 class="tool__title">Contrast checker (WCAG)</h2>
+      </div>
+      <p class="tool__d">
+        Type a colour, or pick from the presets. The ratio is what accessibility guidelines use:
+        4.5:1 for body text, 3:1 for large text. If it fails here, it fails for a lot of
+        people — including anyone reading your work on a phone in daylight.
+      </p>
+
+      <div class="tcon">
+        <div>
+          <div class="tf__row">
+            <div class="tf">
+              <label for="tConFg">Text colour</label>
+              <input id="tConFg" type="color" value="#F1EEE6" />
+            </div>
+            <div class="tf">
+              <label for="tConBg">Background</label>
+              <input id="tConBg" type="color" value="#0A0A0B" />
+            </div>
+          </div>
+          <div style="margin-top:10px">
+            <button class="btn btn--ghost" type="button" id="tConSwap" style="width:100%">Swap colours ⇄</button>
+          </div>
+          <div class="tcon__picks" aria-label="Presets">
+            <button class="tcon__pick" type="button" data-fg="#0A0A0B" data-bg="#F1EEE6" style="background:linear-gradient(135deg,#0A0A0B 50%,#F1EEE6 50%)" aria-label="Ink on paper"></button>
+            <button class="tcon__pick" type="button" data-fg="#F1EEE6" data-bg="#0A0A0B" style="background:linear-gradient(135deg,#F1EEE6 50%,#0A0A0B 50%)" aria-label="Paper on ink"></button>
+            <button class="tcon__pick" type="button" data-fg="#FFFFFF" data-bg="#E4572E" style="background:linear-gradient(135deg,#FFFFFF 50%,#E4572E 50%)" aria-label="White on orange"></button>
+            <button class="tcon__pick" type="button" data-fg="#0A0A0B" data-bg="#F2A93B" style="background:linear-gradient(135deg,#0A0A0B 50%,#F2A93B 50%)" aria-label="Ink on amber"></button>
+            <button class="tcon__pick" type="button" data-fg="#F1EEE6" data-bg="#16223F" style="background:linear-gradient(135deg,#F1EEE6 50%,#16223F 50%)" aria-label="Paper on navy"></button>
+            <button class="tcon__pick" type="button" data-fg="#5C6E58" data-bg="#F1EEE6" style="background:linear-gradient(135deg,#5C6E58 50%,#F1EEE6 50%)" aria-label="Sage on paper"></button>
+          </div>
+        </div>
+
+        <div>
+          <p class="tcon__ratio" id="tConRatio">—</p>
+          <ul class="tcon__checks" id="tConChecks"></ul>
+          <div class="tcon__preview" id="tConPreview">
+            <p id="tConText">
+              Menus people can read in bad light. This is body text at normal size —
+              the paragraph you are reading right now.
+            </p>
+            <p>Large text sample</p>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:10px;align-items:center">
+            <span id="tConSwatchFg" style="width:34px;height:34px;border-radius:6px;border:1px solid rgba(241,238,230,.25)"></span>
+            <span id="tConSwatchBg" style="width:34px;height:34px;border-radius:6px;border:1px solid rgba(241,238,230,.25)"></span>
+            <span class="mono" style="font-size:.56rem;color:rgba(241,238,230,.4)">text / background</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────── 04 · UNITS ───────────── -->
+    <section class="tool" id="units">
+      <div class="tool__head">
+        <span class="tool__n mono">04</span>
+        <h2 class="tool__title">px · rem · pt</h2>
+      </div>
+      <p class="tool__d">
+        Type into any field and the others follow. Point sizes from a print spec, rem values
+        for a stylesheet, pixels for a mockup — this is the conversion that keeps a type scale
+        consistent across both.
+      </p>
+
+      <div class="tunits">
+        <div class="tf"><label for="tUnitPx">Pixels</label><input class="tunit__in" id="tUnitPx" data-unit="px" type="number" inputmode="decimal" step="any" /></div>
+        <div class="tf"><label for="tUnitRem">Rem</label><input class="tunit__in" id="tUnitRem" data-unit="rem" type="number" inputmode="decimal" step="any" /></div>
+        <div class="tf"><label for="tUnitPt">Points</label><input class="tunit__in" id="tUnitPt" data-unit="pt" type="number" inputmode="decimal" step="any" /></div>
+        <div class="tf"><label for="tUnitRoot">Root size (px)</label><input id="tUnitRoot" type="number" value="16" min="1" step="1" inputmode="numeric" /></div>
+      </div>
+      <p class="tunit__note" id="tUnitNote"></p>
+    </section>
+
+    <!-- ───────────── 05 · PALETTE ───────────── -->
+    <section class="tool" id="palette">
+      <div class="tool__head">
+        <span class="tool__n mono">05</span>
+        <h2 class="tool__title">Palette from one colour</h2>
+      </div>
+      <p class="tool__d">
+        Pick a brand colour and get a usable ramp: five tints, the base, five shades, and three
+        accents that are actually related. Each swatch shows its contrast against white and
+        black, so you can see what will hold up as text before you commit.
+      </p>
+
+      <div class="tpal">
+        <div>
+          <div class="tf">
+            <label for="tPalBase">Base colour</label>
+            <input id="tPalBase" type="color" value="#E4572E" />
+          </div>
+          <p class="mono" style="font-size:.56rem;color:rgba(241,238,230,.35);margin:12px 0 0;line-height:1.6">
+            Tap any swatch to copy its hex.<br>The two numbers are contrast vs. white / vs. black.
+          </p>
+        </div>
+        <div>
+          <div class="tpal__grid" id="tPalOut"></div>
+          <div class="tpal__accents" id="tPalAccents"></div>
+          <div class="tpal__export">
+            <span class="mono tpal__export-h">Export the whole ramp</span>
+            <button type="button" class="tpal__exp" id="tPalCss">CSS variables</button>
+            <button type="button" class="tpal__exp" id="tPalJson">JSON tokens</button>
+            <button type="button" class="tpal__exp" id="tPalTailwind">Tailwind config</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────── 06 · FILE WEIGHT ───────────── -->
+    <section class="tool" id="weight">
+      <div class="tool__head">
+        <span class="tool__n mono">07</span>
+        <h2 class="tool__title">File weight budget</h2>
+      </div>
+      <p class="tool__d">
+        The quiet reason a portfolio feels slow. Set the pixel size and the size you want the
+        file to be, and this tells you how many bits per pixel you have left — which is what
+        decides whether the export will band and block or hold together.
+      </p>
+
+      <div class="tweight">
+        <div class="tf__row">
+          <div class="tf"><label for="tWtW">Width (px)</label><input id="tWtW" type="number" value="1080" min="1" step="1" inputmode="numeric" /></div>
+          <div class="tf"><label for="tWtH">Height (px)</label><input id="tWtH" type="number" value="1350" min="1" step="1" inputmode="numeric" /></div>
+          <div class="tf"><label for="tWtBudget">Target size (KB)</label><input id="tWtBudget" type="number" value="120" min="1" step="1" inputmode="numeric" /></div>
+        </div>
+        <div class="tp__out" id="tWtOut"></div>
+      </div>
+    </section>
+
+
+    <!-- ───────────── 06 · FONT STACK INSPECTOR ───────────── -->
+    <section class="tool" id="fonts">
+      <div class="tool__head">
+        <span class="tool__n mono">06</span>
+        <h2 class="tool__title">What font is this, really?</h2>
+      </div>
+      <p class="tool__d">
+        Paste any CSS font stack and this shows you exactly which face your machine resolves it
+        to — the one that actually renders, not the first one you asked for. It is measured, not
+        guessed: the text is drawn on a canvas in each candidate and compared against the generic
+        fallback, so a face that is not installed cannot fake its way in. The line you are reading
+        is set in this site's own stack — <em>Bricolage Grotesque</em> first, with Helvetica,
+        Arial and sans-serif behind it — so the counts below are a live example, not a demo.
+      </p>
+
+      <div class="tfont">
+        <div class="tfont__side">
+          <div class="tf">
+            <label for="tFontStack">Font stack</label>
+            <textarea id="tFontStack" class="tfont__in" rows="3" spellcheck="false">"Bricolage Grotesque", "Helvetica Neue", Helvetica, Arial, sans-serif</textarea>
+          </div>
+          <div class="tf" style="margin-top:14px">
+            <label for="tFontSample">Sample</label>
+            <input id="tFontSample" class="tfont__in" type="text" value="Hamburgefonstiv 0123 — تصميم" />
+          </div>
+          <div class="tfont__size">
+            <label class="mono" for="tFontSize">Size <b id="tFontSizeVal">64</b>px</label>
+            <input id="tFontSize" type="range" min="16" max="140" value="64" />
+          </div>
+          <p class="mono tfont__hint">
+            Green = resolved here · grey = fell through. Every line is drawn in the face it
+            names, so a fallback that looks wrong is a fallback that <em>is</em> wrong.
+          </p>
+        </div>
+        <div class="tfont__main">
+          <div class="tfont__big" id="tFontBig" contenteditable="true" spellcheck="false">Hamburgefonstiv</div>
+          <p class="tfont__res mono" id="tFontResolved"></p>
+          <ul class="tfont__list" id="tFontList"></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────── 08 · IMAGE AUDITOR ───────────── -->
+    <section class="tool" id="audit">
+      <div class="tool__head">
+        <span class="tool__n mono">08</span>
+        <h2 class="tool__title">What's actually inside that export</h2>
+      </div>
+      <p class="tool__d">
+        Drop an image and read it the way a proofer would: real dimensions, the DPI it will print
+        at, whether it has transparency, how much of it is pure black and pure white, and — the one
+        nobody checks — the ratio of noise to detail, which is what tells you whether a JPEG has
+        been re-saved one time too many or a PNG was exported at the wrong size and upscaled.
+        Nothing leaves this tab; the file is read in memory and forgotten.
+      </p>
+
+      <div class="taud">
+        <label class="taud__drop" id="tAudDrop" for="tAudFile">
+          <input id="tAudFile" type="file" accept="image/*" hidden />
+          <span class="taud__icon" aria-hidden="true">↓</span>
+          <b>Drop an image, or tap to choose one</b>
+          <small class="mono">JPEG · PNG · WebP · GIF — read locally, never uploaded</small>
+        </label>
+        <div class="taud__out" id="tAudOut" hidden>
+          <div class="taud__preview"><img id="tAudImg" alt="The image you just loaded" /></div>
+          <div class="taud__facts" id="tAudFacts"></div>
+        </div>
+        <p class="taud__note mono" id="tAudNote"></p>
+      </div>
+    </section>
+
+    <!-- ───────────── 09 · LOCKUP EXPORTER ───────────── -->
+    <section class="tool" id="lockup">
+      <div class="tool__head">
+        <span class="tool__n mono">09</span>
+        <h2 class="tool__title">A lockup you can actually hand over</h2>
+      </div>
+      <p class="tool__d">
+        Type a name, pick a mark, and this writes a real, clean SVG — live text you can outline,
+        a transparent background, and the exact spacing a lockup needs — plus the three
+        arrangements a client always asks for after the fact. Four files, one click, no account
+        and no watermark. It opens in Illustrator as editable shapes because that is what it is.
+      </p>
+
+      <div class="tlk">
+        <div class="tlk__side">
+          <div class="tf"><label for="tlkName">Brand name</label><input id="tlkName" type="text" value="Qandil" maxlength="24" /></div>
+          <div class="tf" style="margin-top:12px"><label for="tlkTag">Tagline (optional)</label><input id="tlkTag" type="text" value="Kitchen &amp; Table" maxlength="34" /></div>
+          <div class="tf" style="margin-top:12px">
+            <label for="tlkMark">Mark</label>
+            <select id="tlkMark">
+              <option value="circle">Circle</option>
+              <option value="square">Square</option>
+              <option value="ring">Ring</option>
+              <option value="arc">Arc</option>
+              <option value="none">Wordmark only</option>
+            </select>
+          </div>
+          <div class="tf" style="margin-top:12px">
+            <label for="tlkInk">Ink</label>
+            <input id="tlkInk" type="color" value="#0A0A0B" />
+          </div>
+          <button class="btn btn--solid tlk__all" id="tlkAll" type="button">Download four SVGs ↓</button>
+        </div>
+        <div class="tlk__stage" id="tlkStage"></div>
+      </div>
+    </section>
+
+    <!-- ───────────── 07 · DIRECTORY ───────────── -->
+    <section class="tool" id="directory">
+      <div class="tool__head">
+        <span class="tool__n mono">10</span>
+        <h2 class="tool__title">The directory</h2>
+      </div>
+      <p class="tool__d">
+        Tools I actually use, grouped by what you reach for them for. No affiliate links,
+        no “top 50” padding — if it is here, it earned the slot. Search or filter by category.
+      </p>
+
+      <div class="tdir__bar">
+        <input class="tdir__search" id="tDirSearch" type="search" placeholder="Search tools…" aria-label="Search tools" />
+        <button class="tdir__chip is-on" type="button" data-cat="all">All</button>
+        <button class="tdir__chip" type="button" data-cat="colour">Colour</button>
+        <button class="tdir__chip" type="button" data-cat="type">Type</button>
+        <button class="tdir__chip" type="button" data-cat="image">Image</button>
+        <button class="tdir__chip" type="button" data-cat="print">Print</button>
+        <button class="tdir__chip" type="button" data-cat="inspo">Inspiration</button>
+        <button class="tdir__chip" type="button" data-cat="handoff">Handoff</button>
+      </div>
+
+      <div id="tDir">
+
+        <div class="tdir__group">
+          <p class="tdir__g">Colour</p>
+          <div class="tdir__list">
+            <a class="tdir__item" data-cat="colour" href="https://coolors.co" target="_blank" rel="noopener"><b>Coolors <span class="tdir__tag">free</span></b><small>Fast palette generation; the spacebar shortcut is the whole point.</small></a>
+            <a class="tdir__item" data-cat="colour" href="https://color.adobe.com" target="_blank" rel="noopener"><b>Adobe Color <span class="tdir__tag">free</span></b><small>Wheel-based harmony rules, and it reads an image for a palette.</small></a>
+            <a class="tdir__item" data-cat="colour" href="https://contrast-ratio.com" target="_blank" rel="noopener"><b>Contrast Ratio <span class="tdir__tag">free</span></b><small>The original quick WCAG check — one screen, no account.</small></a>
+            <a class="tdir__item" data-cat="colour" href="https://www.colorhexa.com" target="_blank" rel="noopener"><b>ColorHexa <span class="tdir__tag">free</span></b><small>Tints, shades, blindness simulation and conversions for one hex.</small></a>
+            <a class="tdir__item" data-cat="colour" href="https://color.review" target="_blank" rel="noopener"><b>Color Review <span class="tdir__tag">free</span></b><small>Shows the contrast result on real text, not just a number.</small></a>
+          </div>
+        </div>
+
+        <div class="tdir__group">
+          <p class="tdir__g">Type</p>
+          <div class="tdir__list">
+            <a class="tdir__item" data-cat="type" href="https://fonts.google.com" target="_blank" rel="noopener"><b>Google Fonts <span class="tdir__tag">free</span></b><small>Open-licence families, with Arabic coverage that actually renders.</small></a>
+            <a class="tdir__item" data-cat="type" href="https://www.fontsquirrel.com" target="_blank" rel="noopener"><b>Font Squirrel <span class="tdir__tag">free</span></b><small>Commercial-use fonts, and a reliable webfont generator.</small></a>
+            <a class="tdir__item" data-cat="type" href="https://wakamaifondue.com" target="_blank" rel="noopener"><b>Wakamai Fondue <span class="tdir__tag">free</span></b><small>Drop a font file and see every OpenType feature it actually has.</small></a>
+            <a class="tdir__item" data-cat="type" href="https://typescale.com" target="_blank" rel="noopener"><b>Typescale <span class="tdir__tag">free</span></b><small>Build a modular scale and read the px/rem values straight off.</small></a>
+            <a class="tdir__item" data-cat="type" href="https://www.fontpair.co" target="_blank" rel="noopener"><b>Fontpair <span class="tdir__tag">free</span></b><small>Pairings that work, when you need a second opinion fast.</small></a>
+          </div>
+        </div>
+
+        <div class="tdir__group">
+          <p class="tdir__g">Image</p>
+          <div class="tdir__list">
+            <a class="tdir__item" data-cat="image" href="https://squoosh.app" target="_blank" rel="noopener"><b>Squoosh <span class="tdir__tag">free</span></b><small>Compress and compare formats side by side. Runs locally, nothing uploads.</small></a>
+            <a class="tdir__item" data-cat="image" href="https://tinypng.com" target="_blank" rel="noopener"><b>TinyPNG <span class="tdir__tag">free</span></b><small>Batch compression when you have twenty files and no time.</small></a>
+            <a class="tdir__item" data-cat="image" href="https://www.photopea.com" target="_blank" rel="noopener"><b>Photopea <span class="tdir__tag">free</span></b><small>A full PSD editor in the browser. The emergency backup.</small></a>
+            <a class="tdir__item" data-cat="image" href="https://remove.bg" target="_blank" rel="noopener"><b>remove.bg <span class="tdir__tag">freemium</span></b><small>Clean cutouts for product shots; the free tier covers single images.</small></a>
+            <a class="tdir__item" data-cat="image" href="https://screenshot.rocks" target="_blank" rel="noopener"><b>Screenshot.rocks <span class="tdir__tag">free</span></b><small>Device frames and backgrounds for mockup-style presentation.</small></a>
+          </div>
+        </div>
+
+        <div class="tdir__group">
+          <p class="tdir__g">Print</p>
+          <div class="tdir__list">
+            <a class="tdir__item" data-cat="print" href="https://www.pdf2go.com" target="_blank" rel="noopener"><b>PDF2Go <span class="tdir__tag">free</span></b><small>Merge, split, compress — the printer wants one file, not six.</small></a>
+            <a class="tdir__item" data-cat="print" href="https://www.ilovepdf.com" target="_blank" rel="noopener"><b>iLovePDF <span class="tdir__tag">free</span></b><small>Same job, different day. Worth having both bookmarked.</small></a>
+            <a class="tdir__item" data-cat="print" href="https://www.prepressure.com/library/paper-size" target="_blank" rel="noopener"><b>Prepressure <span class="tdir__tag">reference</span></b><small>Paper sizes and print specs, explained properly.</small></a>
+            <a class="tdir__item" data-cat="print" href="https://colorbleed.com" target="_blank" rel="noopener"><b>Colorbleed <span class="tdir__tag">free</span></b><small>Quick CMYK/RGB sanity checks before you send the file.</small></a>
+          </div>
+        </div>
+
+        <div class="tdir__group">
+          <p class="tdir__g">Inspiration</p>
+          <div class="tdir__list">
+            <a class="tdir__item" data-cat="inspo" href="https://www.behance.net" target="_blank" rel="noopener"><b>Behance <span class="tdir__tag">free</span></b><small>Where the work lives. Mine is on there too.</small></a>
+            <a class="tdir__item" data-cat="inspo" href="https://www.are.na" target="_blank" rel="noopener"><b>Are.na <span class="tdir__tag">free</span></b><small>Collect references into channels instead of a folder you never open.</small></a>
+            <a class="tdir__item" data-cat="inspo" href="https://www.itsnicethat.com" target="_blank" rel="noopener"><b>It's Nice That <span class="tdir__tag">free</span></b><small>Design writing that is about the work, not the awards.</small></a>
+            <a class="tdir__item" data-cat="inspo" href="https://fontsinuse.com" target="_blank" rel="noopener"><b>Fonts In Use <span class="tdir__tag">free</span></b><small>See a typeface doing a real job before you spec it.</small></a>
+            <a class="tdir__item" data-cat="inspo" href="https://www.logobook.com" target="_blank" rel="noopener"><b>Logobook <span class="tdir__tag">free</span></b><small>A huge archive of real marks, searchable by shape.</small></a>
+          </div>
+        </div>
+
+        <div class="tdir__group">
+          <p class="tdir__g">Handoff</p>
+          <div class="tdir__list">
+            <a class="tdir__item" data-cat="handoff" href="https://www.figma.com" target="_blank" rel="noopener"><b>Figma <span class="tdir__tag">freemium</span></b><small>Where most of my handoff happens now — inspect mode saves the back-and-forth.</small></a>
+            <a class="tdir__item" data-cat="handoff" href="https://zeplin.io" target="_blank" rel="noopener"><b>Zeplin <span class="tdir__tag">freemium</span></b><small>Specs and assets out of a design file, cleanly.</small></a>
+            <a class="tdir__item" data-cat="handoff" href="https://www.notion.so" target="_blank" rel="noopener"><b>Notion <span class="tdir__tag">freemium</span></b><small>Briefs and brand rules that the client will actually read.</small></a>
+            <a class="tdir__item" data-cat="handoff" href="https://wetransfer.com" target="_blank" rel="noopener"><b>WeTransfer <span class="tdir__tag">freemium</span></b><small>Still the least annoying way to send a 2 GB file to a printer.</small></a>
+          </div>
+        </div>
+
+      </div>
+      <p class="tdir__empty" id="tDirEmpty" hidden>Nothing matches that search.</p>
+    </section>
+
+    <section class="tp-foot">
+      <p>
+        These are the tools I reach for, not a sponsorship list — no links here are paid and
+        nothing is tracked. Found one that should be on it, or one that has gone bad?
+        <a href="mailto:jomongy52@gmail.com?subject=Tools%20page">Tell me</a>.
+      </p>
+    </section>
+
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="site-foot__row mono">
+    <span>© 2026 YOUSSEF MOHAMED</span>
+    <a href="index.html">← Back to the portfolio</a>
+  </div>
+</footer>
+
+<script src="js/tools.js" defer></script>
+<script>
+  /* index.html gets these behaviours from app.js; this page is standalone, so it repeats
+     the two bits it needs: the sticky-header state and a burger that goes somewhere. */
+  document.addEventListener('DOMContentLoaded', function () {
+    var b = document.getElementById('burger');
+    if (b) b.addEventListener('click', function () { location.href = 'index.html#contact'; });
+
+    var head = document.getElementById('siteHead');
+    if (!head) return;
+    var ticking = false;
+    function update() {
+      var y = window.scrollY || window.pageYOffset;
+      head.classList.toggle('is-stuck', y > 40);
+      ticking = false;
+    }
+    window.addEventListener('scroll', function () {
+      if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    }, { passive: true });
+    update();
+  });
+</script>
+
+</body>
+</html>

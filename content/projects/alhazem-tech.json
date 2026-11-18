@@ -1,0 +1,26 @@
+{
+  "bg": "#0B57C9",
+  "gallery": [
+    "assets/work/alhazem-tech-1.webp",
+    "assets/work/alhazem-tech-2.webp"
+  ],
+  "title": "Alhazem Tech",
+  "kind": "Social System",
+  "year": "2025",
+  "client": "Alhazem Tech — electronics & networking",
+  "service": "Social design system, product post templates, brand marks",
+  "tags": [
+    "Social Media",
+    "Product",
+    "System"
+  ],
+  "blurb": "Electronics posts usually die in clutter. This one lives on one electric blue, a floating product shot and Arabic copy set in two weights. 28 posts, one grid, zero confusion.",
+  "img": "assets/work/alhazem-tech.webp",
+  "alt": "Alhazem Tech social media grid with blue product posts for routers, cables and power strips",
+  "url": "https://www.behance.net/gallery/255317347/SOCIAL-MEDIA-DESGINSALHAZEM-TECH",
+  "details": [
+    "A single blue stage so accessories photographed on white feel like one family.",
+    "Product hierarchy: photo 60%, headline 25%, logo + handle 15% — enforced in the template.",
+    "Post family: hero product, feature breakdown, price drop, bundle."
+  ]
+}

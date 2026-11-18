@@ -1,0 +1,26 @@
+{
+  "bg": "#13261F",
+  "gallery": [
+    "assets/work/menus-1.webp",
+    "assets/work/menus-2.webp"
+  ],
+  "title": "Menus, Collected",
+  "kind": "Editorial / Menu",
+  "year": "2024",
+  "client": "Various restaurants — Egypt",
+  "service": "Menu design, print preparation, illustration",
+  "tags": [
+    "Menu",
+    "Print",
+    "Illustration"
+  ],
+  "blurb": "Six restaurant menus, six different brands, one discipline: hierarchy you can read from a metre away. Some take illustration, some take brutal type — none of them take decoration for decoration’s sake.",
+  "img": "assets/work/menus.webp",
+  "alt": "Collection of restaurant menu designs in different styles: illustrated, red bold type, and grid based",
+  "url": "https://www.behance.net/gallery/252145715/Menu-for-various-restaurants",
+  "details": [
+    "Each menu starts from the same grid, then the brand decides the voice.",
+    "Illustrated route for casual brands, typographic route for fast-casual.",
+    "Every file handed over print-ready with fonts outlined and a colour proof."
+  ]
+}

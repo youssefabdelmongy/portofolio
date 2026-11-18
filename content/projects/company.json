@@ -1,0 +1,26 @@
+{
+  "bg": "#0B57C9",
+  "gallery": [
+    "assets/work/company-1.webp",
+    "assets/work/company-2.webp"
+  ],
+  "title": "Alhazem Tech — Company Profile",
+  "kind": "Editorial",
+  "year": "2025",
+  "client": "Alhazem Tech",
+  "service": "Company profile booklet, layout system, print",
+  "tags": [
+    "Editorial",
+    "Print",
+    "Identity"
+  ],
+  "blurb": "A 20-page profile that had to convince distributors, not designers. Clean 12-column grid, one accent per spread, and data that reads as confidently as the photos.",
+  "img": "assets/work/company.webp",
+  "alt": "Alhazem Tech company profile booklet mockup with blue spreads and grid layout",
+  "url": "https://www.behance.net/gallery/254876363/Company-Profilefor-alhazemtech",
+  "details": [
+    "Grid documented on a single reference page so the client can extend it in-house.",
+    "Blue kept as the only accent; imagery is the only other decoration.",
+    "Two versions: print (bleed, CMYK) and a lighter-screen PDF for email."
+  ]
+}

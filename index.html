@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>Youssef Mohamed — Graphic Designer, Social Media &amp; Advertising, Cairo</title>
-<meta name="description" content="Youssef Mohamed is a graphic designer in Cairo working on social media campaigns, advertising key visuals, menus and brand systems. Three years, 12 live projects on Behance." />
+<meta name="description" content="Youssef Mohamed is a graphic designer in Cairo working on social media campaigns, advertising key visuals, menus and brand systems. Four years, 12 live projects on Behance." />
 <meta name="author" content="Youssef Mohamed" />
 <meta name="theme-color" content="#0A0A0B" />
 <link rel="canonical" href="https://youssefmohamed.design/" />
@@ -142,6 +142,7 @@
     <a href="#work" class="nav__link" data-spy="work"><span class="mono">02</span>Work</a>
     <a href="#about" class="nav__link" data-spy="about"><span class="mono">03</span>About</a>
     <a href="#contact" class="nav__link" data-spy="contact"><span class="mono">04</span>Contact</a>
+    <a href="tools.html" class="nav__link nav__link--out"><span class="mono">05</span>Tools</a>
   </nav>
 
   <div class="head-right">
@@ -163,6 +164,7 @@
     <a href="#work"><span class="mono">02</span> Work</a>
     <a href="#about"><span class="mono">03</span> About</a>
     <a href="#contact"><span class="mono">04</span> Contact</a>
+    <a href="tools.html"><span class="mono">05</span> Tools</a>
   </nav>
   <div class="menu__foot mono">
     <span>CAIRO · EG</span><span id="clock2">--:--</span>
@@ -178,7 +180,7 @@
       <div>
         <p class="print-head__name">Youssef Mohamed</p>
         <p class="print-head__role">Graphic designer — social media, advertising &amp; brand design. Print-ready menus, campaigns and feeds that hold up outside the file.</p>
-        <p class="print-head__meta">jomongy52@gmail.com · behance.net/65c12764 · Cairo, Egypt</p>
+        <p class="print-head__meta"><span data-t="person.email">jomongy52@gmail.com</span> · behance.net/65c12764 · <span data-t="person.city">Cairo, Egypt</span></p>
       </div>
       <img class="print-head__img" src="assets/portrait-cut.webp" alt="" width="720" height="700" />
     </div>
@@ -187,8 +189,8 @@
   <!-- ───────────────────────── HERO ───────────────────────── -->
   <section class="hero" id="hero">
     <div class="hero__meta mono">
-      <span class="dot-live"><i></i>OPEN FOR PROJECTS · Q1 2026</span>
-      <span>CAIRO, EG <b class="js-lat">30.04°N</b></span>
+      <span class="dot-live"><i></i><span data-t="hero.status">OPEN FOR PROJECTS · Q1 2026</span></span>
+      <span><span data-t="hero.location">CAIRO, EG</span> <b class="js-lat">30.04°N</b></span>
     </div>
 
     <div class="hero__type">
@@ -200,23 +202,23 @@
       </h1>
 
       <p class="hero__sub">
-        <span class="hero__sub-serif">Graphic designer</span> — social media, advertising &amp; brand design.
+        <span class="hero__sub-serif" data-t="hero.subSerif">Graphic designer</span> — social media, advertising &amp; brand design.
         Print-ready menus, campaigns and feeds <em>that hold up outside the file</em>
-        · 3 years, 12 projects, 8 clients · Cairo, working remotely.
+        · 4 years, 12 projects, 8 clients · Cairo, working remotely.
       </p>
 
       <div class="hero__badge" id="heroBadge" aria-hidden="true">
         <svg viewBox="0 0 200 200" class="badge-ring">
           <defs><path id="circPath" d="M100,100 m-74,0 a74,74 0 1,1 148,0 a74,74 0 1,1 -148,0" /></defs>
-          <text><textPath href="#circPath">THREE YEARS · INK &amp; PIXELS · CAIRO · EGYPT · </textPath></text>
+          <text><textPath href="#circPath" data-t="hero.badgeRing">FOUR YEARS · INK &amp; PIXELS · CAIRO · EGYPT · </textPath></text>
         </svg>
-        <span class="badge-core">3<span class="mono">yrs</span></span>
+        <span class="badge-core"><span data-t="hero.badgeCore">4</span><span class="mono" data-t="hero.badgeUnit">yrs</span></span>
       </div>
     </div>
 
     <figure class="hero__figure" id="heroFigure">
       <img src="assets/portrait-cut.webp" alt="Portrait of Youssef Mohamed, graphic designer" width="720" height="700" fetchpriority="high" />
-      <figcaption class="mono">THE HUMAN / v.2026</figcaption>
+      <figcaption class="mono" data-t="hero.portraitCaption">THE HUMAN / v.2026</figcaption>
     </figure>
 
   </section>
@@ -453,7 +455,8 @@
               <textarea class="cbrief__text" id="cbriefText" rows="4" spellcheck="false" aria-label="Your brief, editable"></textarea>
               <p class="cbrief__meta mono" id="cbriefMeta"></p>
               <div class="cbrief__actions">
-                <a class="btn btn--solid" id="cbriefSend" href="mailto:jomongy52@gmail.com" data-cursor="label" data-cursor-text="SEND">Send it <i aria-hidden="true">↗</i></a>
+                <a class="btn btn--solid" id="cbriefSend" data-attr="href:person.emailUrl" href="mailto:jomongy52@gmail.com" data-cursor="label" data-cursor-text="SEND">Send it <i aria-hidden="true">↗</i></a>
+                <a class="btn btn--ghost" id="cbriefWhats" href="https://wa.me/" target="_blank" rel="noopener" data-cursor="label" data-cursor-text="CHAT"><svg class="wa-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm5.8 14.02c-.24.68-1.4 1.3-1.93 1.38-.53.08-1.03.12-1.78-.11-.45-.14-1.03-.33-1.77-.65-2.9-1.25-4.8-4.17-4.94-4.36-.15-.19-1.19-1.58-1.19-3.01s.75-2.13 1.02-2.42c.27-.29.58-.36.78-.36s.39 0 .56.01c.18.01.42-.07.66.5.24.58.82 2 .89 2.14.07.15.12.32.02.51-.1.19-.15.31-.29.48s-.31.36-.44.5c-.15.14-.3.3-.13.59.17.29.75 1.24 1.62 2.01 1.11.99 2.05 1.3 2.34 1.45.29.15.46.12.63-.07.17-.19.72-.84.91-1.13.19-.29.39-.24.65-.14.27.1 1.68.79 1.97.94.29.15.48.22.55.34.07.12.07.7-.17 1.38z"/></svg> WhatsApp</a>
                 <button class="btn btn--ghost" type="button" id="cbriefCopy" data-cursor="label" data-cursor-text="COPY">Copy</button>
                 <button class="btn btn--ghost" type="button" id="cbriefReset" data-cursor="label" data-cursor-text="RESET">Start over</button>
               </div>
@@ -466,7 +469,7 @@
             <span><b>Based</b> in Cairo · working remotely</span>
             <span><b>Fixed price</b> agreed before any work starts</span>
           </div>
-          <p class="cstage__end-mail mono">Prefer email? jomongy52@gmail.com</p>
+          <p class="cstage__end-mail mono">Prefer email? <span data-t="person.email">jomongy52@gmail.com</span></p>
           <ul class="cstage__mob" id="cstageMob" aria-label="What I deliver"></ul>
         </div>
       </div>
@@ -477,7 +480,7 @@
   <!-- ───────────────────────── WORK ───────────────────────── -->
   <section class="section work" id="work">
     <header class="sec-head">
-      <p class="sec-head__kicker mono">02 — SELECTED WORK</p>
+      <p class="sec-head__kicker mono" data-t="work.kicker">02 — SELECTED WORK</p>
       <h2 class="sec-title" data-split="chars">Ink that pays rent</h2>
       <p class="sec-head__note">Eight projects from the <a class="link-btn" href="https://www.behance.net/65c12764" target="_blank" rel="noopener">Behance profile</a> — campaigns, menus and brand systems that went live, printed and posted.</p>
     </header>
@@ -562,66 +565,72 @@
 
   <!-- ───────────────────────── STATEMENT / ABOUT ───────────────────────── -->
   <section class="section about" id="about">
-    <p class="sec-head__kicker mono">03 — ABOUT</p>
-    <p class="statement" id="statement">
-      I design <em>social media</em> that stops the thumb, menus people can read in bad light,
-      and <em>brand systems</em> that survive the hundredth post. Three years in, eight clients deep on
-      Behance and a simple rule: <em>if it doesn't work on a phone, it doesn't work.</em>
+    <p class="sec-head__kicker mono" data-t="about.kicker">03 — ABOUT</p>
+    <p class="statement" id="statement" data-t="about.statement" data-t-html>
+      I'm Youssef Mohamed, a graphic designer with <em>four years of experience</em>
+      in social media and print design. My designs focus on reaching the viewer clearly
+      and simply, effectively conveying the product's concept while maintaining all aspects
+      of its visual identity. I will help you achieve your goals based on my experience in
+      the field and <em>my expertise in marketing</em>.
     </p>
 
-    <div class="stats" id="stats">
-      <div class="stat"><b data-count="3" data-suffix="+">3</b><span class="mono">YEARS<br>IN THE GAME</span></div>
+    <div class="stats" id="stats" data-list="about.stats">
+      <div class="stat"><b data-count="4" data-suffix="+">4</b><span class="mono">YEARS<br>IN THE GAME</span></div>
       <div class="stat"><b data-count="12" data-suffix="">12</b><span class="mono">PROJECTS LIVE<br>ON BEHANCE</span></div>
       <div class="stat"><b data-count="1176" data-suffix="">1176</b><span class="mono">BEHANCE<br>PROJECT VIEWS</span></div>
       <div class="stat"><b data-count="112" data-suffix="">112</b><span class="mono">BEHANCE<br>APPRECIATIONS</span></div>
+      <template data-item><div class="stat"><b data-count="{{count}}" data-suffix="{{suffix}}">{{count}}</b><span class="mono">{{label}}</span></div></template>
     </div>
 
     <div class="about__cols">
       <div class="about__col" data-reveal>
-        <h3 class="mono">TOOLKIT</h3>
-        <ul class="tool-list">
+        <h3 class="mono" data-t="about.toolsTitle">TOOLKIT</h3>
+        <ul class="tool-list" data-list="about.tools">
           <li><span>Photoshop</span><i style="--v:97%"></i></li>
           <li><span>Illustrator</span><i style="--v:95%"></i></li>
           <li><span>InDesign</span><i style="--v:88%"></i></li>
           <li><span>Figma</span><i style="--v:80%"></i></li>
           <li><span>After Effects</span><i style="--v:62%"></i></li>
           <li><span>Lightroom</span><i style="--v:74%"></i></li>
+          <template data-item><li><span>{{name}}</span><i style="--v:{{level}}%"></i></li></template>
         </ul>
       </div>
       <div class="about__col" data-reveal data-reveal-delay="80">
-        <h3 class="mono">SERVICES</h3>
-        <ol class="service-list">
+        <h3 class="mono" data-t="about.servicesTitle">SERVICES</h3>
+        <ol class="service-list" data-list="about.services">
           <li><span class="mono">/01</span>Social media design &amp; content systems</li>
           <li><span class="mono">/02</span>Advertising campaigns &amp; key visuals</li>
           <li><span class="mono">/03</span>Menus, print &amp; publication design</li>
           <li><span class="mono">/04</span>Brand identity &amp; logo design</li>
           <li><span class="mono">/05</span>Illustration, icons &amp; mockups</li>
+          <template data-item><li><span class="mono">/{{#}}</span>{{.}}</li></template>
         </ol>
       </div>
       <div class="about__col about__col--quote" data-reveal data-reveal-delay="160">
         <blockquote>
           “He sent the campaign on a Thursday night, we posted Friday morning, and the feed finally looked like one brand.”
-          <cite class="mono">— MARKETING LEAD, F&amp;B CLIENT · CAIRO</cite>
+          <cite class="mono" data-t="about.quoteBy">— MARKETING LEAD, F&amp;B CLIENT · CAIRO</cite>
         </blockquote>
-        <p class="about__ar" lang="ar" dir="rtl">بصمّم سوشيال ميديا بتبيع فعلاً: فكرة واضحة، تايبوغرافي محترم، وتصميم شغّال على الموبايل قبل أي حاجة.</p>
+        <p class="about__ar" lang="ar" dir="rtl" data-t="about.arabic">بصمّم سوشيال ميديا بتبيع فعلاً: فكرة واضحة، تايبوغرافي محترم، وتصميم شغّال على الموبايل قبل أي حاجة.</p>
       </div>
     </div>
   </section>
 
   <!-- ───────────────────────── CONTACT ───────────────────────── -->
   <section class="section contact" id="contact">
-    <p class="sec-head__kicker mono">04 — CONTACT</p>
+    <p class="sec-head__kicker mono" data-t="contact.kicker">04 — CONTACT</p>
     <h2 class="contact__title">
       <span data-split="chars">Got a brief</span>
       <span class="contact__title-2" data-split="chars">worth the ink?</span>
     </h2>
-    <a class="contact__mail magnetic" data-magnetic href="mailto:jomongy52@gmail.com" data-cursor="label" data-cursor-text="SEND">
-      <span>jomongy52@gmail.com</span>
+    <a class="contact__mail magnetic" data-magnetic data-attr="href:person.emailUrl" href="mailto:jomongy52@gmail.com" data-cursor="label" data-cursor-text="SEND">
+      <span data-t="person.email">jomongy52@gmail.com</span>
     </a>
     <p class="contact__note">Replies within a day · <b id="clock3">--:--</b> in Cairo right now.</p>
 
     <div class="contact__actions">
-      <a class="btn btn--solid" href="mailto:jomongy52@gmail.com?subject=Project%20brief%20%E2%80%94%20Youssef" data-cursor="label" data-cursor-text="MAIL">Email me <i aria-hidden="true">↗</i></a>
+      <a class="btn btn--solid" data-attr="href:contact.mailtoUrl" href="mailto:jomongy52@gmail.com?subject=Project%20brief%20%E2%80%94%20Youssef" data-cursor="label" data-cursor-text="MAIL">Email me <i aria-hidden="true">↗</i></a>
+      <a class="btn btn--ghost wa-btn" id="contactWhats" data-attr="href:person.whatsappUrl;aria-label:person.whatsappLabel" href="https://wa.me/" target="_blank" rel="noopener" data-cursor="label" data-cursor-text="CHAT"><svg class="wa-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm5.8 14.02c-.24.68-1.4 1.3-1.93 1.38-.53.08-1.03.12-1.78-.11-.45-.14-1.03-.33-1.77-.65-2.9-1.25-4.8-4.17-4.94-4.36-.15-.19-1.19-1.58-1.19-3.01s.75-2.13 1.02-2.42c.27-.29.58-.36.78-.36s.39 0 .56.01c.18.01.42-.07.66.5.24.58.82 2 .89 2.14.07.15.12.32.02.51-.1.19-.15.31-.29.48s-.31.36-.44.5c-.15.14-.3.3-.13.59.17.29.75 1.24 1.62 2.01 1.11.99 2.05 1.3 2.34 1.45.29.15.46.12.63-.07.17-.19.72-.84.91-1.13.19-.29.39-.24.65-.14.27.1 1.68.79 1.97.94.29.15.48.22.55.34.07.12.07.7-.17 1.38z"/></svg> <span data-t="contact.whatsappCta">WhatsApp</span></a>
       <button class="btn btn--ghost" type="button" data-copy-mail data-cursor="label" data-cursor-text="COPY">Copy address</button>
       <button class="btn btn--ghost" type="button" data-palette data-cursor="label" data-cursor-text="JUMP">Jump anywhere <span class="mono" aria-hidden="true">⌘K</span></button>
     </div>
@@ -629,6 +638,7 @@
     <div class="contact__row">
       <ul class="socials">
         <li><a href="https://www.behance.net/65c12764" target="_blank" rel="noopener" data-cursor="label" data-cursor-text="BE">Behance ↗</a></li>
+        <li><a class="wa-link" id="socialWhats" data-attr="href:person.whatsappUrl;aria-label:person.whatsappLabel" href="https://wa.me/" target="_blank" rel="noopener" data-cursor="label" data-cursor-text="CHAT"><span data-t="contact.whatsappCta">WhatsApp</span> <span class="wa-num mono" data-t="person.whatsappLocal">0106 695 6233</span> ↗</a></li>
         <li><a href="https://www.behance.net/65c12764" target="_blank" rel="noopener" data-cursor="label" data-cursor-text="HIRE">Available for freelance ↗</a></li>
         <li><button class="link-plain" data-share data-cursor="label" data-cursor-text="COPY">Share this site</button></li>
       </ul>
@@ -639,6 +649,7 @@
 <footer class="site-foot">
   <div class="site-foot__row mono">
     <span>© 2026 YOUSSEF MOHAMED</span>
+    <a href="tools.html">TOOLS FOR DESIGNERS →</a>
     <a href="https://www.behance.net/65c12764" target="_blank" rel="noopener">BEHANCE ↗</a>
   </div>
   <div class="site-foot__huge" aria-hidden="true">LET'S MAKE<br>SOMETHING<br><em>LOUD</em></div>
@@ -647,6 +658,8 @@
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script src="js/data.js" defer></script>
+<script src="js/content.js" defer></script>
+<script src="js/projects-loader.js" defer></script>
 <script src="js/utils.js" defer></script>
 <script src="js/smooth.js" defer></script>
 <script src="js/cursor.js" defer></script>

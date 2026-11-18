@@ -1,0 +1,26 @@
+{
+  "bg": "#0C1B22",
+  "gallery": [
+    "assets/work/qandil-1.webp",
+    "assets/work/qandil-2.webp"
+  ],
+  "title": "Qandil Seafood",
+  "kind": "Menu & Branding",
+  "year": "2024",
+  "client": "Qandil Seafood Restaurant — Egypt",
+  "service": "Menu design, mockups, Instagram launch assets",
+  "tags": [
+    "Menu",
+    "Print",
+    "Instagram"
+  ],
+  "blurb": "A seafood menu that has to be read in bad light, with wet hands, at a table full of people. Big type, generous air, and one illustration mark that ties print and Instagram together.",
+  "img": "assets/work/qandil.webp",
+  "alt": "Qandil Seafood restaurant menu design with illustrated logo mark and dish photography",
+  "url": "https://www.behance.net/gallery/206792963/Menu-Qandil-Seafood-Restaurant",
+  "details": [
+    "Menu architecture: categories first, prices second — visitors scan, they do not read.",
+    "Print-ready file with bleed and CMYK-safe imagery; same visual language reused for the Instagram page.",
+    "Hand-drawn mark used as a stamp across packaging and social."
+  ]
+}

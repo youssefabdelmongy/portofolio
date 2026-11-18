@@ -42,6 +42,7 @@ python3 -m http.server 8080      # http://localhost:8080
 | **02 Work** | ٨ مشاريع حقيقية، كل مشروع بـ ٣ صور من الجاليري الأصلي معروضة **كاملة** على بلاطة بلون البراند + وصف + tags + سطر «+38 more». الكروت بتلف في 3D مع السكرول (`js/reel.js`) — نفس التأثير على الموبايل والديسكتوب. الضغط بيفتح case study فيه صور أكبر، تفاصيل الشغل، لينك Behance، وتنقّل بالكيبورد (← → Esc) ولينك مباشر `#work/talabat` |
 | **03 About** | statement بيتنوّر مع السكرول، أرقام حقيقية، toolkit، خدمات، توصية عميل، سطر عربي للعملاء المحليين |
 | **04 Contact** | إيميل CTA واحد + Behance + زر Share (native share / copy link) + ساعة القاهرة |
+| **05 Tools** (`tools.html`) | صفحة مستقلة فيها **١٠ أدوات** بتشتغل على الجهاز نفسه: مقاسات سوشيال (١٧) · حاسبة bleed و dpi (١٠ بريستات) · فحص تباين WCAG · px/rem/pt · توليد باليتة + تصدير tokens · **كاشف الخطوط الحقيقي** (بيقيس الخط فعليًا بالـcanvas ويقولك أنهي face بيرندر) · ميزانية حجم الملف · **فاحص صور** (أبعاد · dpi فعلي · شفافية · ضوضاء — بدون رفع) · **مصدّر لوكاب SVG** (٤ تركيبات بتحميل حقيقي) + دليل ٢٨ أداة بفلتر وبحث. مفيش رفع ولا تتبع، وكلها أوفلاين |
 
 **إيستر إيجز**: `g` = grid المصممين · `ink!` = حبر على الشاشة · `/` أو `⌘K` = command palette.
 
@@ -67,13 +68,14 @@ python3 -m http.server 8080      # http://localhost:8080
 ```
 portfolio/
 ├── index.html              # الصفحة (محتوى pre-rendered + JSON-LD + OG)
+├── tools.html              # صفحة الأدوات (مستقلة، مش من content/)
 ├── offline.html 404.html   # صفحات الحالات الخاصة
 ├── manifest.webmanifest    # PWA
 ├── sw.js                   # service worker (ا bump الـ CACHE مع كل نشر)
 ├── robots.txt sitemap.xml _headers .gitignore
 ├── fonts.css + fonts/      # Bricolage Grotesque · Space Grotesk · JetBrains Mono ·
 │                           # Instrument Serif · IBM Plex Sans Arabic (woff2 محلية)
-├── css/  base.css · sections.css · effects.css · print.css
+├── css/  base.css · sections.css · effects.css · print.css · tools.css
 ├── js/
 │   ├── data.js             # المشاريع (blurb/details/gallery/bg)
 │   ├── utils.js            # helpers + ticker واحد لكل الأنيميشن
@@ -88,6 +90,7 @@ portfolio/
 │   ├── reel.js             # ميلان 3D لكروت الشغل مع السكرول (موبايل + ديسكتوب)
 │   ├── shader.js           # خلفية الـ hero بـ WebGL خام (fallback: gradient)
 │   ├── palette.js          # Command Palette (⌘K / Ctrl+K / /)
+│   ├── tools.js            # كل حاسبات صفحة الأدوات + الدليل
 │   └── app.js              # menu، anchors، SW، share، copy email، easter eggs
 └── assets/
     ├── og.jpg icon-192/512.png apple-touch-icon.png
@@ -133,5 +136,7 @@ portfolio/
 
 
 ---
+
+✏️ **التعديل:** كل المحتوى في `content/*.json` — شوف [`EDITING.md`](EDITING.md).
 
 📦 **النشر:** شوف [`DEPLOY.md`](DEPLOY.md) — Cloudflare Pages هو الخيار الموصى بيه (باندويث غير محدود، بيقرأ `_headers`).

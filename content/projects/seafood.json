@@ -1,0 +1,26 @@
+{
+  "bg": "#0E2B33",
+  "gallery": [
+    "assets/work/seafood-1.webp",
+    "assets/work/seafood-2.webp"
+  ],
+  "title": "Seafood Social Set",
+  "kind": "Social Campaign",
+  "year": "2023",
+  "client": "Seafood restaurant — Red Sea",
+  "service": "Social posts, photography direction, typography",
+  "tags": [
+    "Social Media",
+    "F&B",
+    "Type"
+  ],
+  "blurb": "Twelve posts built on one rule: the dish is the poster. Deep blue water backdrops, a single serif line, and zero clip-art — the kind of feed a coastal restaurant can actually sustain weekly.",
+  "img": "assets/work/seafood.webp",
+  "alt": "Seafood restaurant social media post with boat photograph and teal typographic layout",
+  "url": "https://www.behance.net/gallery/214878221/Social-Media-Seafood-Restaurant-Post",
+  "details": [
+    "Repeatable weekly template: dish, one line, logo, nothing else.",
+    "Blue and sand palette pulled from the coastline, tested on small phone screens.",
+    "Handoff includes a photo brief so new dishes can be shot in the same language."
+  ]
+}

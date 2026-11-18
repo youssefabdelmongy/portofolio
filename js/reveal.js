@@ -119,7 +119,11 @@ window.PF = window.PF || {};
 
   /* ---------- scroll spy ---------- */
   function initSpy() {
-    const links = $$('.nav__link');
+    /* only in-page links are spy targets — tools.html is a different document and
+       document.querySelector('tools.html') would throw and kill the whole ticker */
+    const links = $$('.nav__link').filter(function (l) {
+      return (l.getAttribute('href') || '').charAt(0) === '#';
+    });
     const secs = links.map(function (l) { return document.querySelector(l.getAttribute('href')); });
     PF.tick(function () {
       let active = -1;

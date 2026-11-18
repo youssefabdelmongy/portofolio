@@ -1,20 +1,30 @@
 /* sw.js — offline-first shell for the portfolio.
    Bump CACHE when you ship new assets; old caches are dropped on activate. */
-const CACHE = 'ym-portfolio-v8';
+const CACHE = 'ym-portfolio-v12';
 const OFFLINE = 'offline.html';
 
 const PRECACHE = [
   './',
   'index.html',
+  'tools.html',
   'offline.html',
   'fonts.css',
   'css/base.css',
   'css/sections.css',
+  'css/tools.css',
   'css/effects.css',
   'css/print.css',
   'js/utils.js', 'js/data.js', 'js/smooth.js', 'js/cursor.js', 'js/intro.js',
   'js/reveal.js', 'js/hero.js', 'js/work.js', 'js/reel.js', 'js/cursorlab.js', 'js/brief.js',
   'js/shader.js', 'js/palette.js', 'js/app.js',
+  'js/content.js', 'js/projects-loader.js', 'js/tools.js',
+  'content/site.json', 'content/acts.json', 'content/projects.json',
+  'content/acts/menus.json', 'content/acts/campaigns.json',
+  'content/acts/identity.json', 'content/acts/social.json',
+  'content/projects/talabat.json', 'content/projects/sheikh.json',
+  'content/projects/alhazem-tech.json', 'content/projects/qandil.json',
+  'content/projects/cookin-aboud.json', 'content/projects/menus.json',
+  'content/projects/company.json', 'content/projects/seafood.json',
   'assets/spec/menu-page.webp', 'assets/spec/key-visual.webp',
   'assets/spec/applied.webp', 'assets/spec/logo.webp', 'assets/spec/logo-raw.webp',
   'assets/spec/social-1.webp', 'assets/spec/social-2.webp', 'assets/spec/social-3.webp',

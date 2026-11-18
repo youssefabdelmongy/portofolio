@@ -501,8 +501,11 @@
 .about{background:var(--ink);padding-top:clamp(70px,10vh,130px)}
 .statement{
   font-family:var(--font-display);font-weight:500;
-  font-size:clamp(1.45rem,3.6vw,3.1rem);line-height:1.14;letter-spacing:-.035em;
-  max-width:30ch;color:rgba(241,238,230,.28);
+  /* the statement got longer, so it scales down with the viewport instead of
+     running into the sticky nav — clamp(vw) keeps the line count stable */
+  font-size:clamp(1.15rem,2.55vw,2.15rem);line-height:1.22;letter-spacing:-.028em;
+  max-width:44ch;color:rgba(241,238,230,.28);
+  text-wrap:pretty;
 }
 .statement em{font-style:normal;color:var(--paper);transition:color .3s}
 .statement .lit{color:var(--paper)}
@@ -908,3 +911,17 @@ body.palette-open{overflow:hidden}
   .cbrief__actions .btn{flex:1 1 auto;justify-content:center}
   .cstage__brief-t{font-size:1.5rem}
 }
+
+/* ── WhatsApp: an icon that sits at the same weight as the other buttons ── */
+.wa-ico{
+  width:1.05em;height:1.05em;flex:none;fill:currentColor;
+  vertical-align:-.16em;margin-right:.1em;
+}
+.wa-btn{display:inline-flex;align-items:center;gap:.15em}
+/* until a real number exists the link carries no href we can trust — hide it */
+[href="https://wa.me/"]{display:none !important}
+.wa-link{white-space:nowrap}
+
+/* the WhatsApp number, spelled out — a visitor who would rather dial than chat */
+.wa-num{color:var(--paper);opacity:.75;font-size:.9em;letter-spacing:.02em}
+.wa-link:hover .wa-num{opacity:1;color:var(--accent-2)}

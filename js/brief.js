@@ -12,7 +12,12 @@ window.PF = window.PF || {};
   const send = PF.$('#cbriefSend', root);
   const copy = PF.$('#cbriefCopy', root);
   const reset = PF.$('#cbriefReset', root);
-  const email = (PF.INFO && PF.INFO.email) || 'jomongy52@gmail.com';
+  let email = (PF.INFO && PF.INFO.email) || 'jomongy52@gmail.com';
+  /* content/site.json is the source of truth once it lands */
+  document.addEventListener('pf:content', function (e) {
+    if (e.detail && e.detail.person && e.detail.person.email) email = e.detail.person.email;
+    if (typeof render === 'function') render();
+  });
 
   const FIELDS = ['need', 'when', 'where'];
   const LABEL = { need: 'Need', when: 'Timing', where: 'Used for' };
@@ -60,6 +65,15 @@ window.PF = window.PF || {};
     send.href = 'mailto:' + email +
       '?subject=' + encodeURIComponent(subject) +
       '&body=' + encodeURIComponent(text.value);
+
+    /* the same brief, ready to paste into WhatsApp */
+    const wa = PF.$('#cbriefWhats', root);
+    if (wa) {
+      const num = (PF.content && PF.content.person && PF.content.person.whatsappDigits) || '';
+      wa.href = 'https://wa.me/' + num + '?text=' + encodeURIComponent(text.value);
+      if (!num) wa.setAttribute('hidden', '');
+      else wa.removeAttribute('hidden');
+    }
     meta.textContent = 'Sends from your own email app · nothing is stored on this site';
   }
 

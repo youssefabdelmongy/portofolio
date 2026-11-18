@@ -5,18 +5,30 @@ window.PF = window.PF || {};
   const $ = PF.$;
   const grid = $('#workGrid');
   if (!grid) return;
-  const projects = PF.DATA.projects;
-  const cards = PF.$$('.card', grid);
+  /* projects come from content/projects/*.json (see projects-loader.js).
+     PF.DATA.projects is the shipped fallback so the modal still works without it. */
+  let projects = PF.DATA.projects;
+  let cards = PF.$$('.card', grid);
+
+  /* the grid may be re-rendered from JSON after this file runs — rebind when it is */
+  document.addEventListener('pf:projects', function (e) {
+    projects = e.detail;
+    cards = PF.$$('.card', grid);
+    revealAndBind();
+  });
 
   /* reveal rows */
-  if ('IntersectionObserver' in window) {
-    const io = new IntersectionObserver(function (en) {
-      en.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('is-inview'); io.unobserve(e.target); } });
-    }, { threshold: 0.12 });
-    cards.forEach(function (c) { io.observe(c); });
-  } else {
-    cards.forEach(function (c) { c.classList.add('is-inview'); });
+  function revealAndBind() {
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(function (en) {
+        en.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('is-inview'); io.unobserve(e.target); } });
+      }, { threshold: 0.12 });
+      cards.forEach(function (c) { io.observe(c); });
+    } else {
+      cards.forEach(function (c) { c.classList.add('is-inview'); });
+    }
   }
+  revealAndBind();
 
   /* ---------- modal ---------- */
   const modal = document.createElement('div');

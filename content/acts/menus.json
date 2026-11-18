@@ -1,0 +1,24 @@
+{
+  "key": "MENUS",
+  "name": "Menus",
+  "urlLabel": "live work / qandil-menu",
+  "bg": "dots",
+  "tint": "#F1EEE6",
+  "kicker": "01 · Menus & print — 5–7 working days",
+  "intro": "Hierarchy that pushes the plates you actually want to sell.",
+  "panelTitle": "A menu that sells the dish you want to sell.",
+  "what": "A menu page. Tap “Today” to see what most places hand the printer.",
+  "result": "Guests notice the plates worth selling, and the printer gets files that work first time — so no second print bill.",
+  "get": [
+    "A print-ready PDF, Arabic + English",
+    "Bleed and CMYK set for your printer",
+    "The editable source file",
+    "Delivered in 5–7 working days"
+  ],
+  "proof": "Qandil Seafood — menu & brand, 2024. Printed and used in the branch.",
+  "before": "What most places print today",
+  "after": "What leaves my studio",
+  "panelBody": "Most menus set every dish at the same size and weight, so guests default to the cheapest plate. Size, weight and spacing decide what the eye lands on first — no price change needed.",
+  "panelMeta": "Print-ready PDF · Arabic + English · bleed & colour profile",
+  "id": "menus"
+}
