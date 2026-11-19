@@ -668,3 +668,58 @@ html{scroll-padding-top:clamp(76px,9vh,104px)}
 .tfont__shift-bar i{display:block;height:100%;background:var(--accent-2);transition:width .3s}
 .tfont__shift.is-reflow .tfont__shift-bar i{background:var(--accent)}
 @media (max-width:700px){.tfont__row{grid-template-columns:auto minmax(0,1fr) auto;row-gap:4px}.tfont__w{display:none}}
+
+/* ── press check ── */
+.tpress{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:24px;margin-top:22px;align-items:start}
+@media (max-width:900px){.tpress{grid-template-columns:1fr}}
+.tpress__drop{padding:26px 18px}
+.tpress__toggles{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.tpress__tg{display:flex;align-items:center;gap:8px;font-size:.62rem;letter-spacing:.04em;color:rgba(241,238,230,.6);cursor:pointer;min-height:40px;padding:0 12px;border:1px solid rgba(241,238,230,.14)}
+.tpress__tg input{accent-color:var(--accent);width:16px;height:16px}
+.tpress__tg:has(input:checked){border-color:var(--accent);color:var(--paper)}
+.tpress__hint{font-size:.5rem;line-height:1.7;color:rgba(241,238,230,.32);margin:10px 0 0;letter-spacing:.04em}
+.tpress__stage{position:relative;border:1px solid rgba(241,238,230,.14);background:#0d0d0f;display:grid;place-items:center;min-height:240px;overflow:hidden}
+.tpress__stage canvas{display:block;width:100%;height:auto}
+.tpress__empty{position:absolute;inset:0;display:grid;place-items:center;font-size:.58rem;letter-spacing:.1em;color:rgba(241,238,230,.25);text-transform:uppercase}
+.tpress__empty[hidden]{display:none}
+.tpress__legend{display:flex;gap:16px;flex-wrap:wrap;font-size:.48rem;letter-spacing:.1em;color:rgba(241,238,230,.4);margin-top:10px;text-transform:uppercase}
+.tpress__legend .lg{display:inline-block;width:9px;height:9px;margin-right:6px;vertical-align:middle}
+.lg--ok{background:#5C6E58}
+.lg--bad{background:#E4572E}
+.lg--tac{background:repeating-linear-gradient(45deg,#14146b,#14146b 2px,#2a2a90 2px,#2a2a90 4px)}
+.tpress__stats{margin-top:18px;display:grid;gap:0}
+.tpress__wait{font-size:.56rem;color:rgba(241,238,230,.3);letter-spacing:.06em}
+.tpress__verdict{padding:14px 16px;border-left:2px solid var(--accent);margin-bottom:12px;display:grid;gap:6px;background:rgba(228,87,46,.05)}
+.tpress__verdict.is-ok{border-color:#5C6E58;background:rgba(92,110,88,.09)}
+.tpress__verdict.is-warn{border-color:var(--accent-2);background:rgba(242,169,59,.07)}
+.tpress__verdict b{font-size:1.02rem;color:var(--accent)}
+.tpress__verdict.is-ok b{color:#8FA98A}
+.tpress__verdict.is-warn b{color:var(--accent-2)}
+.tpress__verdict span{font-size:.62rem;line-height:1.65;color:rgba(241,238,230,.62)}
+.tpress__row{display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-top:1px solid rgba(241,238,230,.09);font-size:.6rem}
+.tpress__row span{color:rgba(241,238,230,.42)}
+.tpress__row b{color:var(--paper);font-weight:500;text-align:right;font-variant-numeric:tabular-nums}
+.tpress__worst{margin-top:16px}
+.tpress__worst-h{font-size:.48rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(241,238,230,.3);margin:0 0 8px}
+.tpress__chip{display:flex;align-items:center;gap:10px;padding:7px 0;border-top:1px solid rgba(241,238,230,.07)}
+.tpress__chip i{width:22px;height:22px;background:var(--c);flex:0 0 auto;border:1px solid rgba(241,238,230,.2)}
+.tpress__chip b{font-size:.58rem;letter-spacing:.05em}
+.tpress__chip span{font-size:.52rem;color:var(--accent);margin-left:auto}
+.tpress__chip{flex-wrap:wrap}
+.tpress__chip i{width:22px;height:22px;background:var(--c);flex:0 0 auto;border:1px solid rgba(241,238,230,.2)}
+.tpress__arrow{color:rgba(241,238,230,.3);font-size:.6rem}
+.tpress__chip b{flex:1 1 auto;font-size:.56rem;letter-spacing:.02em}
+.lg--warn{background:#F2A93B}
+.tpress__eyedrop{font-size:.48rem;letter-spacing:.05em;color:rgba(241,238,230,.3);margin:10px 0 0}
+.tpress__eyedrop b{color:var(--accent-2);font-weight:600}
+.tpress__stage canvas{cursor:crosshair}
+
+/* touch targets: every new slider and control must be thumb-sized */
+@media (hover:none){
+  #tPrTac{height:40px}
+  .tpress__tg{min-height:44px}
+  .tpress__stage canvas{min-height:180px}
+}
+#tPrTac{accent-color:var(--accent)}
+.tpal__lock{margin-top:12px;width:100%;justify-content:center;min-height:40px;font-size:.56rem}
+.tpal__lock[aria-pressed="true"]{border-color:var(--accent);color:var(--accent-2)}

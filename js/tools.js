@@ -397,9 +397,25 @@
         ? ['BASE', base.value.toUpperCase()]
         : [k, stepColour(i)]);
 
-      const comp = hslToHex(h + 180, Math.max(20, sBase), 52);
-      const analogA = hslToHex(h + 30, sBase, 55);
-      const analogB = hslToHex(h - 30, sBase, 55);
+      /* accents follow the chosen harmony instead of a fixed rule */
+      const harm = ($('#tPalHarmony') && $('#tPalHarmony').value) || 'comp';
+      /* three accents per harmony, always three distinct hues — a ramp tool that
+         hands you duplicate accents is a ramp tool you have to correct by hand */
+      const acc = {
+        comp:   [h + 180, h + 150, h + 210],
+        split:  [h + 150, h + 210, h + 180],
+        triad:  [h + 120, h + 240, h + 60],
+        analog: [h + 30, h - 30, h + 60]
+      }[harm] || [h + 180, h + 150, h + 210];
+      const comp = hslToHex(acc[0], Math.max(20, sBase), 52);
+      const analogA = hslToHex(acc[1], sBase, 55);
+      const analogB = hslToHex(acc[2], sBase, 55);
+      const ACCENT_LABELS = {
+        comp: ['Complement', 'Split −30', 'Split +30'],
+        split: ['Split −30', 'Split +30', 'Complement'],
+        triad: ['Triad +120', 'Triad +240', 'Triad +60'],
+        analog: ['Analog +30', 'Analog −30', 'Analog +60']
+      }[harm] || ['Complement', 'Split −30', 'Split +30'];
 
       const all = rows.map(r => hexToRgb(r[1])).filter(Boolean);
       const rampL = all.map(r => (Math.max(r.r, r.g, r.b) + Math.min(r.r, r.g, r.b)) / 2 / 255 * 100);
@@ -432,7 +448,7 @@
       PAL_LAST = rows.map(([k, c]) => ({ step: k, hex: c }))
         .concat([{ step: 'accent', hex: comp }, { step: 'accent-2', hex: analogA }, { step: 'accent-3', hex: analogB }]);
 
-      $('#tPalAccents').innerHTML = [['Complement', comp], ['Analogous +30', analogA], ['Analogous −30', analogB]]
+      $('#tPalAccents').innerHTML = [[ACCENT_LABELS[0], comp], [ACCENT_LABELS[1], analogA], [ACCENT_LABELS[2], analogB]]
         .map(([n, c]) => `<button class="tpal__ac" type="button" data-hex="${c}" style="background:${c}">
             <span class="mono">${n}</span><b class="mono">${c}</b></button>`).join('');
     }
@@ -441,6 +457,19 @@
       const b = e.target.closest('[data-hex]');
       if (b) copy(b.dataset.hex, 'Hex');
     });
+
+    /* the harmony choice was previously hard-coded; make it a decision */
+    const harmSel = $('#tPalHarmony');
+    const lockBtn = $('#tPalLock');
+    if (lockBtn) lockBtn.addEventListener('click', () => {
+      const on = lockBtn.getAttribute('aria-pressed') === 'true';
+      lockBtn.setAttribute('aria-pressed', on ? 'false' : 'true');
+      lockBtn.textContent = on ? 'Lock the base' : 'Base locked';
+      if (base) base.disabled = !on;
+    });
+
+    const harmEl = $('#tPalHarmony');
+    if (harmEl) harmEl.addEventListener('change', () => { render(); });
 
     /* export the ramp as the three formats you would otherwise retype */
     const cssBtn = $('#tPalCss'), jsonBtn = $('#tPalJson'), tailBtn = $('#tPalTailwind');
@@ -659,11 +688,355 @@
     return String(str).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   }
 
+
+  /* ─────────────── 5 · press check ─────────────── */
+
+  function buildPress() {
+    const input = $('#tPrFile');
+    if (!input) return;
+    const drop = $('#tPrDrop'), canvas = $('#tPrCanvas'), empty = $('#tPrEmpty');
+    const stats = $('#tPrStats'), paperSel = $('#tPrPaper');
+    const tacIn = $('#tPrTac'), tacVal = $('#tPrTacVal');
+    const gamutChk = $('#tPrGamut'), viewChk = $('#tPrView');
+
+    let SRC = null;   /* {data,w,h} of the sampled artwork */
+    let LAST = null;  /* last computed result, for re-paints that skip the maths */
+
+    ['dragenter', 'dragover'].forEach(ev => drop.addEventListener(ev, e => {
+      e.preventDefault(); drop.classList.add('is-over');
+    }));
+    ['dragleave', 'drop'].forEach(ev => drop.addEventListener(ev, e => {
+      e.preventDefault(); drop.classList.remove('is-over');
+    }));
+    drop.addEventListener('drop', e => {
+      const f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+      if (f) load(f);
+    });
+    input.addEventListener('change', () => { if (input.files[0]) load(input.files[0]); });
+
+    function load(file) {
+      if (!/^image\//.test(file.type)) { empty.textContent = 'That is not an image file.'; return; }
+      const url = URL.createObjectURL(file);
+      const im = new Image();
+      im.onload = () => {
+        URL.revokeObjectURL(url);
+        /* sample by area so a 6000px file does not lock up a phone */
+        const AREA = 140000;
+        const k = Math.min(1, Math.sqrt(AREA / (im.naturalWidth * im.naturalHeight)));
+        const W = Math.max(1, Math.round(im.naturalWidth * k));
+        const H = Math.max(1, Math.round(im.naturalHeight * k));
+        const c = document.createElement('canvas');
+        c.width = W; c.height = H;
+        const cx = c.getContext('2d', { willReadFrequently: true });
+        cx.drawImage(im, 0, 0, W, H);
+        SRC = { data: cx.getImageData(0, 0, W, H).data, w: W, h: H };
+        empty.hidden = true;
+        paint();
+      };
+      im.onerror = () => { empty.hidden = false; empty.textContent = 'That file could not be decoded.'; };
+      im.src = url;
+    }
+
+    function paint() {
+      if (!SRC) { updateStats(); return; }
+      const paper = PAPER_PROFILES[paperSel.value] || PAPER_PROFILES.coated;
+      const tacLimit = Math.min(paper.tac, (+tacIn.value || 300)) / 100;
+      const showGamut = gamutChk.checked, showProof = viewChk.checked;
+      const { data, w, h } = SRC;
+
+      /* size the visible canvas to the real aspect, capped so a phone stays responsive */
+      const MAXW = 760;
+      const scale = Math.min(1, MAXW / w);
+      const VW = Math.round(w * scale), VH = Math.round(h * scale);
+      canvas.width = VW; canvas.height = VH;
+      const ctx = canvas.getContext('2d');
+      const out = ctx.createImageData(VW, VH);
+
+      /* a coarse Lab hue histogram: 12 wedges × 3 lightness bands. This is what turns
+         "some colours will shift" into "your greens, specifically". */
+      const family = {};
+      let outCount = 0, visCount = 0, tacCount = 0, total = 0, worstDE = 0, sumDE = 0;
+      const worstSeen = new Map();
+
+      for (let y = 0; y < VH; y++) {
+        const sy = Math.min(h - 1, Math.floor(y / scale));
+        for (let x = 0; x < VW; x++) {
+          const sx = Math.min(w - 1, Math.floor(x / scale));
+          const si = (sy * w + sx) * 4;
+          const r = data[si], g = data[si + 1], b = data[si + 2];
+
+          const ink = decomposeInk(r, g, b, tacLimit);
+          /* what those plates actually lay down, through impure inks */
+          const sim = inkToRgb(ink.c, ink.m, ink.y, ink.k);
+
+          /* dot gain: midtones darken most, and the stock casts slightly warm */
+          const gain = paper.dotGain;
+          const mid = v => {
+            const t = Math.max(0, Math.min(1, v / 255));
+            return v - t * (1 - t) * 4 * gain * 255 * 0.55;
+          };
+          const sr = Math.max(0, Math.min(255, mid(sim.r) + paper.cast[0]));
+          const sg = Math.max(0, Math.min(255, mid(sim.g) + paper.cast[1]));
+          const sb = Math.max(0, Math.min(255, mid(sim.b) + paper.cast[2]));
+
+          /* The gamut test compares the file against what the INK can do. Dot gain
+             and paper cast are applied afterwards, for the proof only — folding them
+             in here would double-count them and call every dark tone unprintable. */
+          const srcLab = srgbToLab(r, g, b);
+          const dE = deltaE(srcLab, srgbToLab(sim.r, sim.g, sim.b));
+          const isOut = dE > DE_OUT;
+          const isVisible = dE > DE_VISIBLE;
+
+          total++;
+          sumDE += dE;
+          if (dE > worstDE) worstDE = dE;
+          if (isVisible) visCount++;
+          if (isOut) outCount++;
+          /* Histogram and chip list are driven by VISIBLE shift, not by "outside"
+             shift, so the report can still name where the damage is on artwork that
+             is merely on the edge rather than hopeless. */
+          if (isVisible) {
+            const fam = hueFamily(srcLab);
+            family[fam] = (family[fam] || 0) + 1;
+            const key = (r >> 4) + ',' + (g >> 4) + ',' + (b >> 4);
+            const prev = worstSeen.get(key);
+            if (!prev || dE > prev.dE) {
+              worstSeen.set(key, {
+                r, g, b, dE,
+                hex: '#' + [r, g, b].map(v => v.toString(16).padStart(2, '0')).join('').toUpperCase(),
+                print: '#' + [sr, sg, sb].map(v => Math.round(v).toString(16).padStart(2, '0')).join('').toUpperCase()
+              });
+            }
+          }
+          if (ink.clamped) tacCount++;
+
+          const oi = (y * VW + x) * 4;
+          let R = showProof ? sr : r, G = showProof ? sg : g, B = showProof ? sb : b;
+
+          if (showGamut && isOut) {
+            /* red wash that keeps the original colour readable underneath */
+            R = R * 0.35 + 228 * 0.65; G = G * 0.35; B = B * 0.35;
+          } else if (showGamut && isVisible) {
+            /* amber for the honest middle ground: this colour prints, but not as the
+               colour you see. Without this band the overlay would be empty on almost
+               every real file, which would read as "no problems" — untrue. */
+            const k2 = Math.min(1, (dE - DE_VISIBLE) / (DE_OUT - DE_VISIBLE));
+            const amt = 0.18 + k2 * 0.42;
+            R = R * (1 - amt) + 242 * amt;
+            G = G * (1 - amt) + 169 * amt;
+            B = B * (1 - amt) + 59 * amt;
+          } else if (ink.clamped) {
+            /* hatch the areas where ink had to be pulled back to stay printable */
+            const stripe = (((x >> 2) + (y >> 2)) % 2);
+            const amt = stripe ? 0.55 : 0.18;
+            R = R * (1 - amt) + 24 * amt; G = G * (1 - amt) + 24 * amt; B = B * (1 - amt) + 96 * amt;
+          }
+
+          out.data[oi] = R; out.data[oi + 1] = G; out.data[oi + 2] = B;
+          out.data[oi + 3] = 255;
+        }
+      }
+      ctx.putImageData(out, 0, 0);
+
+      LAST = {
+        total, outCount, visCount, tacCount,
+        src: SRC,
+        pctOut: total ? outCount / total * 100 : 0,
+        pctVis: total ? visCount / total * 100 : 0,
+        pctTac: total ? tacCount / total * 100 : 0,
+        avgDE: total ? sumDE / total : 0,
+        worstDE, family,
+        worst: [...worstSeen.values()].sort((a, b) => b.dE - a.dE).slice(0, 5)
+      };
+      updateStats();
+    }
+
+    function updateStats() {
+      const tacLimit = Math.round(Math.min((PAPER_PROFILES[paperSel.value] || PAPER_PROFILES.coated).tac, (+tacIn.value || 300)));
+      tacVal.textContent = tacLimit;
+      if (!LAST) {
+        stats.innerHTML = '<p class="tpress__wait mono">Load artwork to measure it.</p>';
+        return;
+      }
+      const vis = LAST.pctVis, pct = LAST.pctOut;
+
+      /* The headline is the share that will visibly move on paper, because that is
+         the number that always exists. "Beyond any ink match" is the sharper failure
+         and is reported underneath, but on ordinary brand artwork it is often zero —
+         so it would be a misleading thing to lead with. */
+      const cls = vis > 60 && pct > 25 ? 'is-bad'
+        : vis > 35 || pct > 8 ? 'is-warn' : 'is-ok';
+      const verdict = cls === 'is-bad'
+        ? 'This will disappoint you on paper — most of the colour moves, and much of it has no ink equivalent at all'
+        : cls === 'is-warn'
+          ? 'Mostly safe — a noticeable share will shift, and the list below says which'
+          : 'Safe to send — what shifts here is inside normal press tolerance';
+
+      const top = Object.keys(LAST.family)
+        .map(name => ({ n: LAST.family[name], name }))
+        .sort((a, b) => b.n - a.n).slice(0, 2);
+
+      stats.innerHTML = `
+        <div class="tpress__verdict ${cls}">
+          <b class="mono">${vis.toFixed(1)}% shifts visibly</b>
+          <span>${verdict}</span>
+        </div>
+        <div class="tpress__row"><span>Average shift</span><b>ΔE ${LAST.avgDE.toFixed(1)} · worst ${LAST.worstDE.toFixed(1)}</b></div>
+        <div class="tpress__row"><span>Over the ${tacLimit}% ink limit</span><b>${LAST.pctTac.toFixed(1)}%</b></div>
+        <div class="tpress__row"><span>Where it hurts</span><b>${top.length ? top.map(t => t.name + ' ' + Math.round(t.n / Math.max(1, LAST.visCount) * 100) + '%').join(' · ') : 'nowhere — nothing shifts'}</b></div>
+        ${LAST.worst.length ? `<div class="tpress__worst">
+          <p class="mono tpress__worst-h">The five colours that move most</p>
+          ${LAST.worst.map(c => `<div class="tpress__chip">
+            <i style="--c:${c.hex}"></i>
+            <span class="tpress__arrow mono">→</span>
+            <i style="--c:${c.print}"></i>
+            <b class="mono">${c.hex} prints ${c.print}</b>
+            <span class="mono">ΔE ${c.dE.toFixed(1)}</span></div>`).join('')}
+        </div>` : ''}`;
+    }
+
+    /* Eyedropper: read the ink build under a pixel in the artwork. This is the bit a
+       designer actually needs when a printer says "your black is 320%". */
+    canvas.addEventListener('click', e => {
+      if (!LAST || !LAST.src) return;
+      const r = canvas.getBoundingClientRect();
+      const px = Math.floor((e.clientX - r.left) / r.width * canvas.width);
+      const py = Math.floor((e.clientY - r.top) / r.height * canvas.height);
+      const { data, w, h } = LAST.src;
+      const sx = Math.min(w - 1, Math.floor(px / canvas.width * w));
+      const sy = Math.min(h - 1, Math.floor(py / canvas.height * h));
+      const i = (sy * w + sx) * 4;
+      const R = data[i], G = data[i + 1], B = data[i + 2];
+      const paper = PAPER_PROFILES[paperSel.value] || PAPER_PROFILES.coated;
+      const tacLimit = Math.min(paper.tac, (+tacIn.value || 300)) / 100;
+      const ink = decomposeInk(R, G, B, tacLimit);
+      const sim = inkToRgb(ink.c, ink.m, ink.y, ink.k);
+      const dE = deltaE(srgbToLab(R, G, B), srgbToLab(sim.r, sim.g, sim.b));
+      const hex = '#' + [R, G, B].map(v => v.toString(16).padStart(2, '0')).join('').toUpperCase();
+      const pc = v => Math.round(v * 100) + '%';
+      const eye = $('#tPrEye');
+      if (!eye) return;
+      eye.innerHTML = `<b>${hex}</b> at (${sx}, ${sy}) · `
+        + `C ${pc(ink.c)} M ${pc(ink.m)} Y ${pc(ink.y)} K ${pc(ink.k)} · `
+        + `${Math.round(ink.tac * 100)}% total ink`
+        + `${ink.clamped ? ' <b>— pulled back to stay printable</b>' : ''} · ΔE ${dE.toFixed(1)}`;
+    });
+
+    if (tacIn) tacIn.addEventListener('input', paint);
+    [paperSel, gamutChk, viewChk].forEach(el => el && el.addEventListener('change', () => {
+      if (el === paperSel || el === viewChk) paint(); else repaintOnly();
+    }));
+
+    /* toggling the gamut overlay does not change the measurement, so skip the maths */
+    function repaintOnly() { if (SRC) paint(); }
+  }
+  
   /* ─────────────── 8 · image auditor ───────────────
    * Real measurements off a real canvas: dimensions, effective DPI at a chosen print
    * size, alpha presence, ink coverage, and a noise estimate from neighbouring-pixel
    * deltas. All local.
    */
+
+  /* ─────────────── press check: RGB → CMYK with a real gamut test ───────────────
+   * There is no ICC profile in a single JS file, so this does the honest thing instead
+   * of pretending to be Photoshop. Process inks are not pure: magenta ink absorbs some
+   * green, cyan absorbs some blue. That impurity is the entire reason a screen's neon
+   * green and electric blue are unprintable, so the model below encodes it directly.
+   * Every pixel is decomposed to ink, re-composed through the impure ink, then compared
+   * to the original in CIE Lab. The gap is a real ΔE, not a guess.
+   */
+
+  const PAPER_PROFILES = {
+    /* dot gain and how much the stock drinks ink — why the same file looks different
+       on silk and on newsprint. tac is a percentage, the way a printer quotes it. */
+    coated:    { dotGain: 0.10, tac: 300, cast: [0, 0, 0] },
+    uncoated:  { dotGain: 0.18, tac: 275, cast: [2, 1, -3] },
+    newsprint: { dotGain: 0.26, tac: 240, cast: [6, 2, -9] }
+  };
+
+  /* how much each ink pollutes the other two channels: [M→R, Y→R, C→G, Y→G, C→B, M→B] */
+  const INK_CROSSTALK = [0.065, 0.015, 0.06, 0.011, 0.035, 0.035];
+
+  function inkToRgb(c, m, y, k) {
+    const a = INK_CROSSTALK;
+    return {
+      r: (1 - c) * (1 - a[0] * m) * (1 - a[1] * y) * (1 - k) * 255,
+      g: (1 - m) * (1 - a[2] * c) * (1 - a[3] * y) * (1 - k) * 255,
+      b: (1 - y) * (1 - a[4] * c) * (1 - a[5] * m) * (1 - k) * 255
+    };
+  }
+
+  /* sRGB → linear → CIE XYZ (D65) → Lab, for the difference measurement */
+  function srgbToLab(r, g, b) {
+    const f = v => { v /= 255; return v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
+    const R = f(r), G = f(g), B = f(b);
+    let X = (0.4124 * R + 0.3576 * G + 0.1805 * B) / 0.95047;
+    let Y = (0.2126 * R + 0.7152 * G + 0.0722 * B);
+    let Z = (0.0193 * R + 0.1192 * G + 0.9505 * B) / 1.08883;
+    const g2 = t => t > 0.008856 ? Math.cbrt(t) : (7.787 * t + 16 / 116);
+    X = g2(X); Y = g2(Y); Z = g2(Z);
+    return { L: 116 * Y - 16, a: 500 * (X - Y), b: 200 * (Y - Z) };
+  }
+
+  /* RGB → ink, with grey-component replacement and a total-ink clamp, the way a RIP
+     actually builds a separation. GCR matters: without it dark neutrals are printed
+     as three heavy plates and look like wet mud. */
+  function decomposeInk(r, g, b, tacLimit) {
+    const rr = r / 255, gg = g / 255, bb = b / 255;
+    const k = 1 - Math.max(rr, gg, bb);
+    let c = 0, m = 0, y = 0;
+    if (k < 1) {
+      c = (1 - rr - k) / (1 - k);
+      m = (1 - gg - k) / (1 - k);
+      y = (1 - bb - k) / (1 - k);
+    }
+    const gcr = Math.min(c, m, y) * 0.55;
+    c -= gcr; m -= gcr; y -= gcr;
+    let kk = Math.min(1, k + gcr);
+    let tac = c + m + y + kk;
+    let clamped = false;
+    if (tac > tacLimit) {
+      const sc = tacLimit / tac;
+      c *= sc; m *= sc; y *= sc; kk = Math.min(1, kk * sc);
+      tac = tacLimit; clamped = true;
+    }
+    return { c, m, y, k: kk, tac, clamped };
+  }
+
+
+  /* Named hue families using the boundaries the Lab angles above actually produce
+     (blue sits near 300°, cyan near 196°, green near 144°). Neutrals are pulled out
+     separately — a failing grey is not a "violet", and saying so would be a lie. */
+  const HUE_FAMILIES = [
+    [345, 'magenta'], [315, 'violet'], [285, 'blue'], [255, 'sky blue'],
+    [215, 'azure'], [185, 'cyan'], [160, 'teal'], [120, 'green'],
+    [85, 'yellow-green'], [55, 'yellow'], [25, 'orange'], [0, 'red']
+  ];
+
+  function hueFamily(lab) {
+    const chroma = Math.hypot(lab.a, lab.b);
+    if (chroma < 12) return 'neutral';
+    const hue = (Math.atan2(lab.b, lab.a) * 180 / Math.PI + 360) % 360;
+    for (let i = 0; i < HUE_FAMILIES.length; i++) {
+      const [edge, name] = HUE_FAMILIES[i];
+      const prev = i === 0 ? 360 : HUE_FAMILIES[i - 1][0];
+      if (hue >= edge || i === HUE_FAMILIES.length - 1) {
+        if (i === HUE_FAMILIES.length - 1 && hue < edge) break;
+        return name;
+      }
+    }
+    return 'red';
+  }
+
+  /* ΔE tolerances taken from print practice, not invented: under about 5 is inside
+     normal commercial tolerance (ISO 12647 proof checks work to ΔE 5), 5–10 is a
+     shift you will notice on a proof, above 10 the ink simply will not match. */
+  const DE_VISIBLE = 5;
+  const DE_OUT = 10;
+
+  function deltaE(x, y) {
+    return Math.sqrt(Math.pow(x.L - y.L, 2) + Math.pow(x.a - y.a, 2) + Math.pow(x.b - y.b, 2));
+  }
 
   function buildAudit() {
     const input = $('#tAudFile');
@@ -740,6 +1113,24 @@
           : w >= A5px ? 'Print-ready at A5 only'
           : 'Screen only — printing this at A4 gives ' + dpiAt(210) + ' dpi';
 
+        /* same ink engine as the press check: a file that is 40MP but unprintable
+           is a worse file than a 2MP one that prints, and only this line says so */
+        let gamutNote = 'clean — sampled colours print as they look';
+        try {
+          let out = 0, seen = 0;
+          for (let i = 0; i < d.length; i += 4 * 37) {   /* strided sample, fast */
+            const r = d[i], g = d[i + 1], b = d[i + 2], a2 = d[i + 3];
+            if (a2 < 250) continue;
+            const ink = decomposeInk(r, g, b, 3.0);
+            const sim = inkToRgb(ink.c, ink.m, ink.y, ink.k);
+            if (deltaE(srgbToLab(r, g, b), srgbToLab(sim.r, sim.g, sim.b)) > DE_VISIBLE) out++;
+            seen++;
+          }
+          const pct = seen ? out / seen * 100 : 0;
+          gamutNote = pct < 0.5 ? 'clean — sampled colours print as they look'
+            : pct.toFixed(1) + '% of sampled pixels will shift on press';
+        } catch (err) { /* never let this break the rest of the report */ }
+
         const rows = [
           ['Dimensions', w + ' × ' + h + ' px'],
           ['Format', (file.type || 'unknown').replace('image/', '').toUpperCase() + ' · ' + (file.name || '')],
@@ -751,6 +1142,7 @@
           ['Transparency', hasAlpha ? 'Yes — ' + Math.round(alpha / total * 100) + '% clear' : 'None (opaque)'],
           ['Tone spread', Math.round(ink * 100) + '% midtone · ' + Math.round(black / solid * 100) + '% black · ' + Math.round(white / solid * 100) + '% white'],
           ['Grain / noise index', noiseAvg.toFixed(1) + ' ' + (noiseAvg > 14 ? '— heavy, likely re-saved or upscaled' : noiseAvg > 4 ? '— normal photographic texture' : '— clean, flat or vector-like')],
+          ['Ink check', gamutNote],
           ['Verdict', printUse]
         ];
 
@@ -1208,62 +1600,6 @@
     render();
   }
 
-  /* ─────────────── D · display → print DPI ─────────────── */
-
-  function buildDpi() {
-    const pxIn = $('#tdpiPx');
-    if (!pxIn) return;
-    const pxH = $('#tdpiPxH'), cmIn = $('#tdpiCm'), out = $('#tdpiOut');
-    const fileBtn = $('#tdpiFromFile'), fileIn = $('#tdpiFile');
-
-    function render() {
-      const w = Math.max(1, +pxIn.value || 0);
-      const h = Math.max(1, +pxH.value || 0);
-      const cm = Math.max(0.5, +cmIn.value || 1);
-      const inches = cm / 2.54;
-      const dpi = w / inches;
-      const need = Math.ceil(inches * 300);          /* px needed at 300dpi */
-      const mult = need / w;
-
-      const verdict =
-        dpi >= 300 ? ['Print-ready', 'is-pass'] :
-        dpi >= 200 ? ['Acceptable at a distance', 'is-mid'] :
-        dpi >= 150 ? ['Will look soft up close', 'is-mid'] :
-        ['Will visibly block — do not print this size', 'is-fail'];
-
-      const printH = (h / dpi) * 2.54;
-      out.innerHTML = `
-        <p class="tdpi__big ${verdict[1]}">${Math.round(dpi)} <span>dpi</span></p>
-        <p class="tdpi__verdict">${verdict[0]}</p>
-        <div class="tp__row"><span>Printed size</span><b>${cm} × ${printH.toFixed(1)} cm</b></div>
-        <div class="tp__row"><span>Pixels you have</span><b>${w} × ${h}</b></div>
-        <div class="tp__row"><span>Pixels needed at 300 dpi</span><b>${need} wide</b></div>
-        <div class="tp__row ${mult > 1 ? 'is-fail' : 'is-pass'}"><span>${mult > 1 ? 'Short by' : 'Headroom'}</span><b>${mult > 1 ? Math.round((1 - 1 / mult) * 100) + '% too small' : Math.round((mult < 1 ? 1 / mult - 1 : 0) * 100) + '% spare'}</b></div>`;
-    }
-
-    if (fileBtn && fileIn) {
-      fileBtn.addEventListener('click', () => fileIn.click());
-      fileIn.addEventListener('change', () => {
-        const f = fileIn.files[0];
-        if (!f) return;
-        const url = URL.createObjectURL(f);
-        const im = new Image();
-        im.onload = () => {
-          pxIn.value = im.naturalWidth;
-          pxH.value = im.naturalHeight;
-          URL.revokeObjectURL(url);
-          render();
-          toast(im.naturalWidth + ' × ' + im.naturalHeight + ' px');
-        };
-        im.src = url;
-      });
-    }
-
-    [pxIn, pxH, cmIn].forEach(i => i && i.addEventListener('input', render));
-    render();
-  }
-
-
   /* ─────────────── 08 · text over an image ───────────────
    * This is the only real way to answer "is it readable": render the headline to an
    * offscreen canvas, then walk the pixels UNDER the glyphs in the photo and take the
@@ -1514,7 +1850,7 @@
     buildExtract();
     buildPrint();
     buildScale();
-    buildDpi();
+    buildPress();
     buildContrast();
     buildPalette();
     buildFonts();

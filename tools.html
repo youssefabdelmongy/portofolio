@@ -77,7 +77,7 @@
         <li><a href="#print"><span class="mono">02</span><b>Print bleed</b><small>the document size the printer wants</small></a></li>
         <li><a href="#contrast"><span class="mono">03</span><b>Contrast</b><small>will this text pass WCAG</small></a></li>
         <li><a href="#scale"><span class="mono">04</span><b>Type scale</b><small>nine sizes that pass WCAG</small></a></li>
-        <li><a href="#dpi"><span class="mono">05</span><b>Will it print</b><small>the dpi you actually have</small></a></li>
+        <li><a href="#dpi"><span class="mono">05</span><b>Press check</b><small>what CMYK will kill</small></a></li>
         <li><a href="#palette"><span class="mono">06</span><b>Palette</b><small>one hex → a full ramp</small></a></li>
         <li><a href="#fonts"><span class="mono">07</span><b>Fonts</b><small>which face actually renders</small></a></li>
         <li><a href="#overlay"><span class="mono">08</span><b>Text on photo</b><small>can anyone actually read it</small></a></li>
@@ -91,7 +91,7 @@
         <a href="#print">02 · Print bleed</a>
         <a href="#contrast">03 · Contrast</a>
         <a href="#scale">04 · Type scale</a>
-        <a href="#dpi">05 · Will it print</a>
+        <a href="#dpi">05 · Press check</a>
         <a href="#palette">06 · Palette</a>
         <a href="#fonts">07 · Fonts</a>
         <a href="#overlay">08 · Text on photo</a>
@@ -102,7 +102,7 @@
     </header>
 
 
-    <!-- ───────────── A · COLOUR FROM AN IMAGE ───────────── -->
+    <!-- ───────────── 01 · A · COLOUR FROM AN IMAGE ───────────── -->
     <section class="tool" id="extract">
       <div class="tool__head">
         <span class="tool__n mono">01</span>
@@ -147,66 +147,6 @@
             <p class="mono tx__note" id="txNote"></p>
           </div>
         </div>
-      </div>
-    </section>
-
-    <!-- ───────────── C · TYPE SCALE ───────────── -->
-    <section class="tool" id="scale">
-      <div class="tool__head">
-        <span class="tool__n mono">04</span>
-        <h2 class="tool__title">A type scale that actually holds</h2>
-      </div>
-      <p class="tool__d">Pick a base size and a ratio. It writes the whole scale, checks each step still passes WCAG at its size, and hands you the CSS.</p>
-      <p class="tool__when"><span class="mono">USE IT WHEN</span> You are setting up type for a real project and do not want to eyeball eight sizes.</p>
-
-      <div class="tscale">
-        <div class="tscale__side">
-          <div class="tf"><label for="tscBase">Base size (px)</label><input id="tscBase" type="number" value="16" min="8" max="40" step="1" inputmode="numeric" /></div>
-          <div class="tf" style="margin-top:12px">
-            <label for="tscRatio">Ratio</label>
-            <select id="tscRatio">
-              <option value="1.125">1.125 — major second, dense UI</option>
-              <option value="1.2">1.2 — minor third</option>
-              <option value="1.25">1.25 — major third</option>
-              <option value="1.333" selected>1.333 — perfect fourth</option>
-              <option value="1.414">1.414 — augmented fourth</option>
-              <option value="1.5">1.5 — perfect fifth, editorial</option>
-              <option value="1.618">1.618 — golden ratio, big contrast</option>
-            </select>
-          </div>
-          <div class="tf" style="margin-top:12px">
-            <label for="tscInk">Text colour</label>
-            <input id="tscInk" type="color" value="#F1EEE6" />
-          </div>
-          <div class="tf" style="margin-top:12px">
-            <label for="tscBg">Background</label>
-            <input id="tscBg" type="color" value="#0A0A0B" />
-          </div>
-          <p class="mono tscale__wcag" id="tscVerdict"></p>
-          <button class="btn btn--ghost tscale__copy" type="button" id="tscCopy">Copy the CSS ↓</button>
-        </div>
-        <div class="tscale__out" id="tscOut"></div>
-      </div>
-    </section>
-
-    <!-- ───────────── D · DISPLAY-TO-PRINT DPI ───────────── -->
-    <section class="tool" id="dpi">
-      <div class="tool__head">
-        <span class="tool__n mono">05</span>
-        <h2 class="tool__title">Will this hold up when it prints?</h2>
-      </div>
-      <p class="tool__d">Clip a crop from the web, set the size it will be printed at, and see the DPI you actually have. Under 300 and you can see the difference on paper.</p>
-      <p class="tool__when"><span class="mono">USE IT WHEN</span> A client sends a photo from their phone and wants it on a banner.</p>
-
-      <div class="tdpi">
-        <div>
-          <div class="tf"><label for="tdpiPx">Pixels across</label><input id="tdpiPx" type="number" value="1080" min="1" step="1" inputmode="numeric" /></div>
-          <div class="tf" style="margin-top:10px"><label for="tdpiPxH">Pixels down</label><input id="tdpiPxH" type="number" value="1350" min="1" step="1" inputmode="numeric" /></div>
-          <div class="tf" style="margin-top:10px"><label for="tdpiCm">Printed width (cm)</label><input id="tdpiCm" type="number" value="10" min="0.5" step="0.5" inputmode="decimal" /></div>
-          <button class="btn btn--ghost tdpi__auto" type="button" id="tdpiFromFile">Or read it from a file ↓</button>
-          <input id="tdpiFile" type="file" accept="image/*" hidden />
-        </div>
-        <div class="tdpi__out" id="tdpiOut"></div>
       </div>
     </section>
 
@@ -312,7 +252,98 @@
       </div>
     </section>
 
-    <!-- ───────────── 05 · PALETTE ───────────── -->
+    <!-- ───────────── 04 · C · TYPE SCALE ───────────── -->
+    <section class="tool" id="scale">
+      <div class="tool__head">
+        <span class="tool__n mono">04</span>
+        <h2 class="tool__title">A type scale that actually holds</h2>
+      </div>
+      <p class="tool__d">Pick a base size and a ratio. It writes the whole scale, checks each step still passes WCAG at its size, and hands you the CSS.</p>
+      <p class="tool__when"><span class="mono">USE IT WHEN</span> You are setting up type for a real project and do not want to eyeball eight sizes.</p>
+
+      <div class="tscale">
+        <div class="tscale__side">
+          <div class="tf"><label for="tscBase">Base size (px)</label><input id="tscBase" type="number" value="16" min="8" max="40" step="1" inputmode="numeric" /></div>
+          <div class="tf" style="margin-top:12px">
+            <label for="tscRatio">Ratio</label>
+            <select id="tscRatio">
+              <option value="1.125">1.125 — major second, dense UI</option>
+              <option value="1.2">1.2 — minor third</option>
+              <option value="1.25">1.25 — major third</option>
+              <option value="1.333" selected>1.333 — perfect fourth</option>
+              <option value="1.414">1.414 — augmented fourth</option>
+              <option value="1.5">1.5 — perfect fifth, editorial</option>
+              <option value="1.618">1.618 — golden ratio, big contrast</option>
+            </select>
+          </div>
+          <div class="tf" style="margin-top:12px">
+            <label for="tscInk">Text colour</label>
+            <input id="tscInk" type="color" value="#F1EEE6" />
+          </div>
+          <div class="tf" style="margin-top:12px">
+            <label for="tscBg">Background</label>
+            <input id="tscBg" type="color" value="#0A0A0B" />
+          </div>
+          <p class="mono tscale__wcag" id="tscVerdict"></p>
+          <button class="btn btn--ghost tscale__copy" type="button" id="tscCopy">Copy the CSS ↓</button>
+        </div>
+        <div class="tscale__out" id="tscOut"></div>
+      </div>
+    </section>
+
+    <!-- ───────────── 05 · D · DISPLAY-TO-PRINT DPI ───────────── -->
+    <section class="tool" id="dpi">
+      <div class="tool__head">
+        <span class="tool__n mono">05</span>
+        <h2 class="tool__title">What dies on press?</h2>
+      </div>
+      <p class="tool__d">Monitors are RGB and very forgiving. A press is CMYK and is not. Drop a piece of artwork and this converts it to ink, then shows you every colour it cannot print, every flat colour that will turn into dots, and a proof of what you will actually get back.</p>
+      <p class="tool__when"><span class="mono">USE IT WHEN</span> Artwork is going to a printer and you want to find the muddy greens and the electric blues <em>before</em> a proof comes back wrong.</p>
+
+      <div class="tpress">
+        <div class="tpress__side">
+          <label class="taud__drop tpress__drop" id="tPrDrop" for="tPrFile">
+            <input id="tPrFile" type="file" accept="image/*" hidden />
+            <span class="taud__icon" aria-hidden="true">↓</span>
+            <b>Drop the artwork</b>
+            <small class="mono">JPEG · PNG · WebP · read locally, never uploaded</small>
+          </label>
+          <div class="tf" style="margin-top:14px">
+            <label for="tPrPaper">Paper</label>
+            <select id="tPrPaper">
+              <option value="coated">Coated — silk/gloss, most commercial jobs</option>
+              <option value="uncoated">Uncoated — letterpress, stock cards</option>
+              <option value="newsprint">Newsprint — absorbs everything</option>
+            </select>
+          </div>
+          <div class="tf" style="margin-top:12px">
+            <label for="tPrTac">Total ink limit <b id="tPrTacVal">300</b>%</label>
+            <input id="tPrTac" type="range" min="240" max="340" step="5" value="300" />
+          </div>
+          <div class="tpress__toggles">
+            <label class="tpress__tg"><input id="tPrGamut" type="checkbox" checked /><span>Mark out-of-gamut</span></label>
+            <label class="tpress__tg"><input id="tPrView" type="checkbox" /><span>Show proof instead</span></label>
+          </div>
+          <p class="mono tpress__hint">Amber = prints but not as the colour you see. Red = no ink can reach it. Hatched = over the ink limit.</p>
+          <div class="tpress__stats" id="tPrStats"></div>
+        </div>
+        <div class="tpress__main">
+          <div class="tpress__stage" id="tPrStage">
+            <canvas id="tPrCanvas" width="640" height="480"></canvas>
+            <div class="tpress__empty mono" id="tPrEmpty">No file yet — the proof appears here</div>
+          </div>
+          <div class="tpress__legend mono">
+            <span><i class="lg lg--ok"></i>faithful</span>
+            <span><i class="lg lg--warn"></i>shifts visibly</span>
+            <span><i class="lg lg--bad"></i>no ink match</span>
+            <span><i class="lg lg--tac"></i>over ink limit</span>
+          </div>
+          <p class="mono tpress__eyedrop" id="tPrEye">Tap the artwork to read the ink build under that pixel.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────── 06 · PALETTE ───────────── -->
     <section class="tool" id="palette">
       <div class="tool__head">
         <span class="tool__n mono">06</span>
@@ -335,6 +366,16 @@
               <div class="tpal__knob" id="tPalKnob"></div>
             </div>
             <p class="mono tpal__draghint">Drag anywhere in here — left to right is hue, up and down is saturation.</p>
+            <div class="tf" style="margin-top:14px">
+              <label for="tPalHarmony">Accent harmony</label>
+              <select id="tPalHarmony">
+                <option value="comp">Complementary — opposite the hue</option>
+                <option value="split">Split complement — two, near the opposite</option>
+                <option value="triad">Triadic — 120° apart</option>
+                <option value="analog">Analogous — neighbours, safe</option>
+              </select>
+            </div>
+            <button class="btn btn--ghost tpal__lock" type="button" id="tPalLock" aria-pressed="false">Lock the base</button>
           </div>
           <p class="mono" style="font-size:.56rem;color:rgba(241,238,230,.35);margin:12px 0 0;line-height:1.6">
             Tap any swatch to copy its hex.
@@ -354,7 +395,42 @@
       </div>
     </section>
 
-    <!-- ───────────── 06 · FILE WEIGHT ───────────── -->
+    <!-- ───────────── 07 · FONT STACK INSPECTOR ───────────── -->
+    <section class="tool" id="fonts">
+      <div class="tool__head">
+        <span class="tool__n mono">07</span>
+        <h2 class="tool__title">What font is this, really?</h2>
+      </div>
+            <p class="tool__d">Paste a font stack and see which face your machine actually renders — measured, not guessed.</p>
+      <p class="tool__when"><span class="mono">USE IT WHEN</span> You are about to tell a client “it will look like this”. Their machine is not yours.</p>
+
+      <div class="tfont">
+        <div class="tfont__side">
+          <div class="tf">
+            <label for="tFontStack">Font stack</label>
+            <textarea id="tFontStack" class="tfont__in" rows="3" spellcheck="false">"Bricolage Grotesque", "Helvetica Neue", Helvetica, Arial, sans-serif</textarea>
+          </div>
+          <div class="tf" style="margin-top:14px">
+            <label for="tFontSample">Sample</label>
+            <input id="tFontSample" class="tfont__in" type="text" value="Hamburgefonstiv 0123 — تصميم" />
+          </div>
+          <div class="tfont__size">
+            <label class="mono" for="tFontSize">Size <b id="tFontSizeVal">64</b>px</label>
+            <input id="tFontSize" type="range" min="16" max="140" value="64" />
+          </div>
+          <p class="mono tfont__hint">
+            Green = resolved here · grey = fell through. Every line is drawn in the face it
+            names, so a fallback that looks wrong is a fallback that <em>is</em> wrong.
+          </p>
+        </div>
+        <div class="tfont__main">
+          <div class="tfont__big" id="tFontBig" contenteditable="true" spellcheck="false">Hamburgefonstiv</div>
+          <p class="tfont__res mono" id="tFontResolved"></p>
+          <p class="tfont__shift" id="tFontShift"></p>
+          <ul class="tfont__list" id="tFontList"></ul>
+        </div>
+      </div>
+    </section>
 
     <!-- ───────────── 08 · TEXT OVER AN IMAGE ───────────── -->
     <section class="tool" id="overlay">
@@ -405,44 +481,8 @@
         </div>
       </div>
     </section>
-    <!-- ───────────── 06 · FONT STACK INSPECTOR ───────────── -->
-    <section class="tool" id="fonts">
-      <div class="tool__head">
-        <span class="tool__n mono">07</span>
-        <h2 class="tool__title">What font is this, really?</h2>
-      </div>
-            <p class="tool__d">Paste a font stack and see which face your machine actually renders — measured, not guessed.</p>
-      <p class="tool__when"><span class="mono">USE IT WHEN</span> You are about to tell a client “it will look like this”. Their machine is not yours.</p>
 
-      <div class="tfont">
-        <div class="tfont__side">
-          <div class="tf">
-            <label for="tFontStack">Font stack</label>
-            <textarea id="tFontStack" class="tfont__in" rows="3" spellcheck="false">"Bricolage Grotesque", "Helvetica Neue", Helvetica, Arial, sans-serif</textarea>
-          </div>
-          <div class="tf" style="margin-top:14px">
-            <label for="tFontSample">Sample</label>
-            <input id="tFontSample" class="tfont__in" type="text" value="Hamburgefonstiv 0123 — تصميم" />
-          </div>
-          <div class="tfont__size">
-            <label class="mono" for="tFontSize">Size <b id="tFontSizeVal">64</b>px</label>
-            <input id="tFontSize" type="range" min="16" max="140" value="64" />
-          </div>
-          <p class="mono tfont__hint">
-            Green = resolved here · grey = fell through. Every line is drawn in the face it
-            names, so a fallback that looks wrong is a fallback that <em>is</em> wrong.
-          </p>
-        </div>
-        <div class="tfont__main">
-          <div class="tfont__big" id="tFontBig" contenteditable="true" spellcheck="false">Hamburgefonstiv</div>
-          <p class="tfont__res mono" id="tFontResolved"></p>
-          <p class="tfont__shift" id="tFontShift"></p>
-          <ul class="tfont__list" id="tFontList"></ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- ───────────── 08 · IMAGE AUDITOR ───────────── -->
+    <!-- ───────────── 09 · IMAGE AUDITOR ───────────── -->
     <section class="tool" id="audit">
       <div class="tool__head">
         <span class="tool__n mono">09</span>
@@ -480,7 +520,7 @@
       </div>
     </section>
 
-    <!-- ───────────── 09 · LOCKUP EXPORTER ───────────── -->
+    <!-- ───────────── 10 · LOCKUP EXPORTER ───────────── -->
     <section class="tool" id="lockup">
       <div class="tool__head">
         <span class="tool__n mono">10</span>
@@ -522,7 +562,7 @@
       </div>
     </section>
 
-    <!-- ───────────── 07 · DIRECTORY ───────────── -->
+    <!-- ───────────── 11 · DIRECTORY ───────────── -->
     <section class="tool" id="directory">
       <div class="tool__head">
         <span class="tool__n mono">11</span>
