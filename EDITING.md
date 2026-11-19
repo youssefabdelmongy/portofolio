@@ -125,7 +125,7 @@
 يظهر عند الزوار القدام، غيّر رقم النسخة في `sw.js`:
 
 ```js
-const CACHE = 'ym-portfolio-v12';   // → v13
+const CACHE = 'ym-portfolio-v14';   // → v15
 ```
 
 > ملحوظة: تعديل **محتوى** (`content/*.json`) بيظهر فورًا لأن ملفات الـ JSON

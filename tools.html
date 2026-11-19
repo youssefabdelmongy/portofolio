@@ -67,10 +67,23 @@
       <p class="tp-head__kicker mono">Tools · free · no sign-up</p>
       <h1 class="tp-title">The things I open<br><em>twenty times a day.</em></h1>
       <p class="tp-lede">
-        Six calculators I got tired of googling, and a directory of the tools that actually
-        earn their place in a working designer's browser. Everything here runs on your device —
-        nothing is uploaded, nothing is tracked, and it all works offline.
+        Nine tools I got tired of googling, plus a directory. Everything runs on your device —
+        nothing is uploaded, nothing is tracked, and it works offline.
       </p>
+
+      <!-- what is on the page, in one line each: no one should have to scroll to find out -->
+      <ul class="tp-map" aria-label="What each tool does">
+        <li><a href="#sizes"><span class="mono">01</span><b>Social sizes</b><small>copy the right artboard dimensions</small></a></li>
+        <li><a href="#print"><span class="mono">02</span><b>Print bleed</b><small>the document size the printer wants</small></a></li>
+        <li><a href="#contrast"><span class="mono">03</span><b>Contrast</b><small>will this text pass WCAG, yes or no</small></a></li>
+        <li><a href="#units"><span class="mono">04</span><b>px · rem · pt</b><small>convert between screen and print</small></a></li>
+        <li><a href="#palette"><span class="mono">05</span><b>Palette</b><small>one hex → a full ramp, exportable</small></a></li>
+        <li><a href="#fonts"><span class="mono">06</span><b>Fonts</b><small>which face actually renders</small></a></li>
+        <li><a href="#weight"><span class="mono">07</span><b>File weight</b><small>is this export size realistic</small></a></li>
+        <li><a href="#audit"><span class="mono">08</span><b>Image audit</b><small>read a file before it goes to print</small></a></li>
+        <li><a href="#lockup"><span class="mono">09</span><b>Lockup</b><small>download four real SVGs</small></a></li>
+        <li><a href="#directory"><span class="mono">10</span><b>Directory</b><small>the tools I actually keep open</small></a></li>
+      </ul>
 
       <nav class="tp-nav" aria-label="Jump to a tool">
         <a href="#sizes">01 · Social sizes</a>
@@ -92,12 +105,21 @@
         <span class="tool__n mono">01</span>
         <h2 class="tool__title">Social media sizes</h2>
       </div>
-      <p class="tool__d">
-        The current sizes for every placement worth designing for. Tap any row to copy
-        “width × height” to the clipboard — the aspect ratio is there so you can set up the
-        artboard without doing the maths.
-      </p>
-      <div class="tsize__groups" id="tSizeList"></div>
+            <p class="tool__d">The right size for every placement. Tap a row and the dimensions are on your clipboard.</p>
+      <p class="tool__when"><span class="mono">USE IT WHEN</span> A client says “make it for Instagram” and you need the artboard, not a guess.</p>
+      <div class="tsize__wrap">
+        <div class="tsize__groups" id="tSizeList"></div>
+        <aside class="tsize__preview" aria-live="polite">
+          <p class="mono tsize__plabel">See it on a phone</p>
+          <div class="tsize__phone">
+            <div class="tsize__screen">
+              <div class="tsize__art" id="tSizeArt"></div>
+            </div>
+          </div>
+          <p class="tsize__pmeta mono" id="tSizeMeta">Tap any size to preview it</p>
+          <button class="btn btn--ghost tsize__clone" type="button" id="tSizeClone">Send this size to the print calculator →</button>
+        </aside>
+      </div>
     </section>
 
     <!-- ───────────── 02 · PRINT BLEED ───────────── -->
@@ -106,11 +128,12 @@
         <span class="tool__n mono">02</span>
         <h2 class="tool__title">Print bleed calculator</h2>
       </div>
-      <p class="tool__d">
-        The number that causes the most reprints. Set your trim size and the bleed, and this
-        gives you the document size to create, the safe area to keep text inside, and the pixel
-        count at your export resolution.
-      </p>
+            <p class="tool__d">Finished size and bleed in, document size out — plus the safe area and the pixel count at your export resolution.</p>
+            <div class="tool__hint" id="tPrintHint">
+        <p><b>Bleed</b> is extra artwork past the trim so a 1 mm cutting slip doesn't leave a white edge — 3 mm is standard.</p>
+        <p><b>Safe margin</b> is how far text stays from the cut. <b>DPI</b> is the export resolution; 300 is print, 150 is a big banner.</p>
+      </div>
+<p class="tool__when"><span class="mono">USE IT WHEN</span> Anything is going to a printer. This is the number behind most reprints.</p>
 
       <div class="tprint">
         <div>
@@ -141,11 +164,11 @@
         <span class="tool__n mono">03</span>
         <h2 class="tool__title">Contrast checker (WCAG)</h2>
       </div>
-      <p class="tool__d">
-        Type a colour, or pick from the presets. The ratio is what accessibility guidelines use:
-        4.5:1 for body text, 3:1 for large text. If it fails here, it fails for a lot of
-        people — including anyone reading your work on a phone in daylight.
+            <p class="tool__d">Type two colours and get the ratio. 4.5:1 is the line for body text, 3:1 for large text.</p>
+            <p class="tool__hint">
+        <b>Text</b> is the colour of the words, <b>background</b> is what sits behind them. Swap if you typed them the wrong way round.
       </p>
+<p class="tool__when"><span class="mono">USE IT WHEN</span> Before you hand over a palette — a grey that looks fine on your monitor can disappear on a phone in daylight.</p>
 
       <div class="tcon">
         <div>
@@ -160,8 +183,12 @@
             </div>
           </div>
           <div style="margin-top:10px">
-            <button class="btn btn--ghost" type="button" id="tConSwap" style="width:100%">Swap colours ⇄</button>
+            <div class="tcon__row2">
+              <button class="btn btn--ghost" type="button" id="tConSwap">Swap ⇄</button>
+              <button class="btn btn--ghost" type="button" id="tConPick">Pick from screen ⊙</button>
+            </div>
           </div>
+          <p class="mono tcon__plabel">Or start from a pairing</p>
           <div class="tcon__picks" aria-label="Presets">
             <button class="tcon__pick" type="button" data-fg="#0A0A0B" data-bg="#F1EEE6" style="background:linear-gradient(135deg,#0A0A0B 50%,#F1EEE6 50%)" aria-label="Ink on paper"></button>
             <button class="tcon__pick" type="button" data-fg="#F1EEE6" data-bg="#0A0A0B" style="background:linear-gradient(135deg,#F1EEE6 50%,#0A0A0B 50%)" aria-label="Paper on ink"></button>
@@ -177,10 +204,16 @@
           <ul class="tcon__checks" id="tConChecks"></ul>
           <div class="tcon__preview" id="tConPreview">
             <p id="tConText">
-              Menus people can read in bad light. This is body text at normal size —
-              the paragraph you are reading right now.
+              Menus people can read in bad light. This is the paragraph you are reading right now.
             </p>
-            <p>Large text sample</p>
+          </div>
+          <div class="tcon__live">
+            <div class="tcon__live-head">
+              <label class="mono" for="tConSize">Try it at <b id="tConSizeVal">16</b>px</label>
+              <span class="tcon__live-badge is-pass" id="tConLivePass">PASSES at 16px</span>
+            </div>
+            <input id="tConSize" type="range" min="10" max="48" value="16" />
+            <p class="tcon__live-note mono">Drag the size down. It flips to FAILS the moment the text gets too small for this ratio.</p>
           </div>
           <div style="display:flex;gap:8px;margin-top:10px;align-items:center">
             <span id="tConSwatchFg" style="width:34px;height:34px;border-radius:6px;border:1px solid rgba(241,238,230,.25)"></span>
@@ -197,11 +230,11 @@
         <span class="tool__n mono">04</span>
         <h2 class="tool__title">px · rem · pt</h2>
       </div>
-      <p class="tool__d">
-        Type into any field and the others follow. Point sizes from a print spec, rem values
-        for a stylesheet, pixels for a mockup — this is the conversion that keeps a type scale
-        consistent across both.
+            <p class="tool__d">Type in any field and the rest follow. Pixels, rem and points, converted both ways.</p>
+            <p class="tool__hint">
+        <b>Root size</b> is the browser's base font — 16px unless a stylesheet changes it. Change it and every rem recalculates.
       </p>
+<p class="tool__when"><span class="mono">USE IT WHEN</span> A print spec gives you points and the stylesheet needs rem.</p>
 
       <div class="tunits">
         <div class="tf"><label for="tUnitPx">Pixels</label><input class="tunit__in" id="tUnitPx" data-unit="px" type="number" inputmode="decimal" step="any" /></div>
@@ -218,20 +251,26 @@
         <span class="tool__n mono">05</span>
         <h2 class="tool__title">Palette from one colour</h2>
       </div>
-      <p class="tool__d">
-        Pick a brand colour and get a usable ramp: five tints, the base, five shades, and three
-        accents that are actually related. Each swatch shows its contrast against white and
-        black, so you can see what will hold up as text before you commit.
+            <p class="tool__d">One colour in, a full ramp out. Contrast printed on every swatch, and the whole thing exports as CSS, JSON or Tailwind.</p>
+            <p class="tool__hint">
+        <b>50</b> is the lightest tint, <b>900</b> the darkest shade, <b>base</b> is your original colour. The two numbers on each swatch are its contrast against white and against black.
       </p>
+<p class="tool__when"><span class="mono">USE IT WHEN</span> A client gives you one hex and no brand guidelines.</p>
 
       <div class="tpal">
         <div>
           <div class="tf">
             <label for="tPalBase">Base colour</label>
             <input id="tPalBase" type="color" value="#E4572E" />
+            <div class="tpal__drag" id="tPalDrag" role="slider" tabindex="0"
+                 aria-label="Drag across to change hue and saturation"
+                 aria-valuemin="0" aria-valuemax="360" aria-valuenow="16">
+              <div class="tpal__knob" id="tPalKnob"></div>
+            </div>
+            <p class="mono tpal__draghint">Drag anywhere in here — left to right is hue, up and down is saturation.</p>
           </div>
           <p class="mono" style="font-size:.56rem;color:rgba(241,238,230,.35);margin:12px 0 0;line-height:1.6">
-            Tap any swatch to copy its hex.<br>The two numbers are contrast vs. white / vs. black.
+            Tap any swatch to copy its hex.
           </p>
         </div>
         <div>
@@ -253,11 +292,11 @@
         <span class="tool__n mono">07</span>
         <h2 class="tool__title">File weight budget</h2>
       </div>
-      <p class="tool__d">
-        The quiet reason a portfolio feels slow. Set the pixel size and the size you want the
-        file to be, and this tells you how many bits per pixel you have left — which is what
-        decides whether the export will band and block or hold together.
+            <p class="tool__d">Set the pixel size and the target file size. It tells you the bits per pixel you have left.</p>
+            <p class="tool__hint">
+        <b>Target size</b> is the KB you want the exported file to be. The verdict says whether that size can hold the detail at this pixel count.
       </p>
+<p class="tool__when"><span class="mono">USE IT WHEN</span> An export is banding or blocking and you need to know if the budget is even realistic.</p>
 
       <div class="tweight">
         <div class="tf__row">
@@ -276,14 +315,8 @@
         <span class="tool__n mono">06</span>
         <h2 class="tool__title">What font is this, really?</h2>
       </div>
-      <p class="tool__d">
-        Paste any CSS font stack and this shows you exactly which face your machine resolves it
-        to — the one that actually renders, not the first one you asked for. It is measured, not
-        guessed: the text is drawn on a canvas in each candidate and compared against the generic
-        fallback, so a face that is not installed cannot fake its way in. The line you are reading
-        is set in this site's own stack — <em>Bricolage Grotesque</em> first, with Helvetica,
-        Arial and sans-serif behind it — so the counts below are a live example, not a demo.
-      </p>
+            <p class="tool__d">Paste a font stack and see which face your machine actually renders — measured, not guessed.</p>
+      <p class="tool__when"><span class="mono">USE IT WHEN</span> You are about to tell a client “it will look like this”. Their machine is not yours.</p>
 
       <div class="tfont">
         <div class="tfont__side">
@@ -318,13 +351,8 @@
         <span class="tool__n mono">08</span>
         <h2 class="tool__title">What's actually inside that export</h2>
       </div>
-      <p class="tool__d">
-        Drop an image and read it the way a proofer would: real dimensions, the DPI it will print
-        at, whether it has transparency, how much of it is pure black and pure white, and — the one
-        nobody checks — the ratio of noise to detail, which is what tells you whether a JPEG has
-        been re-saved one time too many or a PNG was exported at the wrong size and upscaled.
-        Nothing leaves this tab; the file is read in memory and forgotten.
-      </p>
+            <p class="tool__d">Drop an image and read it properly: real size, print DPI, transparency, tone, and a grain score that catches re-saved or upscaled files.</p>
+      <p class="tool__when"><span class="mono">USE IT WHEN</span> Someone sends you “the logo” and you need to know if it will survive print.</p>
 
       <div class="taud">
         <label class="taud__drop" id="tAudDrop" for="tAudFile">
@@ -337,6 +365,20 @@
           <div class="taud__preview"><img id="tAudImg" alt="The image you just loaded" /></div>
           <div class="taud__facts" id="tAudFacts"></div>
         </div>
+        <div class="taud__cmp" id="tAudCmp" hidden>
+          <p class="mono taud__cmplabel">Would a re-export be smaller?</p>
+          <div class="taud__cmprow">
+            <label class="mono" for="tAudQ">JPEG quality <b id="tAudQVal">80%</b></label>
+            <input id="tAudQ" type="range" min="30" max="95" value="80" />
+          </div>
+          <canvas id="tAudCmpCanvas" hidden></canvas>
+          <div class="taud__cmpsizes">
+            <div><span class="mono">JPEG</span><b id="tAudJpgSize">—</b></div>
+            <div><span class="mono">PNG</span><b id="tAudPngSize">—</b></div>
+          </div>
+          <p class="taud__save" id="tAudSave"></p>
+          <button class="btn btn--solid taud__dl" type="button" id="tAudDownload">Download this JPEG ↓</button>
+        </div>
         <p class="taud__note mono" id="tAudNote"></p>
       </div>
     </section>
@@ -347,12 +389,8 @@
         <span class="tool__n mono">09</span>
         <h2 class="tool__title">A lockup you can actually hand over</h2>
       </div>
-      <p class="tool__d">
-        Type a name, pick a mark, and this writes a real, clean SVG — live text you can outline,
-        a transparent background, and the exact spacing a lockup needs — plus the three
-        arrangements a client always asks for after the fact. Four files, one click, no account
-        and no watermark. It opens in Illustrator as editable shapes because that is what it is.
-      </p>
+            <p class="tool__d">Type a name, pick a mark, download four SVGs — stacked, horizontal, mark only, and inverse.</p>
+      <p class="tool__when"><span class="mono">USE IT WHEN</span> A job needs a clean lockup today and the brand book does not exist yet.</p>
 
       <div class="tlk">
         <div class="tlk__side">
@@ -372,6 +410,12 @@
             <label for="tlkInk">Ink</label>
             <input id="tlkInk" type="color" value="#0A0A0B" />
           </div>
+          <div class="tlk__tune">
+            <label class="mono" for="tlkWeight">Weight <b id="tlkWeightVal">600</b></label>
+            <input id="tlkWeight" type="range" min="300" max="800" step="100" value="600" />
+            <label class="mono" for="tlkTrack">Tracking <b id="tlkTrackVal">−4</b></label>
+            <input id="tlkTrack" type="range" min="-8" max="4" step="1" value="-4" />
+          </div>
           <button class="btn btn--solid tlk__all" id="tlkAll" type="button">Download four SVGs ↓</button>
         </div>
         <div class="tlk__stage" id="tlkStage"></div>
@@ -385,8 +429,7 @@
         <h2 class="tool__title">The directory</h2>
       </div>
       <p class="tool__d">
-        Tools I actually use, grouped by what you reach for them for. No affiliate links,
-        no “top 50” padding — if it is here, it earned the slot. Search or filter by category.
+        Tools I actually use, grouped by what you reach for. No affiliate links, no padding — if it is here, it earned the slot.
       </p>
 
       <div class="tdir__bar">

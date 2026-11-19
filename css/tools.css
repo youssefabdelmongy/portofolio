@@ -406,3 +406,171 @@ html{scroll-padding-top:clamp(76px,9vh,104px)}
   transition:background .25s,color .25s,border-color .25s;
 }
 .tpal__exp:hover,.tpal__exp:focus-visible{background:var(--paper);color:var(--ink);border-color:var(--paper)}
+
+/* ── the one-line map of the page ──
+   a visitor should know what all ten do before scrolling past the fold */
+/* five across, two rows, no orphan cells — the numbers live in a column of their
+   own so a long label can never shove them into the middle of the text */
+.tp-map{
+  list-style:none;margin:clamp(20px,3vw,30px) 0 0;padding:0;
+  display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:1px;
+  background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden;
+}
+@media (max-width:1080px){.tp-map{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.tp-map{grid-template-columns:1fr}}
+.tp-map li{display:flex;background:var(--ink)}
+.tp-map a{
+  display:grid;grid-template-columns:16px minmax(0,1fr);grid-template-rows:auto auto;
+  gap:3px 8px;padding:13px 14px;background:var(--ink);text-decoration:none;
+  width:100%;transition:background .25s;
+}
+.tp-map a:hover,.tp-map a:focus-visible{background:#15151a}
+.tp-map .mono{
+  grid-row:1/3;align-self:start;color:var(--accent);
+  font-size:.5rem;letter-spacing:.1em;line-height:1.7;
+}
+.tp-map b{
+  font-family:var(--font-display);font-weight:500;font-size:.8rem;line-height:1.2;
+  color:var(--paper);letter-spacing:-.01em;
+}
+.tp-map small{font-size:.65rem;line-height:1.4;color:rgba(241,238,230,.42)}
+.tp-map a:hover small,.tp-map a:focus-visible small{color:rgba(241,238,230,.64)}
+
+/* ── "use it when": the sentence that makes a tool click ── */
+.tool__when{
+  display:block;font-size:.8rem;line-height:1.55;color:rgba(241,238,230,.46);
+  margin:-8px 0 clamp(16px,2.4vw,24px);max-width:64ch;
+}
+.tool__when .mono{
+  display:inline-flex;align-items:center;vertical-align:2px;margin-right:8px;
+  font-size:.48rem;letter-spacing:.13em;color:var(--accent-2);
+  border:1px solid rgba(242,169,59,.28);border-radius:99px;padding:3px 8px;
+}
+
+/* ── field hints: what a label cannot say on its own ── */
+/* quieter than the description above it — it is support text, not a headline */
+.tool__hint{
+  font-size:.72rem;line-height:1.65;color:rgba(241,238,230,.3);
+  max-width:66ch;margin:0 0 clamp(14px,2vw,20px);
+}
+.tool__hint b{color:rgba(241,238,230,.58);font-weight:500}
+.tool__hint p{margin:0 0 3px}
+
+/* the colour squares need a caption — six gradients with no label is a guessing game */
+.tcon__plabel{
+  font-size:.5rem;letter-spacing:.12em;text-transform:uppercase;
+  color:rgba(241,238,230,.32);margin:16px 0 0;
+}
+
+/* ── the print diagram is a control, not a picture ──
+   grab the trim edge to set the bleed, the dashed line to set the safe margin */
+.tpfig__trim,.tpfig__safe{cursor:grab;touch-action:none;outline:none}
+.tpfig__trim:hover,.tpfig__trim:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.tpfig__safe:hover,.tpfig__safe:focus-visible{outline:2px dashed var(--accent);outline-offset:1px}
+.tpfig__grip{
+  position:absolute;left:50%;top:0;width:26px;height:4px;margin-left:-13px;
+  border-radius:99px;background:var(--accent);opacity:0;transition:opacity .2s;
+}
+.tpfig__safe .tpfig__grip{background:rgba(10,10,11,.6)}
+.tpfig__trim:hover .tpfig__grip,.tpfig__trim:focus-visible .tpfig__grip,
+.tpfig__safe:hover .tpfig__grip,.tpfig__safe:focus-visible .tpfig__grip,
+.is-dragging .tpfig__grip{opacity:1}
+.is-dragging .tpfig__trim,.is-dragging .tpfig__safe{cursor:grabbing}
+.tpfig__tip{color:var(--accent-2);opacity:.85}
+
+/* ── contrast: two actions side by side ── */
+.tcon__row2{display:grid;grid-template-columns:auto 1fr;gap:8px;margin-top:10px}
+.tcon__row2 .btn{width:100%;justify-content:center;font-size:.62rem;padding:11px 10px}
+
+/* ── palette: drag to choose hue + saturation ── */
+.tpal__drag{
+  position:relative;height:92px;border-radius:9px;margin-top:10px;cursor:crosshair;
+  touch-action:none;outline:none;
+  background:
+    linear-gradient(to bottom, rgba(10,10,11,0) 0%, rgba(10,10,11,.92) 100%),
+    linear-gradient(to right, #FF0000, #FFFF00, #00FF00, #00FFFF, #0000FF, #FF00FF, #FF0000);
+}
+.tpal__drag:hover,.tpal__drag:focus-visible{box-shadow:0 0 0 2px var(--accent-2)}
+.tpal__knob{
+  position:absolute;width:20px;height:20px;border-radius:50%;pointer-events:none;
+  border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.6),0 2px 6px rgba(0,0,0,.5);
+  transform:translate(-50%,-50%);transition:transform .08s;
+}
+.tpal__drag:active .tpal__knob{transform:translate(-50%,-50%) scale(1.15)}
+.tpal__draghint{font-size:.5rem;letter-spacing:.06em;color:rgba(241,238,230,.3);margin:8px 0 0;line-height:1.6}
+
+/* ── social sizes: the list next to a phone that shows the crop ── */
+.tsize__wrap{display:grid;grid-template-columns:minmax(0,1fr) 244px;gap:clamp(18px,3vw,40px);align-items:start}
+@media (max-width:960px){.tsize__wrap{grid-template-columns:1fr}}
+/* on a phone the preview sits ABOVE the list and scrolls away — a sticky phone
+   would sit on top of the rows and eat every tap */
+@media (max-width:960px){
+  .tsize__preview{order:-1;position:static;padding-bottom:14px;border-bottom:1px solid var(--line)}
+  .tsize__phone{max-width:190px}
+  .tsize__screen{aspect-ratio:9/16}
+}
+.tsize__preview{position:sticky;top:96px}
+.tsize__plabel{font-size:.5rem;letter-spacing:.13em;text-transform:uppercase;color:rgba(241,238,230,.35);margin:0 0 12px}
+.tsize__phone{
+  border:1px solid rgba(241,238,230,.16);border-radius:22px;padding:9px;
+  background:#101013;box-shadow:0 18px 40px -20px rgba(0,0,0,.9);
+}
+.tsize__screen{
+  aspect-ratio:9/19.5;border-radius:15px;overflow:hidden;background:#08080a;
+  display:grid;place-items:center;position:relative;
+}
+.tsize__art{
+  background:var(--accent);transition:width .35s var(--ease-out),height .35s var(--ease-out),border-radius .35s;
+  max-width:100%;max-height:100%;
+  box-shadow:0 0 0 1px rgba(255,255,255,.18);
+}
+.tsize__pmeta{font-size:.52rem;letter-spacing:.06em;color:rgba(241,238,230,.45);margin:12px 0 0;line-height:1.6}
+.tsize__clone{
+  margin-top:12px;width:100%;font-size:.56rem;line-height:1.4;
+  padding:12px 10px;text-align:left;justify-content:flex-start;min-height:44px;
+}
+
+/* ── contrast: drag the size until it fails ── */
+.tcon__live{margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
+.tcon__live-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.tcon__live-head label{font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(241,238,230,.42)}
+.tcon__live-head label b{color:var(--accent-2);font-weight:600}
+.tcon__live-badge{
+  font-family:var(--font-mono);font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;
+  padding:5px 10px;border-radius:99px;font-weight:700;transition:background .25s,color .25s;
+}
+.tcon__live-badge.is-pass{background:#7BC47F;color:#0A0A0B}
+.tcon__live-badge.is-fail{background:var(--accent);color:#fff}
+.tcon__live input[type=range]{width:100%;margin:10px 0 0;accent-color:var(--accent);height:24px}
+@media (hover:none){.tcon__live input[type=range]{height:40px}}
+.tcon__live-note{font-size:.5rem;line-height:1.6;letter-spacing:.05em;color:rgba(241,238,230,.3);margin:6px 0 0}
+
+/* ── lockup: tune the type, watch all four update ── */
+.tlk__tune{margin-top:16px;display:flex;flex-direction:column;gap:6px}
+.tlk__tune label{font-size:.5rem;letter-spacing:.11em;text-transform:uppercase;color:rgba(241,238,230,.4);margin-top:8px;display:flex;justify-content:space-between}
+.tlk__tune label b{color:var(--accent-2);font-weight:600}
+.tlk__tune input[type=range]{width:100%;accent-color:var(--accent);height:22px}
+@media (hover:none){.tlk__tune input[type=range]{height:38px}}
+
+/* ── image audit: re-encode and compare, live ── */
+.taud__cmp{
+  margin-top:22px;padding-top:18px;border-top:1px solid var(--line);
+  display:grid;gap:10px;
+}
+.taud__cmplabel{font-size:.5rem;letter-spacing:.13em;text-transform:uppercase;color:rgba(241,238,230,.35);margin:0}
+.taud__cmprow{display:flex;flex-direction:column;gap:6px}
+.taud__cmprow label{font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(241,238,230,.45);display:flex;justify-content:space-between}
+.taud__cmprow label b{color:var(--accent-2);font-weight:600}
+.taud__cmprow input[type=range]{width:100%;accent-color:var(--accent);height:22px}
+@media (hover:none){.taud__cmprow input[type=range]{height:38px}}
+.taud__cmpsizes{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.taud__cmpsizes div{
+  border:1px solid var(--line);border-radius:8px;padding:10px 12px;background:#101013;
+  display:flex;justify-content:space-between;align-items:center;gap:8px;
+}
+.taud__cmpsizes span{font-size:.48rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(241,238,230,.32)}
+.taud__cmpsizes b{font-family:var(--font-mono);font-size:.82rem;color:var(--paper)}
+.taud__save{font-family:var(--font-mono);font-size:.56rem;letter-spacing:.06em;margin:0}
+.taud__save.is-pass{color:#7BC47F}
+.taud__save.is-fail{color:var(--accent)}
+.taud__dl{width:100%;justify-content:center;margin-top:4px}

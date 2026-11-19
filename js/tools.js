@@ -109,11 +109,56 @@
         }).join('')}
       </div>`).join('');
 
+    /* the phone shows the chosen aspect ratio as a crop inside a 9:19.5 screen */
+    const art = $('#tSizeArt'), meta = $('#tSizeMeta'), clone = $('#tSizeClone');
+    let current = null;
+
+    function preview(b) {
+      const w = +b.dataset.w, h = +b.dataset.h;
+      current = { w, h, name: b.dataset.name };
+      art.style.width = '';
+      art.style.height = '';
+      /* fit the aspect ratio inside the phone screen */
+      if (w >= h) { art.style.width = '86%'; art.style.height = 'auto'; art.style.aspectRatio = w + '/' + h; }
+      else { art.style.height = '78%'; art.style.width = 'auto'; art.style.aspectRatio = w + '/' + h; }
+      art.style.borderRadius = (w === h ? '6px' : '3px');
+      const r = (w / h);
+      const ratio = Math.abs(r - 1) < 0.02 ? '1:1'
+        : Math.abs(r - 16 / 9) < 0.03 ? '16:9'
+        : Math.abs(r - 9 / 16) < 0.03 ? '9:16'
+        : Math.abs(r - 4 / 5) < 0.03 ? '4:5'
+        : r > 1 ? r.toFixed(2) + ':1' : '1:' + (1 / r).toFixed(2);
+      meta.textContent = `${b.dataset.name} — ${w}×${h} · ${ratio}`;
+    }
+
     host.addEventListener('click', e => {
       const b = e.target.closest('.tsize');
       if (!b) return;
       copy(`${b.dataset.w}×${b.dataset.h}`, b.dataset.name);
       $$('.tsize', host).forEach(x => x.classList.toggle('is-on', x === b));
+      preview(b);
+    });
+
+    /* open on the most common size so the preview is never an empty box */
+    const first = host.querySelector('.tsize');
+    if (first) {
+      first.classList.add('is-on');
+      preview(first);
+    }
+
+    /* hand the size over to the print tool — the two tools talk to each other */
+    if (clone) clone.addEventListener('click', () => {
+      if (!current) { toast('Pick a size first'); return; }
+      /* px → mm at 300dpi, so "1080×1920" arrives as a real print size */
+      const mm = px => Math.round(px / 300 * 25.4 * 10) / 10;
+      const wIn = $('#tPrintW'), hIn = $('#tPrintH'), pr = $('#tPrintPreset');
+      if (!wIn) return;
+      wIn.value = mm(current.w);
+      hIn.value = mm(current.h);
+      if (pr) pr.value = '';
+      wIn.dispatchEvent(new Event('input', { bubbles: true }));
+      document.getElementById('print').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      toast(`${current.w}×${current.h}px → ${mm(current.w)}×${mm(current.h)}mm at 300dpi`);
     });
   }
 
@@ -167,17 +212,128 @@
          inset values are % of the DOCUMENT, not of the square, so the layers line up. */
       const scale = 100 / Math.max(docW, docH);
       const insetPct = mm => (mm / Math.max(docW, docH)) * 100;
+      /* millimetres per screen pixel, read live from the box on every move —
+         capturing it here goes stale the moment the diagram re-renders */
+      const mmPerPx = () => {
+        const bx = live();
+        const w = bx ? bx.getBoundingClientRect().width : 0;
+        return w ? Math.max(docW, docH) / w : 0;
+      };
+
       $('#tPrintFig').innerHTML = `
-        <div class="tpfig" style="width:${docW * scale}%;aspect-ratio:${docW}/${docH}">
+        <div class="tpfig" id="tpFigBox" style="width:${docW * scale}%;aspect-ratio:${docW}/${docH}">
           <div class="tpfig__bleed"></div>
-          <div class="tpfig__trim" style="inset:${insetPct(b)}%"></div>
-          <div class="tpfig__safe" style="inset:${insetPct(b + s)}%"></div>
+          <div class="tpfig__trim" data-grab="bleed" role="slider" tabindex="0"
+               aria-label="Bleed size in millimetres" aria-valuemin="0" aria-valuemax="20" aria-valuenow="${b}"
+               style="inset:${insetPct(b)}%"><span class="tpfig__grip"></span></div>
+          <div class="tpfig__safe" data-grab="safe" role="slider" tabindex="0"
+               aria-label="Safe margin in millimetres" aria-valuemin="0" aria-valuemax="40" aria-valuenow="${s}"
+               style="inset:${insetPct(b + s)}%"><span class="tpfig__grip"></span></div>
         </div>
         <div class="tpfig__legend mono">
           <span><i class="lg lg--bleed"></i>bleed ${b}mm</span>
           <span><i class="lg lg--trim"></i>trim</span>
           <span><i class="lg lg--safe"></i>safe ${s}mm</span>
+          <span class="tpfig__tip">drag the edges ↔</span>
         </div>`;
+
+      /* ── drag the diagram to set the numbers ──
+         the trim edge is the bleed handle, the dashed line is the safe margin. */
+      /* render() replaces the diagram on every change, so nothing below may hold on to
+         the element. `live()` always returns the one currently in the document. */
+      const live = () => $('#tpFigBox');
+      if (!live()) return;
+      let drag = null;
+
+      function mmFrom(ev) {
+        const bx = live();
+        if (!bx) return 0;
+        const r = bx.getBoundingClientRect();
+        const pt = ev.touches ? ev.touches[0] : ev;
+        /* distance from the nearest edge, converted to mm off the TRIM edge */
+        const dx = Math.min(pt.clientX - r.left, r.right - pt.clientX);
+        const dy = Math.min(pt.clientY - r.top, r.bottom - pt.clientY);
+        return Math.min(dx, dy) * mmPerPx();
+      }
+
+      function onMove(ev) {
+        if (!drag) return;
+        ev.preventDefault();
+        const mm = mmFrom(ev);
+        if (drag === 'bleed') {
+          const v = Math.round(Math.max(0, Math.min(20, mm)) * 2) / 2;
+          if (v !== +bleedIn.value) { bleedIn.value = v; render(); }
+        } else {
+          /* the handle sits at bleed + safe, so subtract the bleed first */
+          const v = Math.round(Math.max(0, Math.min(40, mm - (+bleedIn.value || 0))));
+          if (v !== +safeIn.value) { safeIn.value = v; render(); }
+        }
+      }
+
+      /* keep the spoken value in step with the sliders */
+      function syncAria(bb, ss) {
+        const bx = live();
+        if (!bx) return;
+        const t = bx.querySelector('[data-grab="bleed"]');
+        const a = bx.querySelector('[data-grab="safe"]');
+        if (t) t.setAttribute('aria-valuenow', bb);
+        if (a) a.setAttribute('aria-valuenow', ss);
+      }
+      function onUp() {
+        drag = null;
+        const bx = $('#tpFigBox');
+        if (bx) bx.classList.remove('is-dragging');
+        window.removeEventListener('pointermove', onMove);
+        window.removeEventListener('pointerup', onUp);
+        window.removeEventListener('pointercancel', onUp);
+      }
+
+      /* render() rebuilds the diagram, which throws away focus mid-drag. Put it back. */
+      function restoreFocus(grab) {
+        if (!grab) return;
+        const bx = live();
+        if (!bx) return;
+        const el = bx.querySelector('[data-grab="' + grab + '"]');
+        if (el && document.activeElement !== el) el.focus({ preventScroll: true });
+      }
+
+      /* Delegated on #tPrintFig — the only element here that render() does NOT replace.
+         Listening on the box dies on the first move, because the move calls render(). */
+      const host = $('#tPrintFig');
+      if (host && !host.dataset.dragWired) {
+        host.dataset.dragWired = '1';
+        host.addEventListener('pointerdown', ev => {
+          const g = ev.target.closest && ev.target.closest('[data-grab]');
+          if (!g) return;
+          ev.preventDefault();
+          const bx = $('#tpFigBox');
+          if (bx) bx.classList.add('is-dragging');
+          drag = g.dataset.grab;
+          window.addEventListener('pointermove', onMove);
+          window.addEventListener('pointerup', onUp);
+          window.addEventListener('pointercancel', onUp);
+        });
+        /* keyboard lives here too, so it also survives re-renders */
+        host.addEventListener('keydown', ev => {
+          const g = ev.target.closest && ev.target.closest('[data-grab]');
+          if (!g) return;
+          const key = ev.key;
+          if (key !== 'ArrowUp' && key !== 'ArrowDown' && key !== 'ArrowLeft' && key !== 'ArrowRight') return;
+          ev.preventDefault();
+          const step = ev.shiftKey ? 2 : 0.5;
+          const dir = (key === 'ArrowUp' || key === 'ArrowRight') ? 1 : -1;
+          if (g.dataset.grab === 'bleed') {
+            bleedIn.value = Math.max(0, Math.min(20, (+bleedIn.value || 0) + dir * step));
+          } else {
+            safeIn.value = Math.max(0, Math.min(40, (+safeIn.value || 0) + dir * step));
+          }
+          const keep = g.dataset.grab;
+          render();
+          restoreFocus(keep);
+        });
+      }
+
+      syncAria(b, s);
     }
 
     [wIn, hIn, bleedIn, safeIn, dpiIn].forEach(i => i && i.addEventListener('input', render));
@@ -218,14 +374,52 @@
         text.style.color = fg.value;
         text.style.background = bg.value;
       }
+
+      /* a live size slider on the sample: does it still pass when it gets small? */
+      const sizeSlider = $('#tConSize');
+      if (sizeSlider) {
+        const px = +sizeSlider.value || 16;
+        $('#tConSizeVal').textContent = px;
+        const big = px >= 24 || (px >= 18.66 && +($('#tConSizeBold') && $('#tConSizeBold').checked ? 700 : 400) >= 700);
+        text.style.fontSize = px + 'px';
+        const largeOk = ratio >= 3, normalOk = ratio >= 4.5;
+        const passes = big ? largeOk : normalOk;
+        text.dataset.pass = passes ? 'yes' : 'no';
+        const badge = $('#tConLivePass');
+        if (badge) {
+          badge.textContent = passes ? 'PASSES at ' + px + 'px' : 'FAILS at ' + px + 'px';
+          badge.className = 'tcon__live-badge ' + (passes ? 'is-pass' : 'is-fail');
+        }
+      }
       $('#tConSwatchFg').style.background = fg.value;
       $('#tConSwatchBg').style.background = bg.value;
+    }
+
+    /* Eyedropper API (Chrome/Edge, and Android Chrome). Where it is missing the
+       button is removed rather than left as a dead control. */
+    const pick = $('#tConPick');
+    if (pick) {
+      if (window.EyeDropper) {
+        pick.addEventListener('click', async () => {
+          try {
+            const { sRGBHex } = await new window.EyeDropper().open();
+            fg.value = sRGBHex;
+            render();
+            toast('Picked ' + sRGBHex);
+          } catch (e) { /* user cancelled — not an error */ }
+        });
+      } else {
+        pick.remove();
+      }
     }
 
     [fg, bg].forEach(i => i.addEventListener('input', render));
     $$('.tcon__pick').forEach(p => p.addEventListener('click', () => {
       fg.value = p.dataset.fg; bg.value = p.dataset.bg; render();
     }));
+
+    const liveSize = $('#tConSize');
+    if (liveSize) liveSize.addEventListener('input', render);
     render();
   }
 
@@ -356,7 +550,86 @@
     if (cssBtn) cssBtn.addEventListener('click', () => copy(toCss(PAL_LAST), 'CSS variables'));
     if (jsonBtn) jsonBtn.addEventListener('click', () => copy(toJson(PAL_LAST), 'JSON tokens'));
     if (tailBtn) tailBtn.addEventListener('click', () => copy(toTailwind(PAL_LAST), 'Tailwind config'));
-    base.addEventListener('input', render);
+    base.addEventListener('input', () => { syncKnob(); render(); });
+
+    /* drag pad: x = hue (0–360), y = saturation (100→12 top to bottom) */
+    const pad = $('#tPalDrag'), knob = $('#tPalKnob');
+    function paint(p) {
+      const h = Math.round(Math.max(0, Math.min(1, p.x)) * 360);
+      const sat = Math.round(100 - Math.max(0, Math.min(1, p.y)) * 88);
+      const hex = hslToHex(h, sat, 50);
+      base.value = hex;
+      syncKnob();
+      render();
+    }
+    function syncKnob() {
+      const rgb = hexToRgb(base.value);
+      if (!rgb || !pad) return;
+      const max = Math.max(rgb.r, rgb.g, rgb.b) / 255;
+      const min = Math.min(rgb.r, rgb.g, rgb.b) / 255;
+      const d = max - min;
+      let h = 0;
+      if (d !== 0) {
+        const r = rgb.r / 255, g = rgb.g / 255, b = rgb.b / 255;
+        h = max === r ? ((g - b) / d) % 6 : max === g ? (b - r) / d + 2 : (r - g) / d + 4;
+        h *= 60;
+      }
+      if (h < 0) h += 360;
+      const sat = max === 0 ? 0 : d / max;
+      knob.style.left = (h / 360 * 100) + '%';
+      knob.style.top = (100 - sat / 100 * 88) + '%';
+      knob.style.background = base.value;
+      pad.setAttribute('aria-valuenow', Math.round(h));
+      base.dataset.hue = Math.round(h);
+    }
+
+    if (pad) {
+      let padDrag = false;
+      const posOf = ev => {
+        const r = pad.getBoundingClientRect();
+        const pt = ev.touches ? ev.touches[0] : ev;
+        return {
+          x: (pt.clientX - r.left) / r.width,
+          y: (pt.clientY - r.top) / r.height
+        };
+      };
+      pad.addEventListener('pointerdown', ev => {
+        ev.preventDefault();
+        padDrag = true;
+        paint(posOf(ev));
+      });
+      window.addEventListener('pointermove', ev => {
+        if (!padDrag) return;
+        ev.preventDefault();
+        paint(posOf(ev));
+      });
+      window.addEventListener('pointerup', () => { padDrag = false; });
+      /* keyboard: hue by arrows, saturate with shift */
+      pad.addEventListener('keydown', ev => {
+        const k = ev.key;
+        if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].indexOf(k) < 0) return;
+        ev.preventDefault();
+        const rgb = hexToRgb(base.value);
+        const hue = +(base.dataset.hue || 16);
+        if (k === 'ArrowLeft' || k === 'ArrowRight') {
+          const nh = (hue + (k === 'ArrowRight' ? 4 : -4) + 360) % 360;
+          base.value = hslToHex(nh, satOf(rgb), 50);
+        } else {
+          const sat = k === 'ArrowUp' ? Math.min(100, satOf(rgb) + 6) : Math.max(0, satOf(rgb) - 6);
+          base.value = hslToHex(hue, sat, 50);
+        }
+        syncKnob(); render();
+      });
+    }
+
+    function satOf(rgb) {
+      if (!rgb) return 100;
+      const max = Math.max(rgb.r, rgb.g, rgb.b) / 255;
+      const min = Math.min(rgb.r, rgb.g, rgb.b) / 255;
+      return max === 0 ? 0 : Math.round((max - min) / max * 100);
+    }
+
+    syncKnob();
     render();
   }
 
@@ -592,6 +865,53 @@
         ).join('');
         out.hidden = false;
         note.textContent = 'Read in memory — ' + (file.name || 'image') + ' was never uploaded.';
+
+        /* ── what would a real export look like? re-encode in the browser and
+              show the size + quality cost side by side, live. ── */
+        const cmp = $('#tAudCmp');
+        if (cmp) {
+          cmp.hidden = false;
+          const canvas = $('#tAudCmpCanvas');
+          const ctx2 = canvas.getContext('2d');
+          canvas.width = w; canvas.height = h;
+          ctx2.drawImage(img, 0, 0);
+          const slider = $('#tAudQ'), qVal = $('#tAudQVal');
+          const jpgOut = $('#tAudJpgSize'), pngOut = $('#tAudPngSize'), save = $('#tAudSave');
+
+          function encode(type, q) {
+            return new Promise(res => canvas.toBlob(res, type, q));
+          }
+
+          async function update() {
+            const q = +slider.value / 100;
+            qVal.textContent = Math.round(q * 100) + '%';
+            const jpg = await encode('image/jpeg', q);
+            const png = await encode('image/png');
+            const fmt = b => b < 1024 * 1024 ? (b / 1024).toFixed(0) + ' KB' : (b / 1048576).toFixed(2) + ' MB';
+            const delta = ((jpg.size - file.size) / file.size) * 100;
+            jpgOut.textContent = fmt(jpg.size);
+            pngOut.textContent = fmt(png.size);
+            save.textContent = (delta <= 0 ? '−' : '+') + Math.abs(delta).toFixed(0) + '% vs the original';
+            save.className = 'taud__save ' + (delta <= 0 ? 'is-pass' : 'is-fail');
+            cmp.dataset.jpgSize = jpg.size;
+          }
+
+          slider.addEventListener('input', update);
+          update();
+
+          const dl = $('#tAudDownload');
+          if (dl) dl.addEventListener('click', () => {
+            canvas.toBlob(blob => {
+              const a = document.createElement('a');
+              a.href = URL.createObjectURL(blob);
+              const base = (file.name || 'image').replace(/\.[^.]+$/, '');
+              a.download = base + '-q' + slider.value + '.jpg';
+              document.body.appendChild(a); a.click(); a.remove();
+              setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+              toast('Saved ' + a.download);
+            }, 'image/jpeg', +slider.value / 100);
+          });
+        }
       };
       img.onerror = () => { note.textContent = 'That file could not be decoded as an image.'; URL.revokeObjectURL(url); };
       img.src = url;
@@ -635,20 +955,22 @@
     const tag = opt.tagline ? escapeHtml(opt.tagline) : '';
     const cx = W / 2;
 
+    const weight = opt.weight || 600;
+    const track = opt.track != null ? opt.track : -4;
     let body = '';
     if (opt.mode === 'stacked') {
       const markY = tag ? 330 : 380;
       body =
         markSvg(opt.mark, cx, markY, 78, ink) +
-        '<text x="' + cx + '" y="' + (markY + 190) + '" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-weight="600" font-size="112" letter-spacing="-4" fill="' + ink + '">' + name + '</text>' +
+        '<text x="' + cx + '" y="' + (markY + 190) + '" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-weight="' + weight + '" font-size="112" letter-spacing="' + track + '" fill="' + ink + '">' + name + '</text>' +
         (tag ? '<text x="' + cx + '" y="' + (markY + 252) + '" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="34" letter-spacing="6" fill="' + ink + '" opacity=".7">' + tag.toUpperCase() + '</text>' : '');
     } else if (opt.mode === 'horizontal') {
       body =
         markSvg(opt.mark, 150, H / 2, 64, ink) +
-        '<text x="270" y="' + (H / 2 + 4) + '" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-weight="600" font-size="96" letter-spacing="-3" fill="' + ink + '">' + name + '</text>' +
+        '<text x="270" y="' + (H / 2 + 4) + '" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-weight="' + weight + '" font-size="96" letter-spacing="' + track + '" fill="' + ink + '">' + name + '</text>' +
         (tag ? '<text x="272" y="' + (H / 2 + 58) + '" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="28" letter-spacing="5" fill="' + ink + '" opacity=".7">' + tag.toUpperCase() + '</text>' : '');
     } else {
-      body = markSvg(opt.mark, cx, H / 2, 190, ink) || '<text x="' + cx + '" y="' + (H / 2 + 40) + '" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-weight="600" font-size="200" fill="' + ink + '">' + name.slice(0, 1) + '</text>';
+      body = markSvg(opt.mark, cx, H / 2, 190, ink) || '<text x="' + cx + '" y="' + (H / 2 + 40) + '" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-weight="' + weight + '" font-size="200" fill="' + ink + '">' + name.slice(0, 1) + '</text>';
     }
 
     return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + W + ' ' + H + '" width="' + W + '" height="' + H + '">' +
@@ -661,12 +983,21 @@
     const tagIn = $('#tlkTag'), markIn = $('#tlkMark'), inkIn = $('#tlkInk');
     const stage = $('#tlkStage'), allBtn = $('#tlkAll');
 
+    const wIn = $('#tlkWeight'), tIn = $('#tlkTrack');
+
     function opts() {
-      return { name: nameIn.value || 'Brand', tagline: tagIn.value, mark: markIn.value, ink: inkIn.value };
+      return {
+        name: nameIn.value || 'Brand', tagline: tagIn.value,
+        mark: markIn.value, ink: inkIn.value,
+        weight: wIn ? +wIn.value : 600,
+        track: tIn ? +tIn.value : -4
+      };
     }
 
     function render() {
       const o = opts();
+      if (wIn) $('#tlkWeightVal').textContent = o.weight;
+      if (tIn) $('#tlkTrackVal').textContent = o.track > 0 ? '+' + o.track : '−' + Math.abs(o.track);
       stage.innerHTML = LOCKUPS.map(l => {
         const conf = Object.assign({}, o, l);
         const svg = lockupSvg(conf);
@@ -706,7 +1037,11 @@
       toast('Saving four SVGs — allow multiple downloads');
     });
 
-    [nameIn, tagIn, inkIn].forEach(i => { i.addEventListener('input', render); i.addEventListener('change', render); });
+    [nameIn, tagIn, inkIn, wIn, tIn].forEach(i => {
+      if (!i) return;
+      i.addEventListener('input', render);
+      i.addEventListener('change', render);
+    });
     markIn.addEventListener('change', render);
     render();
   }
