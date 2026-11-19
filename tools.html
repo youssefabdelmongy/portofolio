@@ -67,58 +67,146 @@
       <p class="tp-head__kicker mono">Tools · free · no sign-up</p>
       <h1 class="tp-title">The things I open<br><em>twenty times a day.</em></h1>
       <p class="tp-lede">
-        Nine tools I got tired of googling, plus a directory. Everything runs on your device —
+        Eleven tools that do the job Google cannot, plus a directory. Everything runs on your device —
         nothing is uploaded, nothing is tracked, and it works offline.
       </p>
 
       <!-- what is on the page, in one line each: no one should have to scroll to find out -->
       <ul class="tp-map" aria-label="What each tool does">
-        <li><a href="#sizes"><span class="mono">01</span><b>Social sizes</b><small>copy the right artboard dimensions</small></a></li>
+        <li><a href="#extract"><span class="mono">01</span><b>Colours</b><small>what is really in that photo</small></a></li>
         <li><a href="#print"><span class="mono">02</span><b>Print bleed</b><small>the document size the printer wants</small></a></li>
-        <li><a href="#contrast"><span class="mono">03</span><b>Contrast</b><small>will this text pass WCAG, yes or no</small></a></li>
-        <li><a href="#units"><span class="mono">04</span><b>px · rem · pt</b><small>convert between screen and print</small></a></li>
-        <li><a href="#palette"><span class="mono">05</span><b>Palette</b><small>one hex → a full ramp, exportable</small></a></li>
-        <li><a href="#fonts"><span class="mono">06</span><b>Fonts</b><small>which face actually renders</small></a></li>
-        <li><a href="#weight"><span class="mono">07</span><b>File weight</b><small>is this export size realistic</small></a></li>
-        <li><a href="#audit"><span class="mono">08</span><b>Image audit</b><small>read a file before it goes to print</small></a></li>
-        <li><a href="#lockup"><span class="mono">09</span><b>Lockup</b><small>download four real SVGs</small></a></li>
-        <li><a href="#directory"><span class="mono">10</span><b>Directory</b><small>the tools I actually keep open</small></a></li>
+        <li><a href="#contrast"><span class="mono">03</span><b>Contrast</b><small>will this text pass WCAG</small></a></li>
+        <li><a href="#scale"><span class="mono">04</span><b>Type scale</b><small>nine sizes that pass WCAG</small></a></li>
+        <li><a href="#dpi"><span class="mono">05</span><b>Will it print</b><small>the dpi you actually have</small></a></li>
+        <li><a href="#palette"><span class="mono">06</span><b>Palette</b><small>one hex → a full ramp</small></a></li>
+        <li><a href="#fonts"><span class="mono">07</span><b>Fonts</b><small>which face actually renders</small></a></li>
+        <li><a href="#overlay"><span class="mono">08</span><b>Text on photo</b><small>can anyone actually read it</small></a></li>
+        <li><a href="#audit"><span class="mono">09</span><b>Image audit</b><small>read a file before print</small></a></li>
+        <li><a href="#lockup"><span class="mono">10</span><b>Lockup</b><small>download four real SVGs</small></a></li>
+        <li><a href="#directory"><span class="mono">11</span><b>Directory</b><small>the tools I keep open</small></a></li>
       </ul>
 
       <nav class="tp-nav" aria-label="Jump to a tool">
-        <a href="#sizes">01 · Social sizes</a>
+        <a href="#extract">01 · Colours</a>
         <a href="#print">02 · Print bleed</a>
         <a href="#contrast">03 · Contrast</a>
-        <a href="#units">04 · Units</a>
-        <a href="#palette">05 · Palette</a>
-        <a href="#fonts">06 · Fonts</a>
-        <a href="#weight">07 · File weight</a>
-        <a href="#audit">08 · Image audit</a>
-        <a href="#lockup">09 · Lockup</a>
-        <a href="#directory">10 · Directory</a>
+        <a href="#scale">04 · Type scale</a>
+        <a href="#dpi">05 · Will it print</a>
+        <a href="#palette">06 · Palette</a>
+        <a href="#fonts">07 · Fonts</a>
+        <a href="#overlay">08 · Text on photo</a>
+        <a href="#audit">09 · Image audit</a>
+        <a href="#lockup">10 · Lockup</a>
+        <a href="#directory">11 · Directory</a>
       </nav>
     </header>
 
-    <!-- ───────────── 01 · SOCIAL SIZES ───────────── -->
-    <section class="tool" id="sizes">
+
+    <!-- ───────────── A · COLOUR FROM AN IMAGE ───────────── -->
+    <section class="tool" id="extract">
       <div class="tool__head">
         <span class="tool__n mono">01</span>
-        <h2 class="tool__title">Social media sizes</h2>
+        <h2 class="tool__title">The real colours in an image</h2>
       </div>
-            <p class="tool__d">The right size for every placement. Tap a row and the dimensions are on your clipboard.</p>
-      <p class="tool__when"><span class="mono">USE IT WHEN</span> A client says “make it for Instagram” and you need the artboard, not a guess.</p>
-      <div class="tsize__wrap">
-        <div class="tsize__groups" id="tSizeList"></div>
-        <aside class="tsize__preview" aria-live="polite">
-          <p class="mono tsize__plabel">See it on a phone</p>
-          <div class="tsize__phone">
-            <div class="tsize__screen">
-              <div class="tsize__art" id="tSizeArt"></div>
-            </div>
+      <p class="tool__d">Drop a photo or a screenshot and get the colours actually in it — not a guess, not an average. Then send any one of them straight into the palette ramp.</p>
+      <p class="tool__when"><span class="mono">USE IT WHEN</span> A client sends a photo and says “make it match this” — and there is no brand file.</p>
+
+      <div class="tx">
+        <label class="taud__drop tx__drop" id="txDrop" for="txFile">
+          <input id="txFile" type="file" accept="image/*" hidden />
+          <span class="taud__icon" aria-hidden="true">↓</span>
+          <b>Drop an image, or tap to choose one</b>
+          <small class="mono">read in this tab · never uploaded</small>
+        </label>
+        <div class="tx__out" id="txOut" hidden>
+          <div class="tx__imgwrap">
+            <img id="txImg" alt="The image you loaded" />
+            <p class="mono tx__imgmeta" id="txImgMeta"></p>
           </div>
-          <p class="tsize__pmeta mono" id="tSizeMeta">Tap any size to preview it</p>
-          <button class="btn btn--ghost tsize__clone" type="button" id="tSizeClone">Send this size to the print calculator →</button>
-        </aside>
+          <div class="tx__side">
+            <div class="tx__opts">
+              <div class="tf">
+                <label for="txCount">Colours <b id="txCountVal" class="mono">8</b></label>
+                <input id="txCount" type="range" min="3" max="12" value="8" />
+              </div>
+              <div class="tf tx__sortfield">
+                <label for="txSort">Sort by</label>
+                <select id="txSort">
+                  <option value="share">By how much of the image</option>
+                  <option value="dark">Darkest first</option>
+                  <option value="light">Lightest first</option>
+                  <option value="hue">By hue</option>
+                </select>
+              </div>
+            </div>
+            <div class="tx__swatches" id="txSwatches"></div>
+            <div class="tx__actions">
+              <button class="btn btn--ghost" type="button" id="txCopyAll">Copy as CSS</button>
+              <button class="btn btn--ghost" type="button" id="txCopyHex">Copy all hex</button>
+            </div>
+            <p class="mono tx__note" id="txNote"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────── C · TYPE SCALE ───────────── -->
+    <section class="tool" id="scale">
+      <div class="tool__head">
+        <span class="tool__n mono">04</span>
+        <h2 class="tool__title">A type scale that actually holds</h2>
+      </div>
+      <p class="tool__d">Pick a base size and a ratio. It writes the whole scale, checks each step still passes WCAG at its size, and hands you the CSS.</p>
+      <p class="tool__when"><span class="mono">USE IT WHEN</span> You are setting up type for a real project and do not want to eyeball eight sizes.</p>
+
+      <div class="tscale">
+        <div class="tscale__side">
+          <div class="tf"><label for="tscBase">Base size (px)</label><input id="tscBase" type="number" value="16" min="8" max="40" step="1" inputmode="numeric" /></div>
+          <div class="tf" style="margin-top:12px">
+            <label for="tscRatio">Ratio</label>
+            <select id="tscRatio">
+              <option value="1.125">1.125 — major second, dense UI</option>
+              <option value="1.2">1.2 — minor third</option>
+              <option value="1.25">1.25 — major third</option>
+              <option value="1.333" selected>1.333 — perfect fourth</option>
+              <option value="1.414">1.414 — augmented fourth</option>
+              <option value="1.5">1.5 — perfect fifth, editorial</option>
+              <option value="1.618">1.618 — golden ratio, big contrast</option>
+            </select>
+          </div>
+          <div class="tf" style="margin-top:12px">
+            <label for="tscInk">Text colour</label>
+            <input id="tscInk" type="color" value="#F1EEE6" />
+          </div>
+          <div class="tf" style="margin-top:12px">
+            <label for="tscBg">Background</label>
+            <input id="tscBg" type="color" value="#0A0A0B" />
+          </div>
+          <p class="mono tscale__wcag" id="tscVerdict"></p>
+          <button class="btn btn--ghost tscale__copy" type="button" id="tscCopy">Copy the CSS ↓</button>
+        </div>
+        <div class="tscale__out" id="tscOut"></div>
+      </div>
+    </section>
+
+    <!-- ───────────── D · DISPLAY-TO-PRINT DPI ───────────── -->
+    <section class="tool" id="dpi">
+      <div class="tool__head">
+        <span class="tool__n mono">05</span>
+        <h2 class="tool__title">Will this hold up when it prints?</h2>
+      </div>
+      <p class="tool__d">Clip a crop from the web, set the size it will be printed at, and see the DPI you actually have. Under 300 and you can see the difference on paper.</p>
+      <p class="tool__when"><span class="mono">USE IT WHEN</span> A client sends a photo from their phone and wants it on a banner.</p>
+
+      <div class="tdpi">
+        <div>
+          <div class="tf"><label for="tdpiPx">Pixels across</label><input id="tdpiPx" type="number" value="1080" min="1" step="1" inputmode="numeric" /></div>
+          <div class="tf" style="margin-top:10px"><label for="tdpiPxH">Pixels down</label><input id="tdpiPxH" type="number" value="1350" min="1" step="1" inputmode="numeric" /></div>
+          <div class="tf" style="margin-top:10px"><label for="tdpiCm">Printed width (cm)</label><input id="tdpiCm" type="number" value="10" min="0.5" step="0.5" inputmode="decimal" /></div>
+          <button class="btn btn--ghost tdpi__auto" type="button" id="tdpiFromFile">Or read it from a file ↓</button>
+          <input id="tdpiFile" type="file" accept="image/*" hidden />
+        </div>
+        <div class="tdpi__out" id="tdpiOut"></div>
       </div>
     </section>
 
@@ -224,31 +312,10 @@
       </div>
     </section>
 
-    <!-- ───────────── 04 · UNITS ───────────── -->
-    <section class="tool" id="units">
-      <div class="tool__head">
-        <span class="tool__n mono">04</span>
-        <h2 class="tool__title">px · rem · pt</h2>
-      </div>
-            <p class="tool__d">Type in any field and the rest follow. Pixels, rem and points, converted both ways.</p>
-            <p class="tool__hint">
-        <b>Root size</b> is the browser's base font — 16px unless a stylesheet changes it. Change it and every rem recalculates.
-      </p>
-<p class="tool__when"><span class="mono">USE IT WHEN</span> A print spec gives you points and the stylesheet needs rem.</p>
-
-      <div class="tunits">
-        <div class="tf"><label for="tUnitPx">Pixels</label><input class="tunit__in" id="tUnitPx" data-unit="px" type="number" inputmode="decimal" step="any" /></div>
-        <div class="tf"><label for="tUnitRem">Rem</label><input class="tunit__in" id="tUnitRem" data-unit="rem" type="number" inputmode="decimal" step="any" /></div>
-        <div class="tf"><label for="tUnitPt">Points</label><input class="tunit__in" id="tUnitPt" data-unit="pt" type="number" inputmode="decimal" step="any" /></div>
-        <div class="tf"><label for="tUnitRoot">Root size (px)</label><input id="tUnitRoot" type="number" value="16" min="1" step="1" inputmode="numeric" /></div>
-      </div>
-      <p class="tunit__note" id="tUnitNote"></p>
-    </section>
-
     <!-- ───────────── 05 · PALETTE ───────────── -->
     <section class="tool" id="palette">
       <div class="tool__head">
-        <span class="tool__n mono">05</span>
+        <span class="tool__n mono">06</span>
         <h2 class="tool__title">Palette from one colour</h2>
       </div>
             <p class="tool__d">One colour in, a full ramp out. Contrast printed on every swatch, and the whole thing exports as CSS, JSON or Tailwind.</p>
@@ -274,6 +341,7 @@
           </p>
         </div>
         <div>
+          <p class="tpal__verdict mono" id="tPalVerdict"></p>
           <div class="tpal__grid" id="tPalOut"></div>
           <div class="tpal__accents" id="tPalAccents"></div>
           <div class="tpal__export">
@@ -287,32 +355,60 @@
     </section>
 
     <!-- ───────────── 06 · FILE WEIGHT ───────────── -->
-    <section class="tool" id="weight">
-      <div class="tool__head">
-        <span class="tool__n mono">07</span>
-        <h2 class="tool__title">File weight budget</h2>
-      </div>
-            <p class="tool__d">Set the pixel size and the target file size. It tells you the bits per pixel you have left.</p>
-            <p class="tool__hint">
-        <b>Target size</b> is the KB you want the exported file to be. The verdict says whether that size can hold the detail at this pixel count.
-      </p>
-<p class="tool__when"><span class="mono">USE IT WHEN</span> An export is banding or blocking and you need to know if the budget is even realistic.</p>
 
-      <div class="tweight">
-        <div class="tf__row">
-          <div class="tf"><label for="tWtW">Width (px)</label><input id="tWtW" type="number" value="1080" min="1" step="1" inputmode="numeric" /></div>
-          <div class="tf"><label for="tWtH">Height (px)</label><input id="tWtH" type="number" value="1350" min="1" step="1" inputmode="numeric" /></div>
-          <div class="tf"><label for="tWtBudget">Target size (KB)</label><input id="tWtBudget" type="number" value="120" min="1" step="1" inputmode="numeric" /></div>
+    <!-- ───────────── 08 · TEXT OVER AN IMAGE ───────────── -->
+    <section class="tool" id="overlay">
+      <div class="tool__head">
+        <span class="tool__n mono">08</span>
+        <h2 class="tool__title">Can anyone actually read this?</h2>
+      </div>
+      <p class="tool__d">Text on a photo is the one thing nobody checks. Drop an image, type the headline, and this measures the contrast against the pixels <em>actually behind the letters</em> — then tells you the smallest scrim that would save it.</p>
+      <p class="tool__when"><span class="mono">USE IT WHEN</span> You are setting type over a photo and the client will read it on a phone in a taxi.</p>
+
+      <div class="tov">
+        <label class="taud__drop tov__drop" id="tovDrop" for="tovFile">
+          <input id="tovFile" type="file" accept="image/*" hidden />
+          <span class="taud__icon" aria-hidden="true">↓</span>
+          <b>Drop the photo you are setting text on</b>
+          <small class="mono">read in this tab · never uploaded</small>
+        </label>
+
+        <div class="tov__stage" id="tovStage" hidden>
+          <div class="tov__canvaswrap">
+            <canvas id="tovCanvas"></canvas>
+            <div class="tov__measure" id="tovMeasure" hidden></div>
+          </div>
+          <div class="tov__controls">
+            <div class="tf"><label for="tovText">Headline</label><input id="tovText" type="text" value="Qandil Kitchen" maxlength="40" /></div>
+            <div class="tf__row" style="margin-top:10px">
+              <div class="tf"><label for="tovSize">Size (px)</label><input id="tovSize" type="number" value="64" min="10" max="200" step="2" inputmode="numeric" /></div>
+              <div class="tf"><label for="tovWeight">Weight</label>
+                <select id="tovWeight"><option>400</option><option selected>600</option><option>700</option><option>800</option></select>
+              </div>
+            </div>
+            <div class="tf" style="margin-top:10px"><label for="tovInk">Text colour</label><input id="tovInk" type="color" value="#FFFFFF" /></div>
+            <div class="tf" style="margin-top:10px"><label for="tovScrim">Scrim <b id="tovScrimVal" class="mono">0%</b></label>
+              <input id="tovScrim" type="range" min="0" max="85" value="0" />
+            </div>
+            <div class="tov__row2">
+              <button class="btn btn--ghost" type="button" id="tovAuto">Fix it for me</button>
+              <button class="btn btn--ghost" type="button" id="tovMove">Move text</button>
+            </div>
+            <button class="btn btn--solid tov__dl" type="button" id="tovDownload">Download the composed JPEG ↓</button>
+          </div>
         </div>
-        <div class="tp__out" id="tWtOut"></div>
+
+        <div class="tov__verdict" id="tovVerdict" hidden>
+          <p class="tov__big" id="tovBig">—</p>
+          <p class="tov__msg" id="tovMsg"></p>
+          <ul class="tov__list" id="tovList"></ul>
+        </div>
       </div>
     </section>
-
-
     <!-- ───────────── 06 · FONT STACK INSPECTOR ───────────── -->
     <section class="tool" id="fonts">
       <div class="tool__head">
-        <span class="tool__n mono">06</span>
+        <span class="tool__n mono">07</span>
         <h2 class="tool__title">What font is this, really?</h2>
       </div>
             <p class="tool__d">Paste a font stack and see which face your machine actually renders — measured, not guessed.</p>
@@ -340,6 +436,7 @@
         <div class="tfont__main">
           <div class="tfont__big" id="tFontBig" contenteditable="true" spellcheck="false">Hamburgefonstiv</div>
           <p class="tfont__res mono" id="tFontResolved"></p>
+          <p class="tfont__shift" id="tFontShift"></p>
           <ul class="tfont__list" id="tFontList"></ul>
         </div>
       </div>
@@ -348,7 +445,7 @@
     <!-- ───────────── 08 · IMAGE AUDITOR ───────────── -->
     <section class="tool" id="audit">
       <div class="tool__head">
-        <span class="tool__n mono">08</span>
+        <span class="tool__n mono">09</span>
         <h2 class="tool__title">What's actually inside that export</h2>
       </div>
             <p class="tool__d">Drop an image and read it properly: real size, print DPI, transparency, tone, and a grain score that catches re-saved or upscaled files.</p>
@@ -386,7 +483,7 @@
     <!-- ───────────── 09 · LOCKUP EXPORTER ───────────── -->
     <section class="tool" id="lockup">
       <div class="tool__head">
-        <span class="tool__n mono">09</span>
+        <span class="tool__n mono">10</span>
         <h2 class="tool__title">A lockup you can actually hand over</h2>
       </div>
             <p class="tool__d">Type a name, pick a mark, download four SVGs — stacked, horizontal, mark only, and inverse.</p>
@@ -403,6 +500,9 @@
               <option value="square">Square</option>
               <option value="ring">Ring</option>
               <option value="arc">Arc</option>
+              <option value="initial">Initial in a disc</option>
+              <option value="monogram">Monogram tile</option>
+              <option value="bars">Rules</option>
               <option value="none">Wordmark only</option>
             </select>
           </div>
@@ -425,7 +525,7 @@
     <!-- ───────────── 07 · DIRECTORY ───────────── -->
     <section class="tool" id="directory">
       <div class="tool__head">
-        <span class="tool__n mono">10</span>
+        <span class="tool__n mono">11</span>
         <h2 class="tool__title">The directory</h2>
       </div>
       <p class="tool__d">

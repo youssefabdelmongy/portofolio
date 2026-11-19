@@ -68,100 +68,6 @@
 
   /* ─────────────── 1 · social sizes ─────────────── */
 
-  const SIZES = [
-    { group: 'Instagram', name: 'Post — square', w: 1080, h: 1080 },
-    { group: 'Instagram', name: 'Post — portrait', w: 1080, h: 1350 },
-    { group: 'Instagram', name: 'Story / Reel', w: 1080, h: 1920 },
-    { group: 'Instagram', name: 'Profile photo', w: 320, h: 320 },
-    { group: 'Facebook', name: 'Feed post', w: 1200, h: 630 },
-    { group: 'Facebook', name: 'Story', w: 1080, h: 1920 },
-    { group: 'Facebook', name: 'Cover photo', w: 851, h: 315 },
-    { group: 'Facebook', name: 'Event cover', w: 1920, h: 1005 },
-    { group: 'LinkedIn', name: 'Feed post', w: 1200, h: 627 },
-    { group: 'LinkedIn', name: 'Banner', w: 1584, h: 396 },
-    { group: 'X / Twitter', name: 'Post image', w: 1600, h: 900 },
-    { group: 'X / Twitter', name: 'Header', w: 1500, h: 500 },
-    { group: 'TikTok', name: 'Video cover', w: 1080, h: 1920 },
-    { group: 'YouTube', name: 'Thumbnail', w: 1280, h: 720 },
-    { group: 'YouTube', name: 'Channel banner', w: 2560, h: 1440 },
-    { group: 'Pinterest', name: 'Pin', w: 1000, h: 1500 },
-    { group: 'WhatsApp', name: 'Status', w: 1080, h: 1920 }
-  ];
-
-  function buildSizes() {
-    const host = $('#tSizeList');
-    if (!host) return;
-    const groups = [...new Set(SIZES.map(s => s.group))];
-    host.innerHTML = groups.map(g => `
-      <div class="tsize__group">
-        <p class="tsize__g mono">${g}</p>
-        ${SIZES.filter(s => s.group === g).map(s => {
-          const r = (s.w / s.h);
-          const ratio = Math.abs(r - 1) < 0.02 ? '1:1'
-            : Math.abs(r - 16 / 9) < 0.03 ? '16:9'
-            : Math.abs(r - 9 / 16) < 0.03 ? '9:16'
-            : Math.abs(r - 4 / 5) < 0.03 ? '4:5'
-            : r > 1 ? r.toFixed(2) + ':1' : '1:' + (1 / r).toFixed(2);
-          return `<button class="tsize" type="button" data-w="${s.w}" data-h="${s.h}" data-name="${s.group} ${s.name}">
-            <span class="tsize__box" style="aspect-ratio:${s.w}/${s.h}"></span>
-            <span class="tsize__txt"><b>${s.name}</b><small class="mono">${s.w}×${s.h} · ${ratio}</small></span>
-          </button>`;
-        }).join('')}
-      </div>`).join('');
-
-    /* the phone shows the chosen aspect ratio as a crop inside a 9:19.5 screen */
-    const art = $('#tSizeArt'), meta = $('#tSizeMeta'), clone = $('#tSizeClone');
-    let current = null;
-
-    function preview(b) {
-      const w = +b.dataset.w, h = +b.dataset.h;
-      current = { w, h, name: b.dataset.name };
-      art.style.width = '';
-      art.style.height = '';
-      /* fit the aspect ratio inside the phone screen */
-      if (w >= h) { art.style.width = '86%'; art.style.height = 'auto'; art.style.aspectRatio = w + '/' + h; }
-      else { art.style.height = '78%'; art.style.width = 'auto'; art.style.aspectRatio = w + '/' + h; }
-      art.style.borderRadius = (w === h ? '6px' : '3px');
-      const r = (w / h);
-      const ratio = Math.abs(r - 1) < 0.02 ? '1:1'
-        : Math.abs(r - 16 / 9) < 0.03 ? '16:9'
-        : Math.abs(r - 9 / 16) < 0.03 ? '9:16'
-        : Math.abs(r - 4 / 5) < 0.03 ? '4:5'
-        : r > 1 ? r.toFixed(2) + ':1' : '1:' + (1 / r).toFixed(2);
-      meta.textContent = `${b.dataset.name} — ${w}×${h} · ${ratio}`;
-    }
-
-    host.addEventListener('click', e => {
-      const b = e.target.closest('.tsize');
-      if (!b) return;
-      copy(`${b.dataset.w}×${b.dataset.h}`, b.dataset.name);
-      $$('.tsize', host).forEach(x => x.classList.toggle('is-on', x === b));
-      preview(b);
-    });
-
-    /* open on the most common size so the preview is never an empty box */
-    const first = host.querySelector('.tsize');
-    if (first) {
-      first.classList.add('is-on');
-      preview(first);
-    }
-
-    /* hand the size over to the print tool — the two tools talk to each other */
-    if (clone) clone.addEventListener('click', () => {
-      if (!current) { toast('Pick a size first'); return; }
-      /* px → mm at 300dpi, so "1080×1920" arrives as a real print size */
-      const mm = px => Math.round(px / 300 * 25.4 * 10) / 10;
-      const wIn = $('#tPrintW'), hIn = $('#tPrintH'), pr = $('#tPrintPreset');
-      if (!wIn) return;
-      wIn.value = mm(current.w);
-      hIn.value = mm(current.h);
-      if (pr) pr.value = '';
-      wIn.dispatchEvent(new Event('input', { bubbles: true }));
-      document.getElementById('print').scrollIntoView({ behavior: 'smooth', block: 'start' });
-      toast(`${current.w}×${current.h}px → ${mm(current.w)}×${mm(current.h)}mm at 300dpi`);
-    });
-  }
-
   /* ─────────────── 2 · print bleed ─────────────── */
 
   const PRESETS = [
@@ -423,43 +329,6 @@
     render();
   }
 
-  /* ─────────────── 4 · px / rem / pt ─────────────── */
-
-  function buildUnits() {
-    const root = $('#tUnitRoot');
-    if (!root) return;
-    const inputs = $$('.tunit__in');
-
-    function render(src) {
-      const base = Math.max(1, +root.value || 16);
-      const v = +src.value || 0;
-      const unit = src.dataset.unit;
-      // convert to px first
-      let px = v;
-      if (unit === 'rem') px = v * base;
-      if (unit === 'pt') px = v / 72 * 96;
-
-      $$('.tunit__in').forEach(i => {
-        if (i === src) return;
-        const u = i.dataset.unit;
-        let val = px;
-        if (u === 'rem') val = px / base;
-        if (u === 'pt') val = px * 72 / 96;
-        i.value = px === 0 ? '' : (Math.round(val * 1000) / 1000);
-      });
-      $('#tUnitNote').textContent =
-        `1 rem = ${base}px · 1 pt = ${(96 / 72).toFixed(4)}px · 1 px = ${(72 / 96).toFixed(4)}pt`;
-    }
-
-    inputs.forEach(i => i.addEventListener('input', () => render(i)));
-    root.addEventListener('input', () => {
-      const filled = inputs.find(i => i.value !== '');
-      if (filled) render(filled);
-    });
-    inputs[0].value = 16;
-    render(inputs[0]);
-  }
-
   /* ─────────────── 5 · palette from one colour ─────────────── */
 
   function hslToHex(h, s, l) {
@@ -506,30 +375,58 @@
       }
       const sBase = max === 0 ? 0 : Math.round((d / max) * 100);
 
-      const tint = (i) => hslToHex(h, Math.max(8, sBase - i * 6), 94 - i * 8);
-      const shade = (i) => hslToHex(h, Math.min(100, sBase + i * 4), Math.max(6, 46 - i * 8));
+      /* A ramp is only honest if the base colour actually lands where it belongs.
+         Build ten fixed lightness steps, find the one nearest the base, and put the
+         base there untouched — so #F1EEE6 saturates at the top of the scale and
+         #0A0A0B at the bottom, instead of both producing the same middle ramp. */
+      const LADDER = [97, 93, 87, 79, 70, 60, 50, 42, 34, 26];
+      const KEYS = ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900'];
+      const baseL = (max + min) / 2 * 100;
+
+      let anchor = 0, best = 999;
+      LADDER.forEach((L, i) => { const d2 = Math.abs(L - baseL); if (d2 < best) { best = d2; anchor = i; } });
+
+      /* saturation falls off as the step darkens, matching how real ramps behave */
+      const stepColour = (i) => {
+        const L = LADDER[i];
+        const sat = Math.max(6, Math.min(96, sBase * (0.55 + 0.45 * Math.sin((1 - i / 9) * Math.PI / 2))));
+        return hslToHex(h, Math.round(sat), L);
+      };
+
+      const rows = KEYS.map((k, i) => i === anchor
+        ? ['BASE', base.value.toUpperCase()]
+        : [k, stepColour(i)]);
+
       const comp = hslToHex(h + 180, Math.max(20, sBase), 52);
       const analogA = hslToHex(h + 30, sBase, 55);
       const analogB = hslToHex(h - 30, sBase, 55);
 
-      /* ten steps, light to dark, so the grid always fills cleanly (2 rows of 5) */
-      const rows = [
-        ['50', tint(1)], ['100', tint(2)], ['200', tint(3)], ['300', tint(4)], ['400', tint(5)],
-        ['BASE', base.value.toUpperCase()],
-        ['600', shade(0)], ['700', shade(1)], ['800', shade(2)], ['900', shade(3)]
-      ].sort((a, b) => 0);
+      const all = rows.map(r => hexToRgb(r[1])).filter(Boolean);
+      const rampL = all.map(r => (Math.max(r.r, r.g, r.b) + Math.min(r.r, r.g, r.b)) / 2 / 255 * 100);
+      const spread = Math.round(Math.max.apply(null, rampL) - Math.min.apply(null, rampL));
+
       out.innerHTML = rows.map(([k, c]) => {
         const rgb2 = hexToRgb(c);
         const onWhite = (contrast(rgb2, { r: 255, g: 255, b: 255 })).toFixed(1);
         const onBlack = (contrast(rgb2, { r: 0, g: 0, b: 0 })).toFixed(1);
         /* put the label in whichever of paper/ink actually reads on this swatch */
         const lc = parseFloat(onWhite) > parseFloat(onBlack) ? '#F1EEE6' : '#0A0A0B';
-        return `<button class="tpal__sw" type="button" data-hex="${c}" style="background:${c};color:${lc}">
+        const isBase = k === 'BASE';
+        return `<button class="tpal__sw${isBase ? ' is-base' : ''}" type="button" data-hex="${c}" style="background:${c};color:${lc}">
           <span class="tpal__k mono">${k}</span>
           <span class="tpal__hex mono">${c}</span>
           <span class="tpal__cr mono">${onWhite} / ${onBlack}</span>
         </button>`;
       }).join('');
+
+      /* say out loud whether this ramp is actually a ramp */
+      const verdict = $('#tPalVerdict');
+      if (verdict) {
+        const cold = spread < 40;
+        verdict.innerHTML = `Base sits at step <b>${KEYS[anchor]}</b> · lightness runs <b>${spread}</b> of 100 across the ramp`
+          + (cold ? ' · <b class="is-warn">flat — this colour has almost no range to give</b>' : '');
+        verdict.classList.toggle('is-flat', cold);
+      }
 
       /* the whole palette as an export block — this is the step everyone does by hand */
       PAL_LAST = rows.map(([k, c]) => ({ step: k, hex: c }))
@@ -633,34 +530,6 @@
     render();
   }
 
-  /* ─────────────── 6 · file size budget ─────────────── */
-
-  function buildWeight() {
-    const wIn = $('#tWtW'), hIn = $('#tWtH'), budget = $('#tWtBudget');
-    if (!wIn) return;
-    const out = $('#tWtOut');
-
-    function render() {
-      const w = Math.max(1, +wIn.value || 0), h = Math.max(1, +hIn.value || 0);
-      const kb = Math.max(1, +budget.value || 0);
-      const px = w * h;
-      const bpp = (kb * 1024 * 8) / px;          // bits per pixel at the budget
-      const verdict =
-        bpp >= 1.0 ? ['Very safe', 'is-pass'] :
-        bpp >= 0.55 ? ['Safe', 'is-pass'] :
-        bpp >= 0.3 ? ['Tight — watch the detail', 'is-mid'] :
-        ['Too small — expect blocking', 'is-fail'];
-      out.innerHTML = `
-        <div class="tp__row"><span>Pixels</span><b>${px.toLocaleString('en-US')}</b></div>
-        <div class="tp__row"><span>Budget per pixel</span><b>${bpp.toFixed(2)} bits</b></div>
-        <div class="tp__row"><span>Verdict</span><b class="${verdict[1]}">${verdict[0]}</b></div>
-        <div class="tp__row tp__row--note"><span>Rule of thumb</span><b>Photos 0.5–0.8 bpp · flat graphics 0.15–0.3 bpp</b></div>`;
-    }
-    [wIn, hIn, budget].forEach(i => i && i.addEventListener('input', render));
-    render();
-  }
-
-
   /* ─────────────── 7 · font stack inspector ───────────────
    * You cannot ask the browser "which font did you use?" — but you can measure.
    * Draw the same string in the candidate and in a probe family, compare widths.
@@ -737,12 +606,37 @@
         ? 'Resolves to <b>' + winner + '</b> on this device'
         : 'Type a font stack to begin';
 
+      /* The question a client actually feels: what happens when the webfont does not
+         arrive? Measure the stack as written against the same stack with its webfont
+         entries removed, and report the real px shift — not a guess about FOUT. */
+      const shiftEl = $('#tFontShift');
+      if (shiftEl) {
+        const asWritten = widthOf(PROBE, px + 'px ' + (stack || 'sans-serif'));
+        const fallbackOnly = faces.length > 1
+          ? splitStack(stack).slice(1).map(f => /^[a-z-]+$/.test(f) ? f : '"' + f + '"').join(', ')
+          : '';
+        const safeOnly = fallbackOnly || 'sans-serif';
+        const fallbackW = widthOf(PROBE, px + 'px ' + safeOnly);
+        const delta = asWritten - fallbackW;
+        const pct = fallbackW ? (delta / fallbackW) * 100 : 0;
+        const abs = Math.abs(pct);
+        const level = abs < 2 ? 'safe' : abs < 8 ? 'noticeable' : 'reflow';
+        const words = { safe: 'no visible shift', noticeable: 'text will visibly re-settle', reflow: 'headlines will reflow — reserve the space' };
+        shiftEl.className = 'tfont__shift is-' + level;
+        shiftEl.innerHTML = `
+          <span class="mono tfont__shift-k">IF THE FONT FAILS</span>
+          <b class="mono tfont__shift-v">${delta >= 0 ? '+' : '−'}${Math.abs(delta).toFixed(0)}px · ${abs.toFixed(1)}%</b>
+          <span class="mono tfont__shift-w">${words[level]} — measured against <code>${escapeHtml(safeOnly.slice(0, 42))}</code></span>
+          <span class="tfont__shift-bar" aria-hidden="true"><i style="width:${Math.min(100, abs * 6)}%"></i></span>`;
+      }
+
       list.innerHTML = faces.map((f, i) => {
         const isWin = f.resolved && f === first;
         return `<li class="tfont__row ${f.resolved ? 'is-ok' : 'is-miss'} ${isWin ? 'is-win' : ''}">
           <span class="tfont__dot" aria-hidden="true"></span>
           <span class="tfont__nm mono">${escapeHtml(f.name)}</span>
           <span class="tfont__tag mono">${f.generic ? 'generic' : f.resolved ? (isWin ? 'in use' : 'installed') : 'missing'}</span>
+          <span class="tfont__w mono" title="advance width of the probe text at the current size">${Math.round(widthOf(PROBE, px + 'px ' + (f.generic ? f.name : "'" + f.name.replace(/'/g, '') + "'"))) }px</span>
           <span class="tfont__prev" style="font-family:${f.generic ? f.name : "'" + f.name.replace(/'/g, '') + "', " + (f.name.match(/serif$/i) && !/sans/i.test(f.name) ? 'serif' : 'sans-serif')}">${escapeHtml(text.slice(0, 22))}</span>
         </li>`;
       }).join('');
@@ -931,7 +825,7 @@
     { id: 'inverse', label: 'Inverse (on ink)', mode: 'stacked', inverse: true }
   ];
 
-  function markSvg(kind, cx, cy, r, ink) {
+  function markSvg(kind, cx, cy, r, ink, opt) {
     const s = 'fill="none" stroke="' + ink + '" stroke-width="' + (r * 0.22).toFixed(2) + '"';
     switch (kind) {
       case 'circle':
@@ -942,9 +836,33 @@
         return '<rect x="' + (cx - r * 0.85).toFixed(2) + '" y="' + (cy - r * 0.85).toFixed(2) + '" width="' + (r * 1.7).toFixed(2) + '" height="' + (r * 1.7).toFixed(2) + '" fill="' + ink + '"/>';
       case 'arc':
         return '<path d="M ' + (cx - r).toFixed(2) + ' ' + (cy + r * 0.5).toFixed(2) + ' A ' + r + ' ' + r + ' 0 0 1 ' + (cx + r).toFixed(2) + ' ' + (cy + r * 0.5).toFixed(2) + '" ' + s + ' stroke-linecap="round"/>';
+      case 'initial':
+        return '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="' + ink + '"/>' +
+          initialMark(opt.name, cx, cy, r, opt.inverse ? opt.ink : '#F1EEE6', opt.weight || 600);
+      case 'monogram':
+        return '<rect x="' + (cx - r).toFixed(2) + '" y="' + (cy - r).toFixed(2) + '" width="' + (r * 2).toFixed(2) + '" height="' + (r * 2).toFixed(2) + '" rx="' + (r * 0.34).toFixed(2) + '" fill="' + ink + '"/>' +
+          initialMark(opt.name, cx, cy, r, opt.inverse ? opt.ink : '#F1EEE6', opt.weight || 600);
+      case 'bars':
+        return [0, 1, 2].map(i =>
+          '<rect x="' + (cx - r).toFixed(2) + '" y="' + (cy - r + i * r * 0.72).toFixed(2) + '" width="' + (r * 2).toFixed(2) + '" height="' + (r * 0.4).toFixed(2) + '" fill="' + ink + '"/>'
+        ).join('');
       default:
         return '';
     }
+  }
+
+  /* A mark built from the mark's own initials, as real SVG paths would be.
+     We measure the letters in the same stack the SVG will use, so the geometry
+     in the file matches what the preview shows. */
+  function initialMark(name, cx, cy, r, ink, weight) {
+    const letter = (name || 'B').trim().charAt(0).toUpperCase() || 'B';
+    const c = document.createElement('canvas').getContext('2d');
+    const fs = r * 1.45;
+    c.font = weight + ' ' + fs + 'px "Helvetica Neue", Helvetica, Arial, sans-serif';
+    const w = c.measureText(letter).width;
+    return '<text x="' + cx + '" y="' + (cy + fs * 0.36) + '" text-anchor="middle" ' +
+      'font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-weight="' + weight + '" ' +
+      'font-size="' + fs.toFixed(1) + '" fill="' + ink + '">' + escapeHtml(letter) + '</text>';
   }
 
   function lockupSvg(opt) {
@@ -961,16 +879,16 @@
     if (opt.mode === 'stacked') {
       const markY = tag ? 330 : 380;
       body =
-        markSvg(opt.mark, cx, markY, 78, ink) +
+        markSvg(opt.mark, cx, markY, 78, ink, opt) +
         '<text x="' + cx + '" y="' + (markY + 190) + '" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-weight="' + weight + '" font-size="112" letter-spacing="' + track + '" fill="' + ink + '">' + name + '</text>' +
         (tag ? '<text x="' + cx + '" y="' + (markY + 252) + '" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="34" letter-spacing="6" fill="' + ink + '" opacity=".7">' + tag.toUpperCase() + '</text>' : '');
     } else if (opt.mode === 'horizontal') {
       body =
-        markSvg(opt.mark, 150, H / 2, 64, ink) +
+        markSvg(opt.mark, 150, H / 2, 64, ink, opt) +
         '<text x="270" y="' + (H / 2 + 4) + '" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-weight="' + weight + '" font-size="96" letter-spacing="' + track + '" fill="' + ink + '">' + name + '</text>' +
         (tag ? '<text x="272" y="' + (H / 2 + 58) + '" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="28" letter-spacing="5" fill="' + ink + '" opacity=".7">' + tag.toUpperCase() + '</text>' : '');
     } else {
-      body = markSvg(opt.mark, cx, H / 2, 190, ink) || '<text x="' + cx + '" y="' + (H / 2 + 40) + '" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-weight="' + weight + '" font-size="200" fill="' + ink + '">' + name.slice(0, 1) + '</text>';
+      body = markSvg(opt.mark, cx, H / 2, 190, ink, opt) || '<text x="' + cx + '" y="' + (H / 2 + 40) + '" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-weight="' + weight + '" font-size="200" fill="' + ink + '">' + name.slice(0, 1) + '</text>';
     }
 
     return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + W + ' ' + H + '" width="' + W + '" height="' + H + '">' +
@@ -1046,6 +964,518 @@
     render();
   }
 
+
+  /* ─────────────── A · colours really in an image ───────────────
+   * Median-cut over a sampled canvas. This is the thing a colour picker cannot do:
+   * it names the colours that dominate the picture rather than one pixel you hit.
+   */
+
+  function medianCut(pixels, count) {
+    let boxes = [pixels];
+    while (boxes.length < count) {
+      /* split the box with the widest channel range — and only boxes big enough
+         to be worth splitting, or we end up with the same colour twice */
+      let target = -1, bestRange = 0, bestCh = 'r';
+      boxes.forEach((bx, i) => {
+        if (bx.length < 2) return;
+        /* weight by population: a big flat area deserves to be split over two
+           pixels of noise */
+        ['r', 'g', 'b'].forEach(ch => {
+          let lo = 255, hi = 0;
+          for (const p of bx) { if (p[ch] < lo) lo = p[ch]; if (p[ch] > hi) hi = p[ch]; }
+          const range = (hi - lo);
+          if (range > bestRange) { bestRange = range; target = i; bestCh = ch; }
+        });
+      });
+      if (target < 0 || bestRange < 8) break;
+      const box = boxes[target].slice().sort((a, b) => a[bestCh] - b[bestCh]);
+      const mid = Math.floor(box.length / 2);
+      /* don't split off an empty half */
+      if (mid === 0 || mid >= box.length) break;
+      boxes.splice(target, 1, box.slice(0, mid), box.slice(mid));
+    }
+    /* merge boxes that average to (nearly) the same colour, so the result is
+       genuinely distinct colours rather than duplicates */
+    const raw = boxes.filter(b => b.length).map(bx => {
+      let r = 0, g = 0, b = 0;
+      for (const p of bx) { r += p.r; g += p.g; b += p.b; }
+      const n = bx.length;
+      return { hex: rgbToHex(r / n, g / n, b / n), share: n / pixels.length, n };
+    });
+
+    /* Collapse near-duplicates, but never below the number asked for: widen the
+       "near enough" threshold only as far as needed to make room. */
+    const sorted = raw.slice().sort((a, b) => b.share - a.share);
+    let merged = [];
+    for (const thresh of [18, 34, 52, 74]) {
+      merged = [];
+      sorted.forEach(col => {
+        const rgb = hexToRgb(col.hex);
+        const near = merged.find(m => {
+          const c = hexToRgb(m.hex);
+          return Math.abs(c.r - rgb.r) + Math.abs(c.g - rgb.g) + Math.abs(c.b - rgb.b) < thresh;
+        });
+        if (near) { near.share += col.share; near.n += col.n; }
+        else merged.push(Object.assign({}, col));
+      });
+      if (merged.length >= count) break;
+    }
+    return merged.slice(0, count);
+  }
+
+  let LAST_PIXELS = null, LAST_META = null;
+
+  function buildExtract() {
+    const input = $('#txFile');
+    if (!input) return;
+    const drop = $('#txDrop'), out = $('#txOut'), wrap = $('#txSwatches'), note = $('#txNote');
+    const img = $('#txImg');
+    const countIn = $('#txCount'), countVal = $('#txCountVal'), sortIn = $('#txSort');
+
+    ['dragenter', 'dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('is-over'); }));
+    ['dragleave', 'drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('is-over'); }));
+    drop.addEventListener('drop', e => {
+      const f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+      if (f) go(f);
+    });
+    input.addEventListener('change', () => { if (input.files[0]) go(input.files[0]); });
+
+    function go(file) {
+      if (!/^image\//.test(file.type)) { note.textContent = 'That is not an image.'; return; }
+      const url = URL.createObjectURL(file);
+      img.onload = () => {
+        URL.revokeObjectURL(url);
+        const w = img.naturalWidth, h = img.naturalHeight;
+        const AREA = 40000;
+        const k = Math.min(1, Math.sqrt(AREA / (w * h)));
+        const SW = Math.max(1, Math.round(w * k)), SH = Math.max(1, Math.round(h * k));
+        const c = document.createElement('canvas');
+        c.width = SW; c.height = SH;
+        const ctx = c.getContext('2d', { willReadFrequently: true });
+        ctx.drawImage(img, 0, 0, SW, SH);
+        const d = ctx.getImageData(0, 0, SW, SH).data;
+
+        const px = [];
+        for (let i = 0; i < d.length; i += 4) {
+          if (d[i + 3] < 24) continue;              /* ignore transparent */
+          px.push({ r: d[i] & 0xF8, g: d[i + 1] & 0xF8, b: d[i + 2] & 0xF8 });
+        }
+        if (!px.length) { note.textContent = 'That image is fully transparent.'; return; }
+
+        LAST_PIXELS = px;
+        LAST_META = { w, h, name: file.name || 'image', size: file.size };
+        $('#txImgMeta').textContent = w + ' × ' + h + ' px · ' + (file.size / 1024).toFixed(0) + ' KB';
+        out.hidden = false;
+        paint();
+      };
+      img.onerror = () => { note.textContent = 'That file could not be decoded.'; URL.revokeObjectURL(url); };
+      img.src = url;
+    }
+
+    function hueOf(hex) {
+      const c = hexToRgb(hex);
+      const mx = Math.max(c.r, c.g, c.b) / 255, mn = Math.min(c.r, c.g, c.b) / 255;
+      const d2 = mx - mn;
+      if (d2 === 0) return -1;
+      const r = c.r / 255, g = c.g / 255, b = c.b / 255;
+      let h2 = mx === r ? ((g - b) / d2) % 6 : mx === g ? (b - r) / d2 + 2 : (r - g) / d2 + 4;
+      h2 *= 60;
+      return (h2 + 360) % 360;
+    }
+
+    function paint() {
+      if (!LAST_PIXELS) return;
+      const n = +countIn.value || 8;
+      countVal.textContent = n;
+      let cols = medianCut(LAST_PIXELS, n);
+
+      const mode = sortIn ? sortIn.value : 'share';
+      if (mode === 'dark' || mode === 'light') {
+        const lum = hx => { const c = hexToRgb(hx); return 0.2126 * c.r + 0.7152 * c.g + 0.0722 * c.b; };
+        cols.sort((a, b) => mode === 'dark' ? lum(a.hex) - lum(b.hex) : lum(b.hex) - lum(a.hex));
+      } else if (mode === 'hue') {
+        cols.sort((a, b) => hueOf(a.hex) - hueOf(b.hex));
+      }
+
+      wrap.innerHTML = cols.map(col => {
+        const rgb = hexToRgb(col.hex);
+        const onWhite = contrast(rgb, { r: 255, g: 255, b: 255 });
+        const onBlack = contrast(rgb, { r: 0, g: 0, b: 0 });
+        const text = onWhite > onBlack ? '#F1EEE6' : '#0A0A0B';
+        return `<button class="tx__sw" type="button" data-hex="${col.hex}" style="background:${col.hex};color:${text}">
+            <span class="tx__pct">${Math.round(col.share * 100)}%</span>
+            <span class="tx__hex">${col.hex}</span>
+            <span class="tx__cr">${onWhite.toFixed(1)} / ${onBlack.toFixed(1)}</span>
+          </button>`;
+      }).join('');
+      /* be honest when the image simply does not contain the number asked for */
+      const short = n - cols.length;
+      note.textContent = `Read in memory · ${cols.length} dominant colour${cols.length === 1 ? '' : 's'}`
+        + (short > 0 ? ` · this image only holds ${cols.length} — ${short} short of ${n}, not padded with invented tints` : '')
+        + ' · tap one to build a ramp';
+    }
+
+    if (countIn) countIn.addEventListener('input', paint);
+    if (sortIn) sortIn.addEventListener('change', paint);
+
+    /* tap a swatch → it becomes the palette tool's base colour and we jump there */
+    wrap.addEventListener('click', e => {
+      const b = e.target.closest('[data-hex]');
+      if (!b) return;
+      const base = $('#tPalBase');
+      if (!base) return;
+      base.value = b.dataset.hex;
+      base.dispatchEvent(new Event('input', { bubbles: true }));
+      copy(b.dataset.hex, 'Copied');
+      document.getElementById('palette').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      toast('Sent ' + b.dataset.hex + ' to the palette');
+    });
+
+    const all = () => [...wrap.querySelectorAll('[data-hex]')].map(x => x.dataset.hex);
+    if ($('#txCopyHex')) $('#txCopyHex').addEventListener('click', () => copy(all().join(', '), 'Hex list'));
+    if ($('#txCopyAll')) $('#txCopyAll').addEventListener('click', () => {
+      const css = ':root {\n' + all().map((hx, i) => '  --swatch-' + (i + 1) + ': ' + hx + ';').join('\n') + '\n}';
+      copy(css, 'Swatch CSS');
+    });
+  }
+
+  /* ─────────────── C · modular type scale ─────────────── */
+
+  function buildScale() {
+    const baseIn = $('#tscBase');
+    if (!baseIn) return;
+    const ratioSel = $('#tscRatio'), ink = $('#tscInk'), bg = $('#tscBg');
+    const out = $('#tscOut'), verdict = $('#tscVerdict'), copyBtn = $('#tscCopy');
+    let SCALE = [];
+
+    const STEPS = [
+      ['xs', -2], ['sm', -1], ['base', 0], ['lg', 1], ['xl', 2],
+      ['2xl', 3], ['3xl', 4], ['4xl', 5], ['5xl', 6]
+    ];
+
+    function render() {
+      const base = Math.max(8, +baseIn.value || 16);
+      const ratio = +ratioSel.value || 1.333;
+      const f = hexToRgb(ink.value), b = hexToRgb(bg.value);
+      const cr = (f && b) ? contrast(f, b) : 21;
+
+      SCALE = STEPS.map(([name, n]) => {
+        const px = base * Math.pow(ratio, n);
+        const rounded = Math.round(px * 100) / 100;
+        /* WCAG "large text" is 18.66px bold or 24px regular */
+        const isLarge = rounded >= 24;
+        const need = isLarge ? 3 : 4.5;
+        /* leading that holds at this size — big type wants tight, small type wants air */
+        const lh = rounded >= 48 ? 1.02
+          : rounded >= 32 ? 1.1
+          : rounded >= 22 ? 1.25
+          : rounded >= 16 ? 1.5
+          : 1.6;
+        /* 45 characters is the comfortable line length for body copy */
+        const measure = Math.round(rounded * 0.5 * 45);
+        return { name, px: rounded, large: isLarge, pass: cr >= need, need, lh, measure };
+      });
+
+      out.innerHTML = SCALE.map(s => `
+        <div class="tscale__row ${s.pass ? 'is-pass' : 'is-fail'}">
+          <span class="mono tscale__name">${s.name}</span>
+          <span class="tscale__sample" style="font-size:${Math.min(s.px, 96)}px;color:${ink.value}">Ag</span>
+          <span class="mono tscale__px">${s.px}px · ${(s.px / base).toFixed(3)}rem<span class="tscale__lh">lh ${s.lh}</span></span>
+          <span class="tscale__badge mono">${s.pass ? '✓' : '✕'} ${s.need}:1</span>
+        </div>`).join('');
+
+      const failing = SCALE.filter(s => !s.pass);
+      verdict.textContent = failing.length
+        ? `${failing.length} step${failing.length > 1 ? 's' : ''} under ${cr.toFixed(2)}:1 fails WCAG — ${failing.map(s => s.name).join(', ')}`
+        : `All ${SCALE.length} steps pass at ${cr.toFixed(2)}:1`;
+      verdict.className = 'mono tscale__wcag ' + (failing.length ? 'is-fail' : 'is-pass');
+
+      out.style.background = bg.value;
+    }
+
+    if (copyBtn) copyBtn.addEventListener('click', () => {
+      const base = Math.max(8, +baseIn.value || 16);
+      const css = '/* type scale — base ' + base + 'px */\n:root {\n' +
+        SCALE.map(s => '  --text-' + s.name + ': ' + (s.px / base).toFixed(3) + 'rem; /* ' + s.px + 'px */\n' +
+          '  --leading-' + s.name + ': ' + s.lh + ';\n' +
+          '  --measure-' + s.name + ': ' + s.measure + 'px;').join('\n') +
+        '\n}';
+      copy(css, 'Type scale CSS');
+    });
+
+    [baseIn, ink, bg].forEach(i => i && i.addEventListener('input', render));
+    ratioSel.addEventListener('change', render);
+    render();
+  }
+
+  /* ─────────────── D · display → print DPI ─────────────── */
+
+  function buildDpi() {
+    const pxIn = $('#tdpiPx');
+    if (!pxIn) return;
+    const pxH = $('#tdpiPxH'), cmIn = $('#tdpiCm'), out = $('#tdpiOut');
+    const fileBtn = $('#tdpiFromFile'), fileIn = $('#tdpiFile');
+
+    function render() {
+      const w = Math.max(1, +pxIn.value || 0);
+      const h = Math.max(1, +pxH.value || 0);
+      const cm = Math.max(0.5, +cmIn.value || 1);
+      const inches = cm / 2.54;
+      const dpi = w / inches;
+      const need = Math.ceil(inches * 300);          /* px needed at 300dpi */
+      const mult = need / w;
+
+      const verdict =
+        dpi >= 300 ? ['Print-ready', 'is-pass'] :
+        dpi >= 200 ? ['Acceptable at a distance', 'is-mid'] :
+        dpi >= 150 ? ['Will look soft up close', 'is-mid'] :
+        ['Will visibly block — do not print this size', 'is-fail'];
+
+      const printH = (h / dpi) * 2.54;
+      out.innerHTML = `
+        <p class="tdpi__big ${verdict[1]}">${Math.round(dpi)} <span>dpi</span></p>
+        <p class="tdpi__verdict">${verdict[0]}</p>
+        <div class="tp__row"><span>Printed size</span><b>${cm} × ${printH.toFixed(1)} cm</b></div>
+        <div class="tp__row"><span>Pixels you have</span><b>${w} × ${h}</b></div>
+        <div class="tp__row"><span>Pixels needed at 300 dpi</span><b>${need} wide</b></div>
+        <div class="tp__row ${mult > 1 ? 'is-fail' : 'is-pass'}"><span>${mult > 1 ? 'Short by' : 'Headroom'}</span><b>${mult > 1 ? Math.round((1 - 1 / mult) * 100) + '% too small' : Math.round((mult < 1 ? 1 / mult - 1 : 0) * 100) + '% spare'}</b></div>`;
+    }
+
+    if (fileBtn && fileIn) {
+      fileBtn.addEventListener('click', () => fileIn.click());
+      fileIn.addEventListener('change', () => {
+        const f = fileIn.files[0];
+        if (!f) return;
+        const url = URL.createObjectURL(f);
+        const im = new Image();
+        im.onload = () => {
+          pxIn.value = im.naturalWidth;
+          pxH.value = im.naturalHeight;
+          URL.revokeObjectURL(url);
+          render();
+          toast(im.naturalWidth + ' × ' + im.naturalHeight + ' px');
+        };
+        im.src = url;
+      });
+    }
+
+    [pxIn, pxH, cmIn].forEach(i => i && i.addEventListener('input', render));
+    render();
+  }
+
+
+  /* ─────────────── 08 · text over an image ───────────────
+   * This is the only real way to answer "is it readable": render the headline to an
+   * offscreen canvas, then walk the pixels UNDER the glyphs in the photo and take the
+   * contrast against each one. A single average would lie — a photo can be bright on
+   * one side of the word and black on the other.
+   */
+
+  function buildOverlay() {
+    const input = $('#tovFile');
+    if (!input) return;
+    const drop = $('#tovDrop'), stage = $('#tovStage'), canvas = $('#tovCanvas');
+    const verdictBox = $('#tovVerdict'), big = $('#tovBig'), msg = $('#tovMsg'), list = $('#tovList');
+    const textIn = $('#tovText'), sizeIn = $('#tovSize'), weightIn = $('#tovWeight');
+    const inkIn = $('#tovInk'), scrimIn = $('#tovScrim'), scrimVal = $('#tovScrimVal');
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+
+    let photo = null;          /* the decoded Image */
+    let placed = { x: 0.5, y: 0.72 };  /* text anchor as a fraction of the canvas */
+
+    ['dragenter', 'dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('is-over'); }));
+    ['dragleave', 'drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('is-over'); }));
+    drop.addEventListener('drop', e => {
+      const f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+      if (f) load(f);
+    });
+    input.addEventListener('change', () => { if (input.files[0]) load(input.files[0]); });
+
+    function load(file) {
+      if (!/^image\//.test(file.type)) return;
+      const url = URL.createObjectURL(file);
+      const im = new Image();
+      im.onload = () => {
+        URL.revokeObjectURL(url);
+        photo = im;
+        /* draw the photo at a sane working size so the maths stays fast on a phone */
+        const MAXW = 900;
+        const k = Math.min(1, MAXW / im.naturalWidth);
+        canvas.width = Math.round(im.naturalWidth * k);
+        canvas.height = Math.round(im.naturalHeight * k);
+        stage.hidden = false;
+        verdictBox.hidden = false;
+        render();
+      };
+      im.src = url;
+    }
+
+    function measure() {
+      if (!photo) return null;
+      const W = canvas.width, H = canvas.height;
+      const fs = Math.max(6, Math.round(+sizeIn.value * (W / 1080)));   /* px on the working canvas */
+      const weight = weightIn.value;
+      const family = '"Bricolage Grotesque", "Helvetica Neue", Helvetica, Arial, sans-serif';
+      const label = textIn.value || 'Headline';
+
+      /* 1) where do the glyphs actually sit? */
+      ctx.font = weight + ' ' + fs + 'px ' + family;
+      const tw = ctx.measureText(label).width;
+      const x = Math.round(placed.x * W - tw / 2);
+      const y = Math.round(placed.y * H);
+
+      /* 2) render the glyphs to an offscreen mask */
+      const mask = document.createElement('canvas');
+      mask.width = W; mask.height = H;
+      const mctx = mask.getContext('2d', { willReadFrequently: true });
+      mctx.font = weight + ' ' + fs + 'px ' + family;
+      mctx.textBaseline = 'alphabetic';
+      mctx.fillStyle = '#fff';
+      mctx.fillText(label, x, y);
+      const mdata = mctx.getImageData(0, 0, W, H).data;
+
+      /* 3) sample the photo under every filled pixel */
+      const pdata = ctx.getImageData(0, 0, W, H).data;
+      const ink = hexToRgb(inkIn.value) || { r: 255, g: 255, b: 255 };
+      const scrim = +scrimIn.value / 100;
+      const scrimRgb = { r: 10, g: 10, b: 11 };
+
+      let n = 0, worst = 21, best = 0, sum = 0, fails = 0, darkest = 255, lightest = 0;
+      const hist = new Array(24).fill(0);   /* contrast histogram, 0–21 in 1-stop bins */
+
+      /* step in 2px steps: 8x fewer samples, same answer */
+      for (let py = 0; py < H; py += 2) {
+        for (let px = 0; px < W; px += 2) {
+          const i = (py * W + px) * 4;
+          if (mdata[i + 3] < 128) continue;      /* not on a glyph */
+          let r = pdata[i], g = pdata[i + 1], b = pdata[i + 2];
+          if (scrim > 0) {
+            r = r * (1 - scrim) + scrimRgb.r * scrim;
+            g = g * (1 - scrim) + scrimRgb.g * scrim;
+            b = b * (1 - scrim) + scrimRgb.b * scrim;
+          }
+          const cr = contrast(ink, { r, g, b });
+          const L = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+          if (L < darkest) darkest = L;
+          if (L > lightest) lightest = L;
+          if (cr < worst) worst = cr;
+          if (cr > best) best = cr;
+          sum += cr; n++;
+          if (cr < 4.5) fails++;
+          hist[Math.min(23, Math.floor(cr))]++;
+        }
+      }
+      return { n, worst, best, avg: n ? sum / n : 0, fails, fs, x, y, tw, darkest, lightest, hist };
+    }
+
+    function render() {
+      if (!photo) return;
+      const W = canvas.width, H = canvas.height;
+      ctx.clearRect(0, 0, W, H);
+      ctx.drawImage(photo, 0, 0, W, H);
+
+      const scrim = +scrimIn.value / 100;
+      const m = measure();
+
+      /* the scrim goes on AFTER measuring, so what you see is what was measured */
+      if (scrim > 0) {
+        ctx.fillStyle = 'rgba(10,10,11,' + scrim + ')';
+        ctx.fillRect(0, 0, W, H);
+      }
+
+      if (m) {
+        const fs = m.fs;
+        ctx.font = weightIn.value + ' ' + fs + 'px "Bricolage Grotesque", "Helvetica Neue", Helvetica, Arial, sans-serif';
+        ctx.textBaseline = 'alphabetic';
+        ctx.fillStyle = inkIn.value;
+        ctx.fillText(textIn.value || 'Headline', m.x, m.y);
+        /* a hairline box so you can see what was measured */
+        ctx.strokeStyle = 'rgba(228,87,46,.9)';
+        ctx.lineWidth = 1;
+        ctx.setLineDash([4, 4]);
+        ctx.strokeRect(m.x - 2, m.y - fs * 0.92, m.tw + 4, fs * 1.2);
+        ctx.setLineDash([]);
+      }
+
+      scrimVal.textContent = scrimIn.value + '%';
+      showVerdict(m);
+    }
+
+    function showVerdict(m) {
+      if (!m || !m.n) { big.textContent = '—'; return; }
+      const smallOk = m.worst >= 4.5, largeOk = m.worst >= 3;
+      const isLarge = m.fs >= 24;
+      const passes = isLarge ? largeOk : smallOk;
+
+      big.textContent = m.worst.toFixed(2) + ':1';
+      big.className = 'tov__big ' + (passes ? 'is-pass' : m.worst >= 2.5 ? 'is-mid' : 'is-fail');
+
+      msg.textContent = passes
+        ? 'Worst-case pixel under the letters still clears ' + (isLarge ? '3:1' : '4.5:1') + '.'
+        : 'On its worst pixel this fails. ' + Math.round(m.fails / m.n * 100) + '% of the letters sit on something too close to the text colour.';
+
+      const rows = [
+        ['Contrast range', m.worst.toFixed(2) + ' → ' + m.best.toFixed(2)],
+        ['Average', m.avg.toFixed(2) + ':1'],
+        ['Pixels measured', m.n.toLocaleString('en-US')],
+        ['Letters below 4.5:1', Math.round(m.fails / m.n * 100) + '%'],
+        ['Background brightness', Math.round((m.darkest + m.lightest) / 2 / 2.55) + '% · spread ' + Math.round((m.lightest - m.darkest) / 2.55) + '%']
+      ];
+      list.innerHTML = rows.map(([k, v]) => '<li><span>' + k + '</span><b>' + v + '</b></li>').join('');
+    }
+
+    /* the smallest scrim that gets every glyph pixel over the line */
+    function autoFix() {
+      if (!photo) return;
+      const start = +scrimIn.value;
+      for (let s = 0; s <= 85; s += 1) {
+        scrimIn.value = s;
+        const m = measure();
+        if (!m) break;
+        const need = m.fs >= 24 ? 3 : 4.5;
+        if (m.worst >= need) {
+          render();
+          toast('Scrim at ' + s + '% is the minimum that works');
+          return;
+        }
+      }
+      scrimIn.value = 85;
+      render();
+      toast('Even 85% is not enough — move the text or change the colour');
+    }
+
+    if ($('#tovAuto')) $('#tovAuto').addEventListener('click', autoFix);
+
+    /* tap the photo to move the text there, and it re-measures */
+    canvas.addEventListener('click', ev => {
+      const r = canvas.getBoundingClientRect();
+      placed.x = (ev.clientX - r.left) / r.width;
+      placed.y = (ev.clientY - r.top) / r.height;
+      render();
+    });
+    if ($('#tovMove')) $('#tovMove').addEventListener('click', () => {
+      toast('Tap anywhere on the photo to move the text');
+      canvas.classList.add('is-targeting');
+      setTimeout(() => canvas.classList.remove('is-targeting'), 2600);
+    });
+
+    [textIn, sizeIn, weightIn, inkIn].forEach(i => i && i.addEventListener('input', render));
+    if (weightIn) weightIn.addEventListener('change', render);
+    scrimIn.addEventListener('input', render);
+
+    const dl = $('#tovDownload');
+    if (dl) dl.addEventListener('click', () => {
+      canvas.toBlob(blob => {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'headline-' + (textIn.value || 'composite').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') + '.jpg';
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+        toast('Saved ' + a.download);
+      }, 'image/jpeg', 0.92);
+    });
+  }
+
   /* ─────────────── the link guide ─────────────── */
 
   function buildDirectory() {
@@ -1081,13 +1511,14 @@
   /* ───────────────────────── boot ───────────────────────── */
 
   function boot() {
-    buildSizes();
+    buildExtract();
     buildPrint();
+    buildScale();
+    buildDpi();
     buildContrast();
-    buildUnits();
     buildPalette();
     buildFonts();
-    buildWeight();
+    buildOverlay();
     buildAudit();
     buildLockup();
     buildDirectory();
