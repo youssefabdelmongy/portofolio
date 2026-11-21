@@ -9,10 +9,29 @@ media:
   extensions: [webp, jpg, png]
 
 content:
+  # ─────────────────────────── SEO / META ───────────────────────────
+  # Without this entry the editor does not know meta exists, and the first save
+  # from app.pagescms.org rewrites site.json without it — title, description and
+  # OG image all gone.
+  - name: meta
+    label: ٠ · عنوان الموقع (SEO)
+    type: file
+    path: content/site.json
+    fields:
+      - name: meta
+        label: بيانات الصفحة
+        type: object
+        fields:
+          - { name: title, label: عنوان التاب (title), type: string }
+          - { name: description, label: وصف البحث (description), type: text }
+          - { name: domain, label: الدومين, type: string }
+          - { name: ogImage, label: صورة المشاركة (OG image), type: string }
+
   # ─────────────────────────── WHO YOU ARE ───────────────────────────
   - name: person
     label: ١ · المعلومات الشخصية
-    file: content/site.json
+    type: file
+    path: content/site.json
     fields:
       - name: person
         label: هو أنت
@@ -32,7 +51,8 @@ content:
   # ─────────────────────────── HERO ───────────────────────────
   - name: hero
     label: ٢ · أول شاشة (Hero)
-    file: content/site.json
+    type: file
+    path: content/site.json
     fields:
       - name: hero
         label: الكلام اللي فوق
@@ -50,11 +70,18 @@ content:
   # ─────────────────────────── THE FOUR ACTS ───────────────────────────
   - name: acts
     label: ٣ · الفصول الأربعة (The Cursor)
-    folder: content/acts
-    extension: json
+    type: collection
+    path: content/acts
+    format: json
     filename:
       template: "{name}.json"
     fields:
+      - { name: id, label: المعرّف (id — متغيّرهوش), type: string }
+      - { name: key, label: الكلمة الكبيرة, type: string }
+      - { name: urlLabel, label: سطر اللينك الصغير, type: string }
+      - { name: bg, label: نوع الخلفية, type: string }
+      - { name: tint, label: لون التينت, type: string }
+      - { name: intro, label: سطر التقديم, type: string }
       - { name: name, label: اسم الفصل, type: string }
       - { name: kicker, label: السطر الصغير اللي فوق, type: string }
       - { name: panelTitle, label: العنوان الكبير, type: string }
@@ -62,7 +89,7 @@ content:
       - { name: panelMeta, label: تفاصيل صغيرة, type: string }
       - { name: what, label: سطر الكارت في الأعلى, type: string }
       - { name: result, label: النتيجة (جملة واحدة), type: text }
-      - { name: get, label: اللي بتاخده (نقاط), type: list }
+      - { name: get, label: اللي بتاخده (نقاط), type: string, list: true }
       - { name: proof, label: سطر الدليل (Made for), type: string }
       - { name: before, label: اسم تاب Today, type: string }
       - { name: after, label: اسم تاب After the fix, type: string }
@@ -70,7 +97,8 @@ content:
   # ─────────────────────────── ABOUT ───────────────────────────
   - name: about
     label: ٤ · عني
-    file: content/site.json
+    type: file
+    path: content/site.json
     fields:
       - name: about
         label: قسم About
@@ -80,15 +108,17 @@ content:
           - { name: toolsTitle, label: عنوان المهارات, type: string }
           - name: tools
             label: الأدوات
-            type: list
+            type: object
+            list: true
             fields:
               - { name: name, label: اسم البرنامج, type: string }
               - { name: level, label: النسبة %, type: number }
           - { name: servicesTitle, label: عنوان الخدمات, type: string }
-          - { name: services, label: الخدمات, type: list }
+          - { name: services, label: الخدمات, type: string, list: true }
           - name: stats
             label: الأرقام
-            type: list
+            type: object
+            list: true
             fields:
               - { name: count, label: الرقم, type: string }
               - { name: suffix, label: علامة بعد الرقم (+), type: string }
@@ -100,7 +130,8 @@ content:
   # ─────────────────────────── CONTACT & FOOTER ───────────────────────────
   - name: contact
     label: ٥ · التواصل
-    file: content/site.json
+    type: file
+    path: content/site.json
     fields:
       - name: contact
         label: Contact
@@ -113,7 +144,8 @@ content:
           - { name: jumpCta, label: نص زر القائمة, type: string }
           - name: socials
             label: لينكات السوشيال
-            type: list
+            type: object
+            list: true
             fields:
               - { name: label, label: الاسم الظاهر, type: string }
               - { name: url, label: اللينك, type: string }
@@ -121,8 +153,9 @@ content:
   # ─────────────────────────── PROJECTS ───────────────────────────
   - name: projects
     label: ٦ · المشاريع
-    folder: content/projects
-    extension: json
+    type: collection
+    path: content/projects
+    format: json
     fields:
       - { name: title, label: اسم المشروع, type: string }
       - { name: kind, label: النوع (Social Campaign…), type: string }
@@ -138,15 +171,18 @@ content:
       - { name: alt, label: وصف الصورة (لقارئ الشاشة), type: string }
       - { name: url, label: لينك Behance, type: string }
       - { name: bg, label: لون الخلفية, type: string }
-      - { name: tags, label: تاجات, type: list }
-      - { name: details, label: تفاصيل دراسة الحالة, type: list }
+      - { name: tags, label: تاجات, type: string, list: true }
+      - { name: details, label: تفاصيل دراسة الحالة, type: string, list: true }
 
   # ─────────────────────────── ORDER ───────────────────────────
   - name: projectOrder
     label: ٧ · ترتيب المشاريع
-    file: content/projects.json
+    type: file
+    path: content/projects.json
+    format: json
+    list: true
     fields:
       - name: order
-        label: ترتيب المشاريع (id لكل مشروع)
-        type: list
+        label: معرّف المشروع (id)
+        type: string
         required: true
