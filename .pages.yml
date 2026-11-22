@@ -16,7 +16,7 @@ content:
   - name: meta
     label: ٠ · عنوان الموقع (SEO)
     type: file
-    path: content/site.json
+    path: content/seo.json
     fields:
       - name: meta
         label: بيانات الصفحة
@@ -31,7 +31,7 @@ content:
   - name: person
     label: ١ · المعلومات الشخصية
     type: file
-    path: content/site.json
+    path: content/person.json
     fields:
       - name: person
         label: هو أنت
@@ -52,7 +52,7 @@ content:
   - name: hero
     label: ٢ · أول شاشة (Hero)
     type: file
-    path: content/site.json
+    path: content/hero.json
     fields:
       - name: hero
         label: الكلام اللي فوق
@@ -98,7 +98,7 @@ content:
   - name: about
     label: ٤ · عني
     type: file
-    path: content/site.json
+    path: content/about.json
     fields:
       - name: about
         label: قسم About
@@ -131,7 +131,7 @@ content:
   - name: contact
     label: ٥ · التواصل
     type: file
-    path: content/site.json
+    path: content/contact.json
     fields:
       - name: contact
         label: Contact
