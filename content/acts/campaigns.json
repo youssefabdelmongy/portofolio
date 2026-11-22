@@ -1,12 +1,15 @@
 {
+  "id": "campaigns",
   "key": "CAMPAIGNS",
-  "name": "Campaigns",
-  "urlLabel": "live work / talabat-10yrs",
+  "urlLabel": " talabat",
   "bg": "lines",
   "tint": "#F1EEE6",
-  "kicker": "02 · Campaigns — one idea, every channel",
   "intro": "Key visual, feed set, stories and print from one idea.",
+  "name": "Campaigns",
+  "kicker": "02 · Campaigns — one idea, every channel",
   "panelTitle": "One campaign, not five unrelated graphics.",
+  "panelBody": "One photo gets resized by four suppliers for four channels, so the same offer looks like four different businesses.",
+  "panelMeta": "Key visual · feed & story sizes · photo brief",
   "what": "One offer. Tap “Today” to see how it usually falls apart across channels.",
   "result": "The same offer looks like one business everywhere your customer meets it. No confusion about whether it’s really you.",
   "get": [
@@ -17,8 +20,5 @@
   ],
   "proof": "Talabat — 10 Years campaign, 2025. Ran across feed, stories and print.",
   "before": "The usual campaign",
-  "after": "The same offer, one voice",
-  "panelBody": "One photo gets resized by four suppliers for four channels, so the same offer looks like four different businesses.",
-  "panelMeta": "Key visual · feed & story sizes · photo brief",
-  "id": "campaigns"
+  "after": "The same offer, one voice"
 }
