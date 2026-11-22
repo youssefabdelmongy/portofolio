@@ -180,9 +180,29 @@ content:
     type: file
     path: content/projects.json
     format: json
-    list: true
+    # الملف {note, order} — object مش array. list:true كان بيخلي الشاشة فاضية.
     fields:
+      - name: note
+        label: ملاحظة (مش بتعدل)
+        type: text
+        readonly: true
       - name: order
-        label: معرّف المشروع (id)
+        label: ترتيب المشاريع — معرّف لكل مشروع
         type: string
-        required: true
+        list: true
+
+  - name: actsOrder
+    label: ٨ · ترتيب الفصول
+    type: file
+    path: content/acts.json
+    format: json
+    # نفس الشكل: {note, order} — object فيه array
+    fields:
+      - name: note
+        label: ملاحظة (مش بتعدل)
+        type: text
+        readonly: true
+      - name: order
+        label: ترتيب الفصول — معرّف لكل فصل
+        type: string
+        list: true
