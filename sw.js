@@ -1,6 +1,6 @@
 /* sw.js — offline-first shell for the portfolio.
    Bump CACHE when you ship new assets; old caches are dropped on activate. */
-const CACHE = 'ym-portfolio-v17';
+const CACHE = 'ym-portfolio-v18';
 const OFFLINE = 'offline.html';
 
 const PRECACHE = [
@@ -19,6 +19,7 @@ const PRECACHE = [
   'js/shader.js', 'js/palette.js', 'js/app.js',
   'js/content.js', 'js/projects-loader.js', 'js/tools.js',
   'content/site.json', 'content/acts.json', 'content/projects.json',
+  'content/person.json', 'content/hero.json', 'content/about.json', 'content/contact.json', 'content/seo.json',
   'content/acts/menus.json', 'content/acts/campaigns.json',
   'content/acts/identity.json', 'content/acts/social.json',
   'content/projects/talabat.json', 'content/projects/sheikh.json',

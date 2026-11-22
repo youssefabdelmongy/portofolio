@@ -1,0 +1,50 @@
+{
+  "about": {
+    "statement": "I'm Youssef Mohamed, a graphic designer with *four years of experience* in social media and print design. My designs focus on reaching the viewer clearly and simply, effectively conveying the product's concept while maintaining all aspects of its visual identity. I will help you achieve your goals based on my experience in the field and *my expertise in marketing*.",
+    "toolsTitle": "TOOLKIT",
+    "tools": [
+      {
+        "name": "Photoshop",
+        "level": 97
+      },
+      {
+        "name": "Illustrator",
+        "level": 95
+      },
+      {
+        "name": "InDesign",
+        "level": 88
+      }
+    ],
+    "servicesTitle": "SERVICES",
+    "services": [
+      "Social media design ",
+      "Advertising campaigns & key visuals",
+      "Printing Design"
+    ],
+    "stats": [
+      {
+        "count": "4",
+        "suffix": "+",
+        "label": "YEARS<br>IN THE GAME"
+      },
+      {
+        "count": "12",
+        "label": "PROJECTS LIVE<br>ON BEHANCE"
+      },
+      {
+        "count": "1227",
+        "suffix": "+",
+        "label": "BEHANCE<br>PROJECT VIEWS"
+      },
+      {
+        "count": "115",
+        "suffix": "+",
+        "label": "BEHANCE<br>APPRECIATIONS"
+      }
+    ],
+    "quote": "“He sent the campaign on a Thursday night, we posted Friday morning, and the feed finally looked like one brand.”",
+    "quoteBy": "— MARKETING LEAD, F&B CLIENT · CAIRO",
+    "arabic": "بصمّم سوشيال ميديا بتبيع فعلاً: فكرة واضحة، تايبوغرافي محترم، وتصميم شغّال على الموبايل قبل أي حاجة."
+  }
+}

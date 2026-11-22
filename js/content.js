@@ -121,10 +121,56 @@ window.PF = window.PF || {};
     document.dispatchEvent(new CustomEvent('pf:content', { detail: content }));
   }
 
-  PF.contentReady = fetch('content/site.json', { cache: 'no-cache' })
-    .then(function (r) {
-      if (!r.ok) throw new Error('content ' + r.status);
-      return r.json();
+  /* ── one file per editorial screen ──
+   * These used to all live in site.json, which meant six different entries in the
+   * CMS pointed at the same path. Pages CMS then resolved "the person file" and
+   * "the contact file" to the same object, so a screen that tried to render one
+   * entry's fields against another entry's data came out half-empty.
+   * Each section now has its own file and its own fields. site.json is still read
+   * as a fallback so an older deploy or a stale cache never leaves the page blank.
+   */
+  var PARTS = ['person', 'hero', 'about', 'contact', 'seo'];
+
+  function merge(target, src) {
+    if (!src) return target;
+    Object.keys(src).forEach(function (k) {
+      var v = src[k];
+      var cur = target[k];
+      /* deep-merge plain objects so seo.meta and a stray site.json both survive */
+      if (v && typeof v === 'object' && !Array.isArray(v) && cur && typeof cur === 'object' && !Array.isArray(cur)) {
+        merge(cur, v);
+      } else {
+        target[k] = v;
+      }
+    });
+    return target;
+  }
+
+  PF.contentReady = Promise.all([
+    fetch('content/site.json', { cache: 'no-cache' })
+      .then(function (r) { return r.ok ? r.json() : {}; })
+      .catch(function () { return {}; })
+  ].concat(PARTS.map(function (part) {
+    return fetch('content/' + part + '.json', { cache: 'no-cache' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .catch(function () { return null; });
+  })))
+    .then(function (results) {
+      var content = results[0] || {};
+      var anyPart = false;
+      results.slice(1).forEach(function (part) {
+        if (!part) return;
+        anyPart = true;
+        /* a part file may be flat ({name:...}) or wrapped ({person:{...}}) */
+        var keys = Object.keys(part);
+        if (keys.length === 1 && part[keys[0]] && typeof part[keys[0]] === 'object' && !Array.isArray(part[keys[0]])) {
+          merge(content, part);
+        } else {
+          merge(content, {});
+        }
+      });
+      if (!anyPart && !Object.keys(content).length) throw new Error('no content');
+      return content;
     })
     .then(function (content) {
       PF.content = content;

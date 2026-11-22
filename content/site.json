@@ -45,6 +45,65 @@
     ],
     "quote": "“He sent the campaign on a Thursday night, we posted Friday morning, and the feed finally looked like one brand.”",
     "quoteBy": "— MARKETING LEAD, F&B CLIENT · CAIRO",
-    "arabic": "بصمّم سوشيال ميديا بتبيع فعلاً: فكرة واضحة، تايبوغرافي محترم، وتصميم شغّال على الموبايل قبل أي حاجة."
-  }
+    "arabic": "بصمّم سوشيال ميديا بتبيع فعلاً: فكرة واضحة، تايبوغرافي محترم، وتصميم شغّال على الموبايل قبل أي حاجة.",
+    "kicker": "03 — ABOUT"
+  },
+  "meta": {
+    "title": "Youssef Mohamed — Graphic designer, Cairo",
+    "description": "Graphic designer in Cairo. Print-ready menus, campaigns and social feeds that hold up outside the file. 4 years, 12 projects, 8 clients.",
+    "domain": "https://yousefmohamed.design",
+    "ogImage": "https://yousefmohamed.design/assets/og.jpg"
+  },
+  "person": {
+    "name": "Youssef Mohamed",
+    "first": "YOUSSEF",
+    "last": "MOHAMED",
+    "role": "Graphic designer, social media & advertising",
+    "email": "jomongy52@gmail.com",
+    "emailUrl": "mailto:jomongy52@gmail.com",
+    "behance": "https://www.behance.net/65c12764",
+    "city": "Cairo, Egypt",
+    "years": 4,
+    "whatsapp": "201066956233",
+    "whatsappLocal": "0106 695 6233"
+  },
+  "hero": {
+    "status": "OPEN FOR PROJECTS · Q1 2026",
+    "statusLive": true,
+    "location": "CAIRO, EG",
+    "subSerif": "Graphic designer",
+    "subRest": "social media, advertising & brand design. Print-ready menus, campaigns and feeds",
+    "subEm": "that hold up outside the file",
+    "subTail": "4 years, 12 projects, 8 clients · Cairo, working remotely.",
+    "badgeRing": "FOUR YEARS · INK & PIXELS · CAIRO · EGYPT · ",
+    "badgeCore": "4",
+    "badgeUnit": "yrs",
+    "portrait": "assets/portrait-cut.webp",
+    "portraitCaption": "THE HUMAN / v.2026"
+  },
+  "contact": {
+    "kicker": "04 — CONTACT",
+    "titleLine1": "Got a brief",
+    "titleLine2": "worth the ink?",
+    "note": "Replies within a day ·",
+    "emailCta": "Email me",
+    "copyCta": "Copy address",
+    "jumpCta": "Jump anywhere",
+    "socials": [
+      {
+        "label": "Behance ↗",
+        "url": "https://www.behance.net/65c12764",
+        "cursor": "BE"
+      },
+      {
+        "label": "Available for freelance ↗",
+        "url": "https://www.behance.net/65c12764",
+        "cursor": "HIRE"
+      }
+    ],
+    "shareLabel": "Share this site",
+    "mailtoUrl": "mailto:jomongy52@gmail.com?subject=Project%20brief%20%E2%80%94%20Youssef",
+    "whatsappCta": "WhatsApp"
+  },
+  "footer": {}
 }

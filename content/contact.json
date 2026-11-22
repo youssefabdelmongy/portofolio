@@ -1,0 +1,26 @@
+{
+  "contact": {
+    "kicker": "04 — CONTACT",
+    "titleLine1": "Got a brief",
+    "titleLine2": "worth the ink?",
+    "note": "Replies within a day ·",
+    "emailCta": "Email me",
+    "copyCta": "Copy address",
+    "jumpCta": "Jump anywhere",
+    "socials": [
+      {
+        "label": "Behance ↗",
+        "url": "https://www.behance.net/65c12764",
+        "cursor": "BE"
+      },
+      {
+        "label": "Available for freelance ↗",
+        "url": "https://www.behance.net/65c12764",
+        "cursor": "HIRE"
+      }
+    ],
+    "shareLabel": "Share this site",
+    "mailtoUrl": "mailto:jomongy52@gmail.com?subject=Project%20brief%20%E2%80%94%20Youssef",
+    "whatsappCta": "WhatsApp"
+  }
+}
