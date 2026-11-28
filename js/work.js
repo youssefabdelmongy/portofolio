@@ -59,6 +59,15 @@ window.PF = window.PF || {};
         '<img src="' + src + '" srcset="' + sm + ' 640w, ' + src + ' 1400w" sizes="(max-width:900px) 92vw, 60vw" alt="' + p.title + ' — frame ' + (k + 1) + '" width="1000" height="1000">' +
         '</figure>';
     }).join('');
+    /* a CMS upload has no -sm copy: fall back to the full image instead of a blank frame */
+    PF.$$('img', media).forEach(function (img) {
+      img.addEventListener('error', function () {
+        if (img.hasAttribute('srcset')) {
+          var full = img.getAttribute('srcset').split(',')[1].trim().split(' ')[0];
+          img.removeAttribute('srcset'); img.src = full;
+        }
+      });
+    });
     main.innerHTML =
       '<h3 id="caseTitle">' + p.title + '</h3>' +
       '<p>' + p.blurb + '</p>' +

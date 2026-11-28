@@ -1,6 +1,6 @@
 /* sw.js — offline-first shell for the portfolio.
    Bump CACHE when you ship new assets; old caches are dropped on activate. */
-const CACHE = 'ym-portfolio-v18';
+const CACHE = 'ym-portfolio-v19';
 const OFFLINE = 'offline.html';
 
 const PRECACHE = [
@@ -71,8 +71,8 @@ self.addEventListener('fetch', function (event) {
   const url = new URL(req.url);
   if (url.origin !== location.origin) return;
 
-  // network-first for documents, so a new deploy is picked up immediately
-  if (req.mode === 'navigate' || (req.headers.get('accept') || '').includes('text/html')) {
+  // network-first for documents AND editable content JSON, so CMS edits show up immediately
+  if (req.mode === 'navigate' || (req.headers.get('accept') || '').includes('text/html') || url.pathname.indexOf('/content/') !== -1) {
     event.respondWith(
       fetch(req).then(function (res) {
         const copy = res.clone();

@@ -23,6 +23,10 @@ window.PF = window.PF || {};
       sizes: '(max-width:900px) 92vw, 46vw',
       alt: alt, loading: 'lazy', decoding: 'async', width: '1000', height: '1000'
     });
+    /* a CMS upload has no -sm copy: fall back to the full image instead of showing a blank */
+    img.addEventListener('error', function () {
+      if (img.hasAttribute('srcset')) { img.removeAttribute('srcset'); img.src = src.base; }
+    });
     f.appendChild(img);
     return f;
   }
